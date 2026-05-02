@@ -1,0 +1,93 @@
+{
+  "name": "One Empire — Token Refresh",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "d4e5f6a7-0004-0004-0004-000000000001",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check all token tables for tokens expiring within 7 days\n// Returns a list of token records that need refreshing, tagged by platform\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst supabaseUrl = 'https://gsqcsyepztcmrvzxevhw.supabase.co';\nconst serviceKey  = $env.SUPABASE_SERVICE_KEY;\n\nconst sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();\n\nasync function fetchExpiringTokens(table, platform) {\n  try {\n    const res = await $helpers.httpRequest({\n      method: 'GET',\n      url: `${supabaseUrl}/rest/v1/${table}?is_active=eq.true&token_expires_at=lte.${encodeURIComponent(sevenDaysFromNow)}&select=*`,\n      headers: {\n        'apikey':        serviceKey,\n        'Authorization': `Bearer ${serviceKey}`\n      }\n    });\n    const rows = typeof res === 'string' ? JSON.parse(res) : res;\n    return (Array.isArray(rows) ? rows : []).map(r => ({ ...r, _platform: platform }));\n  } catch (e) {\n    console.error(`Failed to fetch ${table}: ${e.message}`);\n    return [];\n  }\n}\n\nconst [linkedin, facebook, instagram, youtube, tiktok] = await Promise.all([\n  fetchExpiringTokens('linkedin_tokens',  'linkedin'),\n  fetchExpiringTokens('facebook_tokens',  'facebook'),\n  fetchExpiringTokens('instagram_tokens', 'instagram'),\n  fetchExpiringTokens('youtube_tokens',   'youtube'),\n  fetchExpiringTokens('tiktok_tokens',    'tiktok')\n]);\n\nconst allExpiring = [...linkedin, ...facebook, ...instagram, ...youtube, ...tiktok];\n\nif (allExpiring.length === 0) {\n  return [{ json: { status: 'no_tokens_expiring', checked_at: new Date().toISOString() } }];\n}\n\nreturn allExpiring.map(t => ({ json: t }));\n"
+      },
+      "id": "d4e5f6a7-0004-0004-0004-000000000002",
+      "name": "Find Expiring Tokens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "no_tokens_expiring",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "d4e5f6a7-0004-0004-0004-000000000003",
+      "name": "Any tokens to refresh?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Refresh tokens by platform\n// LinkedIn: cannot auto-refresh — send re-auth email notification\n// Facebook/Instagram: exchange for new long-lived token using current token\n// YouTube: use refresh_token with Google OAuth\n// TikTok: use refresh_token with TikTok OAuth v2\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst token    = $input.first().json;\nconst platform = token._platform;\nconst supabaseUrl = 'https://gsqcsyepztcmrvzxevhw.supabase.co';\nconst serviceKey  = $env.SUPABASE_SERVICE_KEY;\n\nasync function updateToken(table, memberEmail, updates) {\n  await $helpers.httpRequest({\n    method: 'PATCH',\n    url: `${supabaseUrl}/rest/v1/${table}?member_email=eq.${encodeURIComponent(memberEmail)}`,\n    headers: {\n      'Content-Type':  'application/json',\n      'apikey':        serviceKey,\n      'Authorization': `Bearer ${serviceKey}`,\n      'Prefer':        'return=minimal'\n    },\n    body: JSON.stringify(updates)\n  });\n}\n\nconst now = new Date();\n\nif (platform === 'linkedin') {\n  // LinkedIn access tokens last 60 days and cannot be refreshed programmatically.\n  // Mark as expiring and return — a separate notification workflow should email the member.\n  return [{\n    json: {\n      platform,\n      member_email: token.member_email,\n      action: 'needs_reauth',\n      message: 'LinkedIn token cannot be refreshed automatically. Member must re-authenticate.',\n      expires_at: token.token_expires_at\n    }\n  }];\n}\n\nif (platform === 'facebook' || platform === 'instagram') {\n  const appId     = $env.FACEBOOK_APP_ID;\n  const appSecret = $env.FACEBOOK_APP_SECRET;\n  try {\n    const res = await $helpers.httpRequest({\n      method: 'GET',\n      url: `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${appId}&client_secret=${appSecret}&fb_exchange_token=${encodeURIComponent(token.access_token)}`\n    });\n    const data = typeof res === 'string' ? JSON.parse(res) : res;\n    if (data.error) throw new Error(data.error.message);\n\n    const newExpiry = new Date(now.getTime() + (data.expires_in || 5184000) * 1000);\n    const table = platform === 'facebook' ? 'facebook_tokens' : 'instagram_tokens';\n    await updateToken(table, token.member_email, {\n      access_token:     data.access_token,\n      expires_in:       data.expires_in,\n      token_stored_at:  now.toISOString(),\n      token_expires_at: newExpiry.toISOString()\n    });\n    return [{ json: { platform, member_email: token.member_email, action: 'refreshed', new_expiry: newExpiry.toISOString() } }];\n  } catch (e) {\n    return [{ json: { platform, member_email: token.member_email, action: 'refresh_failed', error: e.message } }];\n  }\n}\n\nif (platform === 'youtube') {\n  if (!token.refresh_token) {\n    return [{ json: { platform, member_email: token.member_email, action: 'needs_reauth', message: 'No refresh token available' } }];\n  }\n  const clientId     = $env.YOUTUBE_CLIENT_ID;\n  const clientSecret = $env.YOUTUBE_CLIENT_SECRET;\n  try {\n    const params = new URLSearchParams({\n      client_id:     clientId,\n      client_secret: clientSecret,\n      refresh_token: token.refresh_token,\n      grant_type:    'refresh_token'\n    });\n    const res = await $helpers.httpRequest({\n      method: 'POST',\n      url: 'https://oauth2.googleapis.com/token',\n      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n      body: params.toString()\n    });\n    const data = typeof res === 'string' ? JSON.parse(res) : res;\n    if (data.error) throw new Error(data.error_description || data.error);\n\n    const expiresIn  = data.expires_in || 3600;\n    const newExpiry  = new Date(now.getTime() + expiresIn * 1000);\n    await updateToken('youtube_tokens', token.member_email, {\n      access_token:     data.access_token,\n      expires_in:       expiresIn,\n      token_stored_at:  now.toISOString(),\n      token_expires_at: newExpiry.toISOString()\n    });\n    return [{ json: { platform, member_email: token.member_email, action: 'refreshed', new_expiry: newExpiry.toISOString() } }];\n  } catch (e) {\n    return [{ json: { platform, member_email: token.member_email, action: 'refresh_failed', error: e.message } }];\n  }\n}\n\nif (platform === 'tiktok') {\n  if (!token.refresh_token) {\n    return [{ json: { platform, member_email: token.member_email, action: 'needs_reauth', message: 'No refresh token available' } }];\n  }\n  const clientKey    = $env.TIKTOK_CLIENT_KEY;\n  const clientSecret = $env.TIKTOK_CLIENT_SECRET;\n  try {\n    const params = new URLSearchParams({\n      client_key:    clientKey,\n      client_secret: clientSecret,\n      grant_type:    'refresh_token',\n      refresh_token: token.refresh_token\n    });\n    const res = await $helpers.httpRequest({\n      method: 'POST',\n      url: 'https://open.tiktokapis.com/v2/oauth/token/',\n      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n      body: params.toString()\n    });\n    const data = typeof res === 'string' ? JSON.parse(res) : res;\n    if (data.error) throw new Error(data.error_description || data.error);\n\n    const expiresIn       = data.expires_in || 86400;\n    const refreshExpires  = data.refresh_expires_in || 31536000;\n    const newExpiry       = new Date(now.getTime() + expiresIn * 1000);\n    const newRefreshExpiry = new Date(now.getTime() + refreshExpires * 1000);\n    await updateToken('tiktok_tokens', token.member_email, {\n      access_token:       data.access_token,\n      refresh_token:      data.refresh_token,\n      expires_in:         expiresIn,\n      refresh_expires_in: refreshExpires,\n      token_stored_at:    now.toISOString(),\n      token_expires_at:   newExpiry.toISOString(),\n      refresh_expires_at: newRefreshExpiry.toISOString()\n    });\n    return [{ json: { platform, member_email: token.member_email, action: 'refreshed', new_expiry: newExpiry.toISOString() } }];\n  } catch (e) {\n    return [{ json: { platform, member_email: token.member_email, action: 'refresh_failed', error: e.message } }];\n  }\n}\n\nreturn [{ json: { platform, member_email: token.member_email, action: 'unknown_platform' } }];\n"
+      },
+      "id": "d4e5f6a7-0004-0004-0004-000000000004",
+      "name": "Refresh Token",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 420]
+    },
+    {
+      "parameters": {},
+      "id": "d4e5f6a7-0004-0004-0004-000000000005",
+      "name": "No Tokens Expiring",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [900, 200]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [{ "node": "Find Expiring Tokens", "type": "main", "index": 0 }]
+      ]
+    },
+    "Find Expiring Tokens": {
+      "main": [
+        [{ "node": "Any tokens to refresh?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Any tokens to refresh?": {
+      "main": [
+        [{ "node": "No Tokens Expiring", "type": "main", "index": 0 }],
+        [{ "node": "Refresh Token", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "one-empire-token-refresh-v1"
+}

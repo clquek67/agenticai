@@ -1,0 +1,71 @@
+{
+  "name": "One Empire — YouTube OAuth Token Exchange",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "one-empire-youtube-oauth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0002-0002-0002-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "one-empire-youtube-oauth"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"received\" }",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0002-0002-0002-000000000002",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// YouTube OAuth — Exchange authorisation code for access + refresh tokens\n// Google OAuth 2.0 with offline access gives a refresh token for long-term use\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n// Required env vars: YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET\n\nconst body = $input.first().json.body || $input.first().json;\nconst code        = body.code;\nconst memberEmail = body.member_email || '';\nconst redirectUri = body.redirect_uri || 'https://brief.one-empire.com/youtube/callback';\n\nif (!code) {\n  throw new Error('Missing authorisation code');\n}\n\nconst clientId     = $env.YOUTUBE_CLIENT_ID;\nconst clientSecret = $env.YOUTUBE_CLIENT_SECRET;\n\n// Exchange code for tokens\nconst tokenParams = new URLSearchParams({\n  code:          code,\n  client_id:     clientId,\n  client_secret: clientSecret,\n  redirect_uri:  redirectUri,\n  grant_type:    'authorization_code'\n});\n\nlet tokenData;\ntry {\n  const tokenRes = await $helpers.httpRequest({\n    method: 'POST',\n    url: 'https://oauth2.googleapis.com/token',\n    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n    body: tokenParams.toString()\n  });\n  tokenData = typeof tokenRes === 'string' ? JSON.parse(tokenRes) : tokenRes;\n} catch (e) {\n  throw new Error('Google token exchange failed: ' + e.message);\n}\n\nif (tokenData.error) {\n  throw new Error('Google error: ' + (tokenData.error_description || tokenData.error));\n}\n\nconst accessToken  = tokenData.access_token;\nconst refreshToken = tokenData.refresh_token || null;\nconst expiresIn    = tokenData.expires_in || 3600;\n\n// Fetch YouTube channel info\nlet channelId   = '';\nlet channelName = '';\ntry {\n  const channelRes = await $helpers.httpRequest({\n    method: 'GET',\n    url: `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&access_token=${accessToken}`\n  });\n  const channelData = typeof channelRes === 'string' ? JSON.parse(channelRes) : channelRes;\n  if (channelData.items && channelData.items.length > 0) {\n    channelId   = channelData.items[0].id || '';\n    channelName = channelData.items[0].snippet?.title || '';\n  }\n} catch (e) {\n  // Non-fatal\n}\n\nconst now      = new Date();\nconst expiresAt = new Date(now.getTime() + expiresIn * 1000);\n\nreturn [{\n  json: {\n    member_email:     memberEmail,\n    youtube_id:       channelId,\n    youtube_name:     channelName,\n    access_token:     accessToken,\n    refresh_token:    refreshToken,\n    expires_in:       expiresIn,\n    token_stored_at:  now.toISOString(),\n    token_expires_at: expiresAt.toISOString(),\n    is_active:        true\n  }\n}];\n"
+      },
+      "id": "b2c3d4e5-0002-0002-0002-000000000003",
+      "name": "Exchange Code for Token",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 420]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store YouTube token in Supabase\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst data = $input.first().json;\nconst supabaseUrl = 'https://gsqcsyepztcmrvzxevhw.supabase.co';\nconst serviceKey  = $env.SUPABASE_SERVICE_KEY;\n\nif (!data.member_email) {\n  throw new Error('member_email is required');\n}\n\nconst payload = {\n  member_email:     data.member_email,\n  youtube_id:       data.youtube_id,\n  youtube_name:     data.youtube_name,\n  access_token:     data.access_token,\n  refresh_token:    data.refresh_token,\n  expires_in:       data.expires_in,\n  token_stored_at:  data.token_stored_at,\n  token_expires_at: data.token_expires_at,\n  is_active:        true\n};\n\ntry {\n  await $helpers.httpRequest({\n    method: 'POST',\n    url: `${supabaseUrl}/rest/v1/youtube_tokens`,\n    headers: {\n      'Content-Type':  'application/json',\n      'apikey':        serviceKey,\n      'Authorization': `Bearer ${serviceKey}`,\n      'Prefer':        'resolution=merge-duplicates'\n    },\n    body: JSON.stringify(payload)\n  });\n  return [{ json: { success: true, message: 'YouTube token stored', member_email: data.member_email } }];\n} catch (e) {\n  throw new Error('Failed to store YouTube token: ' + e.message);\n}\n"
+      },
+      "id": "b2c3d4e5-0002-0002-0002-000000000004",
+      "name": "Store Token in Supabase",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 420]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          { "node": "Respond to Webhook", "type": "main", "index": 0 },
+          { "node": "Exchange Code for Token", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Exchange Code for Token": {
+      "main": [
+        [{ "node": "Store Token in Supabase", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "one-empire-youtube-oauth-v1"
+}

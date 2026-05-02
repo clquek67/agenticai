@@ -1,0 +1,7 @@
+# One Empire — brief.one-empire.com Netlify redirects
+
+/linkedin/callback   /linkedin-callback.html   200
+/facebook/callback   /facebook-callback.html   200
+/instagram/callback  /instagram-callback.html  200
+/youtube/callback    /youtube-callback.html    200
+/tiktok/callback     /tiktok-callback.html     200

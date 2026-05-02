@@ -1,0 +1,71 @@
+{
+  "name": "One Empire — Instagram OAuth Token Exchange",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "one-empire-instagram-oauth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "one-empire-instagram-oauth"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"received\" }",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000002",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Instagram OAuth — Exchange authorisation code for long-lived token\n// Uses Facebook Graph API (Instagram with Instagram Login uses same endpoint)\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst body = $input.first().json.body || $input.first().json;\nconst code = body.code;\nconst memberEmail = body.member_email || '';\nconst redirectUri = body.redirect_uri || 'https://brief.one-empire.com/instagram/callback';\n\nif (!code) {\n  throw new Error('Missing authorisation code');\n}\n\nconst appId     = $env.INSTAGRAM_APP_ID;\nconst appSecret = $env.INSTAGRAM_APP_SECRET;\n\n// Step 1: Exchange code for short-lived token via Facebook OAuth endpoint\nconst tokenParams = new URLSearchParams({\n  client_id:     appId,\n  client_secret: appSecret,\n  grant_type:    'authorization_code',\n  redirect_uri:  redirectUri,\n  code:          code\n});\n\nlet shortTokenData;\ntry {\n  const tokenRes = await $helpers.httpRequest({\n    method: 'POST',\n    url: 'https://graph.facebook.com/v18.0/oauth/access_token',\n    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n    body: tokenParams.toString()\n  });\n  shortTokenData = typeof tokenRes === 'string' ? JSON.parse(tokenRes) : tokenRes;\n} catch (e) {\n  throw new Error('Token exchange failed: ' + e.message);\n}\n\nif (shortTokenData.error) {\n  throw new Error('Facebook error: ' + (shortTokenData.error.message || JSON.stringify(shortTokenData.error)));\n}\n\nconst shortToken = shortTokenData.access_token;\n\n// Step 2: Get long-lived token (60 days)\nlet longTokenData;\ntry {\n  const longTokenRes = await $helpers.httpRequest({\n    method: 'GET',\n    url: `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${appId}&client_secret=${appSecret}&fb_exchange_token=${shortToken}`\n  });\n  longTokenData = typeof longTokenRes === 'string' ? JSON.parse(longTokenRes) : longTokenRes;\n} catch (e) {\n  // Fall back to short-lived token if exchange fails\n  longTokenData = shortTokenData;\n}\n\nconst accessToken = longTokenData.access_token || shortToken;\nconst expiresIn   = longTokenData.expires_in   || shortTokenData.expires_in || 5184000;\n\n// Step 3: Get Instagram Business Account ID and username\nlet igUserId   = '';\nlet igUsername = '';\ntry {\n  const meRes = await $helpers.httpRequest({\n    method: 'GET',\n    url: `https://graph.facebook.com/v18.0/me?fields=id,name,instagram_business_account&access_token=${accessToken}`\n  });\n  const meData = typeof meRes === 'string' ? JSON.parse(meRes) : meRes;\n  if (meData.instagram_business_account) {\n    igUserId = meData.instagram_business_account.id;\n    // Fetch Instagram username\n    try {\n      const igRes = await $helpers.httpRequest({\n        method: 'GET',\n        url: `https://graph.facebook.com/v18.0/${igUserId}?fields=username&access_token=${accessToken}`\n      });\n      const igData = typeof igRes === 'string' ? JSON.parse(igRes) : igRes;\n      igUsername = igData.username || '';\n    } catch (e) { /* non-fatal */ }\n  } else {\n    // Fallback: use Facebook user ID\n    igUserId = meData.id || '';\n    igUsername = meData.name || '';\n  }\n} catch (e) {\n  // Non-fatal — store token without profile details\n}\n\nconst now = new Date();\nconst expiresAt = new Date(now.getTime() + expiresIn * 1000);\n\nreturn [{\n  json: {\n    member_email:   memberEmail,\n    instagram_id:   igUserId,\n    instagram_name: igUsername,\n    access_token:   accessToken,\n    expires_in:     expiresIn,\n    token_stored_at: now.toISOString(),\n    token_expires_at: expiresAt.toISOString(),\n    is_active: true\n  }\n}];\n"
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000003",
+      "name": "Exchange Code for Token",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 420]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store Instagram token in Supabase via REST API\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst data = $input.first().json;\nconst supabaseUrl = 'https://gsqcsyepztcmrvzxevhw.supabase.co';\nconst serviceKey  = $env.SUPABASE_SERVICE_KEY;\n\nif (!data.member_email) {\n  throw new Error('member_email is required to store token');\n}\n\nconst payload = {\n  member_email:     data.member_email,\n  instagram_id:     data.instagram_id,\n  instagram_name:   data.instagram_name,\n  access_token:     data.access_token,\n  expires_in:       data.expires_in,\n  token_stored_at:  data.token_stored_at,\n  token_expires_at: data.token_expires_at,\n  is_active:        true\n};\n\ntry {\n  const res = await $helpers.httpRequest({\n    method: 'POST',\n    url: `${supabaseUrl}/rest/v1/instagram_tokens`,\n    headers: {\n      'Content-Type':  'application/json',\n      'apikey':        serviceKey,\n      'Authorization': `Bearer ${serviceKey}`,\n      'Prefer':        'resolution=merge-duplicates'\n    },\n    body: JSON.stringify(payload)\n  });\n  return [{ json: { success: true, message: 'Instagram token stored', member_email: data.member_email } }];\n} catch (e) {\n  throw new Error('Failed to store token in Supabase: ' + e.message);\n}\n"
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000004",
+      "name": "Store Token in Supabase",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 420]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          { "node": "Respond to Webhook", "type": "main", "index": 0 },
+          { "node": "Exchange Code for Token", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Exchange Code for Token": {
+      "main": [
+        [{ "node": "Store Token in Supabase", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "one-empire-instagram-oauth-v1"
+}

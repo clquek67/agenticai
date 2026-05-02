@@ -1,0 +1,71 @@
+{
+  "name": "One Empire — TikTok OAuth Token Exchange",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "one-empire-tiktok-oauth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-0003-0003-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "one-empire-tiktok-oauth"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"received\" }",
+        "options": {}
+      },
+      "id": "c3d4e5f6-0003-0003-0003-000000000002",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TikTok OAuth v2 — Exchange authorisation code for access + refresh tokens\n// TikTok for Developers: https://developers.tiktok.com/doc/oauth-user-access-token-management\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n// Required env vars: TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET\n\nconst body = $input.first().json.body || $input.first().json;\nconst code        = body.code;\nconst memberEmail = body.member_email || '';\nconst codeVerifier = body.code_verifier || '';\n\nif (!code) {\n  throw new Error('Missing authorisation code');\n}\n\nconst clientKey    = $env.TIKTOK_CLIENT_KEY;\nconst clientSecret = $env.TIKTOK_CLIENT_SECRET;\n\n// TikTok v2 token exchange uses x-www-form-urlencoded\nconst tokenParams = new URLSearchParams({\n  client_key:    clientKey,\n  client_secret: clientSecret,\n  code:          code,\n  grant_type:    'authorization_code',\n  redirect_uri:  'https://brief.one-empire.com/tiktok/callback'\n});\n\nif (codeVerifier) {\n  tokenParams.set('code_verifier', codeVerifier);\n}\n\nlet tokenData;\ntry {\n  const tokenRes = await $helpers.httpRequest({\n    method: 'POST',\n    url: 'https://open.tiktokapis.com/v2/oauth/token/',\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded',\n      'Cache-Control': 'no-cache'\n    },\n    body: tokenParams.toString()\n  });\n  tokenData = typeof tokenRes === 'string' ? JSON.parse(tokenRes) : tokenRes;\n} catch (e) {\n  throw new Error('TikTok token exchange failed: ' + e.message);\n}\n\nif (tokenData.error) {\n  throw new Error('TikTok error: ' + (tokenData.error_description || tokenData.error));\n}\n\nconst accessToken    = tokenData.access_token;\nconst refreshToken   = tokenData.refresh_token || null;\nconst openId         = tokenData.open_id || '';\nconst expiresIn      = tokenData.expires_in || 86400;\nconst refreshExpires = tokenData.refresh_expires_in || 31536000;\n\n// Fetch TikTok user info\nlet displayName = '';\nlet avatarUrl   = '';\ntry {\n  const userRes = await $helpers.httpRequest({\n    method: 'GET',\n    url: 'https://open.tiktokapis.com/v2/user/info/?fields=display_name,avatar_url',\n    headers: { 'Authorization': `Bearer ${accessToken}` }\n  });\n  const userData = typeof userRes === 'string' ? JSON.parse(userRes) : userRes;\n  if (userData.data && userData.data.user) {\n    displayName = userData.data.user.display_name || '';\n    avatarUrl   = userData.data.user.avatar_url || '';\n  }\n} catch (e) {\n  // Non-fatal\n}\n\nconst now             = new Date();\nconst expiresAt       = new Date(now.getTime() + expiresIn * 1000);\nconst refreshExpiresAt = new Date(now.getTime() + refreshExpires * 1000);\n\nreturn [{\n  json: {\n    member_email:          memberEmail,\n    tiktok_open_id:        openId,\n    tiktok_name:           displayName,\n    access_token:          accessToken,\n    refresh_token:         refreshToken,\n    expires_in:            expiresIn,\n    refresh_expires_in:    refreshExpires,\n    token_stored_at:       now.toISOString(),\n    token_expires_at:      expiresAt.toISOString(),\n    refresh_expires_at:    refreshExpiresAt.toISOString(),\n    is_active:             true\n  }\n}];\n"
+      },
+      "id": "c3d4e5f6-0003-0003-0003-000000000003",
+      "name": "Exchange Code for Token",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 420]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store TikTok token in Supabase\n// NEVER use this.getCredentials() — use $env.VARIABLE_NAME\n\nconst data = $input.first().json;\nconst supabaseUrl = 'https://gsqcsyepztcmrvzxevhw.supabase.co';\nconst serviceKey  = $env.SUPABASE_SERVICE_KEY;\n\nif (!data.member_email) {\n  throw new Error('member_email is required');\n}\n\nconst payload = {\n  member_email:       data.member_email,\n  tiktok_open_id:     data.tiktok_open_id,\n  tiktok_name:        data.tiktok_name,\n  access_token:       data.access_token,\n  refresh_token:      data.refresh_token,\n  expires_in:         data.expires_in,\n  refresh_expires_in: data.refresh_expires_in,\n  token_stored_at:    data.token_stored_at,\n  token_expires_at:   data.token_expires_at,\n  refresh_expires_at: data.refresh_expires_at,\n  is_active:          true\n};\n\ntry {\n  await $helpers.httpRequest({\n    method: 'POST',\n    url: `${supabaseUrl}/rest/v1/tiktok_tokens`,\n    headers: {\n      'Content-Type':  'application/json',\n      'apikey':        serviceKey,\n      'Authorization': `Bearer ${serviceKey}`,\n      'Prefer':        'resolution=merge-duplicates'\n    },\n    body: JSON.stringify(payload)\n  });\n  return [{ json: { success: true, message: 'TikTok token stored', member_email: data.member_email } }];\n} catch (e) {\n  throw new Error('Failed to store TikTok token: ' + e.message);\n}\n"
+      },
+      "id": "c3d4e5f6-0003-0003-0003-000000000004",
+      "name": "Store Token in Supabase",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 420]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          { "node": "Respond to Webhook", "type": "main", "index": 0 },
+          { "node": "Exchange Code for Token", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Exchange Code for Token": {
+      "main": [
+        [{ "node": "Store Token in Supabase", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "one-empire-tiktok-oauth-v1"
+}
