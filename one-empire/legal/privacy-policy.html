@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | One Empire</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #050D1A;
+      --navy-light: #0A1929;
+      --navy-mid: #0D2137;
+      --gold: #E8B84B;
+      --gold-muted: #C99D3A;
+      --text: #CBD5E1;
+      --text-muted: #8899A6;
+      --border: rgba(232, 184, 75, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--navy);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .logo span { color: #fff; }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 24px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy-mid) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 24px 48px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .page-hero h1 span { color: var(--gold); }
+
+    .page-hero p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(232, 184, 75, 0.12);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Layout ── */
+    .content-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky;
+      top: 80px;
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .toc-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+    }
+
+    .toc li { counter-increment: toc; margin-bottom: 8px; }
+
+    .toc a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      color: var(--gold-muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .toc a:hover { color: var(--gold); }
+
+    /* ── Article ── */
+    article section { margin-bottom: 48px; }
+
+    article h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    article h2 .sec-num {
+      color: var(--gold);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    article h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin: 20px 0 8px;
+    }
+
+    article p { color: var(--text); margin-bottom: 14px; }
+
+    article ul, article ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    article li { color: var(--text); margin-bottom: 6px; }
+
+    article a { color: var(--gold); text-decoration: none; }
+    article a:hover { text-decoration: underline; }
+
+    .highlight-box {
+      background: rgba(232, 184, 75, 0.06);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .highlight-box p { margin: 0; font-size: 0.95rem; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy-light);
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    footer p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; }
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .content-wrap {
+        grid-template-columns: 1fr;
+        padding: 32px 16px 64px;
+      }
+      .toc { position: static; }
+      .header-inner nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">ONE <span>EMPIRE</span></a>
+    <nav>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="badge">Legal</div>
+  <h1>Privacy <span>Policy</span></h1>
+  <p>Last updated: May 2, 2026 &nbsp;&mdash;&nbsp; Effective: May 2, 2026</p>
+</div>
+
+<!-- Body -->
+<div class="content-wrap">
+
+  <!-- Table of Contents -->
+  <aside class="toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#information-we-collect">Information We Collect</a></li>
+      <li><a href="#how-we-use">How We Use Your Information</a></li>
+      <li><a href="#sharing">Sharing & Disclosure</a></li>
+      <li><a href="#cookies">Cookies & Tracking</a></li>
+      <li><a href="#data-retention">Data Retention</a></li>
+      <li><a href="#your-rights">Your Rights</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#third-party">Third-Party Services</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#international">International Transfers</a></li>
+      <li><a href="#changes">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </aside>
+
+  <!-- Main Article -->
+  <article>
+
+    <div class="highlight-box">
+      <p>At One Empire, your privacy is a core value, not a checkbox. This policy explains exactly what data we collect, why we collect it, and how you control it. If you have questions at any point, email us at <a href="mailto:privacy@one-empire.com">privacy@one-empire.com</a>.</p>
+    </div>
+
+    <section id="information-we-collect">
+      <h2><span class="sec-num">01.</span> Information We Collect</h2>
+
+      <h3>Information You Provide Directly</h3>
+      <ul>
+        <li><strong>Account data:</strong> name, email address, password (hashed), and profile details you provide on sign-up or in your account settings.</li>
+        <li><strong>Payment information:</strong> billing address and payment method details. Card numbers are processed and stored by our PCI-DSS-compliant payment processor; we do not store raw card data.</li>
+        <li><strong>Content you create:</strong> text, images, scripts, and any other material you generate or upload using the One Empire platform.</li>
+        <li><strong>Communications:</strong> messages you send us via support tickets, email, or in-app chat.</li>
+      </ul>
+
+      <h3>Information Collected Automatically</h3>
+      <ul>
+        <li><strong>Usage data:</strong> features accessed, workflows triggered, API calls made, and platform interactions — used to improve performance and your experience.</li>
+        <li><strong>Device & log data:</strong> IP address, browser type, operating system, referring URLs, and timestamps.</li>
+        <li><strong>Cookies & similar technologies:</strong> see Section 4 for details.</li>
+      </ul>
+
+      <h3>Information from Third Parties</h3>
+      <ul>
+        <li>If you connect a social account (e.g., YouTube, Facebook, LinkedIn) to publish content through One Empire, we receive OAuth tokens and the account metadata you authorise us to access.</li>
+        <li>Analytics partners may provide aggregated demographic signals associated with your account.</li>
+      </ul>
+    </section>
+
+    <section id="how-we-use">
+      <h2><span class="sec-num">02.</span> How We Use Your Information</h2>
+      <p>We use the information we collect to:</p>
+      <ul>
+        <li>Provide, operate, and improve the One Empire platform and its automation features.</li>
+        <li>Process transactions and send related invoices, receipts, and billing notices.</li>
+        <li>Personalise content suggestions and automation workflows based on your preferences and usage history.</li>
+        <li>Communicate with you about product updates, security alerts, and support responses.</li>
+        <li>Send marketing communications where you have opted in, with a clear unsubscribe option in every message.</li>
+        <li>Monitor for abuse, fraud, and violations of our Terms of Service.</li>
+        <li>Comply with applicable legal obligations.</li>
+      </ul>
+      <p>We do <strong>not</strong> sell your personal data to third-party advertisers or data brokers.</p>
+    </section>
+
+    <section id="sharing">
+      <h2><span class="sec-num">03.</span> Sharing &amp; Disclosure</h2>
+      <p>We share your information only in the following circumstances:</p>
+
+      <h3>Service Providers</h3>
+      <p>We engage trusted vendors (hosting, analytics, payment processing, email delivery) who process data on our behalf under strict data-processing agreements and are prohibited from using it for any other purpose.</p>
+
+      <h3>Connected Platforms</h3>
+      <p>When you authorise One Empire to publish content to a third-party platform (e.g., YouTube), we transmit the relevant content and credentials to that platform on your behalf.</p>
+
+      <h3>Legal Requirements</h3>
+      <p>We may disclose information if required by law, court order, or governmental authority, or when we believe disclosure is necessary to protect the rights, property, or safety of One Empire, our users, or the public.</p>
+
+      <h3>Business Transfers</h3>
+      <p>In the event of a merger, acquisition, or sale of all or substantially all assets, your data may be transferred to the successor entity. We will notify you before your data becomes subject to a different privacy policy.</p>
+
+      <h3>With Your Consent</h3>
+      <p>We share information with third parties when you have given us explicit consent to do so.</p>
+    </section>
+
+    <section id="cookies">
+      <h2><span class="sec-num">04.</span> Cookies &amp; Tracking</h2>
+      <p>One Empire uses cookies and similar technologies to keep you signed in, remember your preferences, and understand how the platform is being used.</p>
+
+      <h3>Types of Cookies We Use</h3>
+      <ul>
+        <li><strong>Essential cookies:</strong> required for authentication and core platform functionality. Cannot be disabled without breaking the service.</li>
+        <li><strong>Analytics cookies:</strong> help us understand feature usage and performance. You can opt out in your account settings.</li>
+        <li><strong>Preference cookies:</strong> store settings like theme, language, and notification preferences.</li>
+      </ul>
+
+      <p>You can manage cookies through your browser settings. Disabling essential cookies will impair platform functionality. For more control, visit your <a href="/account/privacy">Privacy Settings</a>.</p>
+    </section>
+
+    <section id="data-retention">
+      <h2><span class="sec-num">05.</span> Data Retention</h2>
+      <p>We retain your personal data for as long as your account is active or as needed to provide our services. Specifically:</p>
+      <ul>
+        <li><strong>Account data:</strong> retained while your account is open and for 90 days after closure to allow reactivation.</li>
+        <li><strong>Content data:</strong> deleted within 30 days of account closure unless you download it first.</li>
+        <li><strong>Billing records:</strong> retained for 7 years to satisfy financial and tax obligations.</li>
+        <li><strong>Log data:</strong> retained for 12 months for security and debugging purposes, then deleted or anonymised.</li>
+      </ul>
+    </section>
+
+    <section id="your-rights">
+      <h2><span class="sec-num">06.</span> Your Rights</h2>
+      <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+      <ul>
+        <li><strong>Access:</strong> request a copy of the personal data we hold about you.</li>
+        <li><strong>Correction:</strong> update inaccurate or incomplete data.</li>
+        <li><strong>Deletion:</strong> request deletion of your personal data ("right to be forgotten"), subject to legal retention requirements.</li>
+        <li><strong>Portability:</strong> receive your data in a machine-readable format.</li>
+        <li><strong>Objection / Restriction:</strong> object to or restrict certain processing activities.</li>
+        <li><strong>Withdraw consent:</strong> where processing is based on consent, withdraw it at any time without affecting prior processing.</li>
+      </ul>
+      <p>To exercise any of these rights, email <a href="mailto:privacy@one-empire.com">privacy@one-empire.com</a>. We respond within 30 days. Residents of the EU/EEA, UK, and California (CCPA) have additional statutory protections we honour in full.</p>
+    </section>
+
+    <section id="security">
+      <h2><span class="sec-num">07.</span> Security</h2>
+      <p>We implement industry-standard technical and organisational measures to protect your data, including:</p>
+      <ul>
+        <li>TLS encryption for all data in transit.</li>
+        <li>AES-256 encryption for sensitive data at rest.</li>
+        <li>Role-based access controls limiting employee access to personal data.</li>
+        <li>Regular penetration testing and security audits.</li>
+        <li>Incident response procedures with user notification within 72 hours of a confirmed breach.</li>
+      </ul>
+      <p>No system is 100% secure. In the unlikely event of a data breach affecting your rights and freedoms, we will notify you promptly and take immediate remedial action.</p>
+    </section>
+
+    <section id="third-party">
+      <h2><span class="sec-num">08.</span> Third-Party Services</h2>
+      <p>One Empire integrates with third-party platforms to deliver its content automation features. Once your content is published to an external platform, that platform's own privacy policy governs how they handle it. We encourage you to review the privacy policies of any platforms you connect, including but not limited to YouTube, Facebook, Instagram, LinkedIn, and TikTok.</p>
+    </section>
+
+    <section id="children">
+      <h2><span class="sec-num">09.</span> Children's Privacy</h2>
+      <p>One Empire is not directed to children under 16 years of age, and we do not knowingly collect personal data from children. If you believe a child has provided us with personal data, please contact us at <a href="mailto:privacy@one-empire.com">privacy@one-empire.com</a> and we will delete it promptly.</p>
+    </section>
+
+    <section id="international">
+      <h2><span class="sec-num">10.</span> International Data Transfers</h2>
+      <p>One Empire operates globally. Your data may be transferred to and processed in countries outside your home country, including the United States. Where we transfer data from the EU/EEA or UK, we rely on Standard Contractual Clauses (SCCs) or other lawful transfer mechanisms approved by the relevant supervisory authority.</p>
+    </section>
+
+    <section id="changes">
+      <h2><span class="sec-num">11.</span> Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. We will notify you of material changes by email and/or by displaying a prominent notice on the platform at least 14 days before changes take effect. Continued use of One Empire after the effective date constitutes acceptance of the revised policy.</p>
+      <p>The version history is maintained and available upon request.</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="sec-num">12.</span> Contact Us</h2>
+      <p>If you have questions, concerns, or requests related to this Privacy Policy, please reach out:</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:privacy@one-empire.com">privacy@one-empire.com</a></li>
+        <li><strong>Website:</strong> <a href="https://one-empire.com/legal">one-empire.com/legal</a></li>
+        <li><strong>Response time:</strong> We aim to respond within 2 business days.</li>
+      </ul>
+      <p>EU/EEA users may also lodge a complaint with their national data protection authority.</p>
+    </section>
+
+  </article>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 One Empire. All rights reserved.</p>
+  <p>
+    <a href="privacy-policy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
+    <a href="terms-of-service.html">Terms of Service</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:privacy@one-empire.com">privacy@one-empire.com</a>
+  </p>
+</footer>
+
+</body>
+</html>

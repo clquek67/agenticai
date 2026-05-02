@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service | One Empire</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #050D1A;
+      --navy-light: #0A1929;
+      --navy-mid: #0D2137;
+      --gold: #E8B84B;
+      --gold-muted: #C99D3A;
+      --text: #CBD5E1;
+      --text-muted: #8899A6;
+      --border: rgba(232, 184, 75, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--navy);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .logo span { color: #fff; }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 24px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy-mid) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 24px 48px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .page-hero h1 span { color: var(--gold); }
+
+    .page-hero p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(232, 184, 75, 0.12);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Layout ── */
+    .content-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky;
+      top: 80px;
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .toc-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+    }
+
+    .toc li { counter-increment: toc; margin-bottom: 8px; }
+
+    .toc a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      color: var(--gold-muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .toc a:hover { color: var(--gold); }
+
+    /* ── Article ── */
+    article section { margin-bottom: 48px; }
+
+    article h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    article h2 .sec-num {
+      color: var(--gold);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    article h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin: 20px 0 8px;
+    }
+
+    article p { color: var(--text); margin-bottom: 14px; }
+
+    article ul, article ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    article li { color: var(--text); margin-bottom: 6px; }
+
+    article a { color: var(--gold); text-decoration: none; }
+    article a:hover { text-decoration: underline; }
+
+    .highlight-box {
+      background: rgba(232, 184, 75, 0.06);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .highlight-box p { margin: 0; font-size: 0.95rem; }
+
+    .warning-box {
+      background: rgba(220, 53, 69, 0.07);
+      border-left: 3px solid #dc3545;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .warning-box p { margin: 0; font-size: 0.9rem; color: #f8b4ba; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy-light);
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    footer p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px; }
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .content-wrap {
+        grid-template-columns: 1fr;
+        padding: 32px 16px 64px;
+      }
+      .toc { position: static; }
+      .header-inner nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">ONE <span>EMPIRE</span></a>
+    <nav>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="badge">Legal</div>
+  <h1>Terms of <span>Service</span></h1>
+  <p>Last updated: May 2, 2026 &nbsp;&mdash;&nbsp; Effective: May 2, 2026</p>
+</div>
+
+<!-- Body -->
+<div class="content-wrap">
+
+  <!-- Table of Contents -->
+  <aside class="toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#acceptance">Acceptance of Terms</a></li>
+      <li><a href="#eligibility">Eligibility</a></li>
+      <li><a href="#account">Your Account</a></li>
+      <li><a href="#services">The Services</a></li>
+      <li><a href="#acceptable-use">Acceptable Use</a></li>
+      <li><a href="#intellectual-property">Intellectual Property</a></li>
+      <li><a href="#user-content">Your Content</a></li>
+      <li><a href="#ai-generated">AI-Generated Content</a></li>
+      <li><a href="#payment">Payment & Billing</a></li>
+      <li><a href="#third-party">Third-Party Integrations</a></li>
+      <li><a href="#disclaimers">Disclaimers</a></li>
+      <li><a href="#limitation">Limitation of Liability</a></li>
+      <li><a href="#indemnification">Indemnification</a></li>
+      <li><a href="#termination">Termination</a></li>
+      <li><a href="#governing-law">Governing Law</a></li>
+      <li><a href="#changes">Changes to Terms</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </aside>
+
+  <!-- Main Article -->
+  <article>
+
+    <div class="highlight-box">
+      <p>Please read these Terms of Service carefully before using One Empire. By creating an account or using the platform, you agree to be bound by these terms. If you do not agree, do not use the service.</p>
+    </div>
+
+    <section id="acceptance">
+      <h2><span class="sec-num">01.</span> Acceptance of Terms</h2>
+      <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and One Empire ("One Empire," "we," "us," or "our") governing your access to and use of the One Empire content automation platform, website at <a href="https://one-empire.com">one-empire.com</a>, APIs, and all related services (collectively, the "Services").</p>
+      <p>By clicking "I Agree," creating an account, or otherwise accessing the Services, you affirm that you have read, understood, and agree to be bound by these Terms and our <a href="privacy-policy.html">Privacy Policy</a>, which is incorporated herein by reference.</p>
+    </section>
+
+    <section id="eligibility">
+      <h2><span class="sec-num">02.</span> Eligibility</h2>
+      <p>You must be at least 18 years of age to use the Services. By agreeing to these Terms, you represent and warrant that:</p>
+      <ul>
+        <li>You are at least 18 years old.</li>
+        <li>You have the legal capacity to enter into a binding agreement.</li>
+        <li>Your use of the Services does not violate any applicable laws or regulations in your jurisdiction.</li>
+        <li>You are not located in a country subject to a U.S. government embargo or designated as a "terrorist supporting" country.</li>
+      </ul>
+      <p>If you are using the Services on behalf of a business or other legal entity, you represent that you have authority to bind that entity to these Terms.</p>
+    </section>
+
+    <section id="account">
+      <h2><span class="sec-num">03.</span> Your Account</h2>
+      <h3>Account Registration</h3>
+      <p>You must provide accurate, complete, and current information when creating your account. You are responsible for keeping your account information up to date.</p>
+
+      <h3>Account Security</h3>
+      <p>You are solely responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You agree to:</p>
+      <ul>
+        <li>Use a strong, unique password for your One Empire account.</li>
+        <li>Enable two-factor authentication where available.</li>
+        <li>Notify us immediately at <a href="mailto:security@one-empire.com">security@one-empire.com</a> of any suspected unauthorised access.</li>
+      </ul>
+      <p>One Empire is not liable for any loss or damage arising from unauthorised account access resulting from your failure to safeguard your credentials.</p>
+
+      <h3>One Account Per User</h3>
+      <p>Each individual may maintain only one personal account. Creating multiple accounts to circumvent subscription limits, suspensions, or other restrictions is prohibited and may result in permanent termination of all associated accounts.</p>
+    </section>
+
+    <section id="services">
+      <h2><span class="sec-num">04.</span> The Services</h2>
+      <p>One Empire provides a content automation platform that enables users to create, schedule, and distribute content across multiple channels using AI-assisted tools. Specific features available to you depend on your subscription plan.</p>
+
+      <h3>Service Availability</h3>
+      <p>We strive for 99.9% monthly uptime for paid plans. We reserve the right to perform scheduled maintenance (with advance notice) and may experience occasional unplanned downtime. We are not liable for interruptions caused by factors outside our reasonable control, including third-party platform outages.</p>
+
+      <h3>Beta Features</h3>
+      <p>We may offer beta or early-access features. These are provided "as-is," may be modified or discontinued without notice, and are excluded from any uptime commitments or SLA guarantees.</p>
+    </section>
+
+    <section id="acceptable-use">
+      <h2><span class="sec-num">05.</span> Acceptable Use</h2>
+      <p>You agree to use the Services only for lawful purposes and in a manner that does not infringe on the rights of others. You must not use the Services to:</p>
+
+      <h3>Prohibited Content</h3>
+      <ul>
+        <li>Create, distribute, or promote content that is illegal, defamatory, harassing, hateful, sexually explicit involving minors, or violates any applicable law.</li>
+        <li>Spread misinformation, disinformation, or deliberately deceptive content designed to mislead audiences.</li>
+        <li>Infringe any third party's intellectual property rights, including copyright, trademark, or trade secret.</li>
+        <li>Violate the terms of service of any third-party platform you publish to via One Empire.</li>
+      </ul>
+
+      <h3>Prohibited Actions</h3>
+      <ul>
+        <li>Attempt to reverse engineer, decompile, or disassemble any part of the Services.</li>
+        <li>Use automated bots, scrapers, or scripts to access the Services in a manner that burdens our infrastructure.</li>
+        <li>Attempt to gain unauthorised access to other users' accounts or our backend systems.</li>
+        <li>Resell, sublicense, or redistribute access to the Services without written authorisation.</li>
+        <li>Use the Services to generate spam, phishing content, or unsolicited mass communications.</li>
+      </ul>
+
+      <div class="warning-box">
+        <p><strong>Violation Warning:</strong> Breaching these acceptable use provisions may result in immediate suspension or permanent termination of your account, at our sole discretion, with or without prior notice.</p>
+      </div>
+    </section>
+
+    <section id="intellectual-property">
+      <h2><span class="sec-num">06.</span> Intellectual Property</h2>
+      <h3>One Empire's IP</h3>
+      <p>The One Empire platform, including its software, design, logos, trademarks, and all underlying technology, is owned by or licensed to One Empire and is protected by applicable intellectual property laws. These Terms do not grant you any ownership interest in the Services.</p>
+
+      <h3>Limited Licence to Use</h3>
+      <p>Subject to your compliance with these Terms and timely payment of applicable fees, One Empire grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Services for your personal or internal business purposes.</p>
+    </section>
+
+    <section id="user-content">
+      <h2><span class="sec-num">07.</span> Your Content</h2>
+      <h3>Ownership</h3>
+      <p>You retain all ownership rights in the content you create, upload, or publish using One Empire ("User Content"). We do not claim ownership of your User Content.</p>
+
+      <h3>Licence to One Empire</h3>
+      <p>By using the Services, you grant One Empire a non-exclusive, worldwide, royalty-free licence to host, store, process, and transmit your User Content solely as necessary to provide and improve the Services. This licence terminates when you delete your content or close your account, subject to our data retention policy.</p>
+
+      <h3>Content Responsibility</h3>
+      <p>You are solely responsible for your User Content, including its accuracy, legality, and compliance with third-party platform policies. One Empire does not endorse or verify User Content and accepts no liability for it.</p>
+    </section>
+
+    <section id="ai-generated">
+      <h2><span class="sec-num">08.</span> AI-Generated Content</h2>
+      <p>One Empire uses artificial intelligence to assist with content creation. You acknowledge and agree that:</p>
+      <ul>
+        <li>AI-generated outputs are tools to assist your creative process, not guaranteed final products.</li>
+        <li>You are responsible for reviewing, editing, and approving all AI-generated content before publication.</li>
+        <li>AI outputs may occasionally be inaccurate, incomplete, or inappropriate — always verify facts and compliance before publishing.</li>
+        <li>You must comply with all platform-specific disclosure requirements regarding AI-generated content (e.g., YouTube's synthetic content disclosures).</li>
+        <li>The intellectual property status of AI-generated outputs may vary by jurisdiction; you are responsible for understanding and complying with local laws.</li>
+      </ul>
+    </section>
+
+    <section id="payment">
+      <h2><span class="sec-num">09.</span> Payment &amp; Billing</h2>
+      <h3>Subscription Fees</h3>
+      <p>Certain features require a paid subscription. By subscribing, you authorise us to charge your payment method on a recurring basis (monthly or annually, as selected). All fees are stated in USD unless otherwise specified and are exclusive of applicable taxes.</p>
+
+      <h3>Free Trial</h3>
+      <p>Where a free trial is offered, it will convert to a paid subscription at the end of the trial period unless you cancel before the trial expires. We will send a reminder email at least 3 days before the trial ends.</p>
+
+      <h3>Cancellation</h3>
+      <p>You may cancel your subscription at any time through your account settings. Cancellation takes effect at the end of your current billing period. We do not provide prorated refunds for partial billing periods, except where required by applicable law.</p>
+
+      <h3>Refunds</h3>
+      <p>Refund requests within 14 days of your initial purchase are considered on a case-by-case basis. Contact <a href="mailto:billing@one-empire.com">billing@one-empire.com</a> to request a refund review. We do not offer refunds for annual plans after the 14-day window.</p>
+
+      <h3>Price Changes</h3>
+      <p>We may change subscription prices with at least 30 days' written notice. Continued use after the effective date constitutes acceptance of the new pricing.</p>
+    </section>
+
+    <section id="third-party">
+      <h2><span class="sec-num">10.</span> Third-Party Integrations</h2>
+      <p>One Empire integrates with third-party platforms (e.g., YouTube, Facebook, Instagram, LinkedIn, TikTok) to enable content distribution. You acknowledge that:</p>
+      <ul>
+        <li>Your use of third-party platforms is governed by their respective terms of service and privacy policies.</li>
+        <li>One Empire is not responsible for the actions, availability, or policies of third-party platforms.</li>
+        <li>Third-party platforms may change their APIs or policies, which may affect One Empire's integration features. We will make reasonable efforts to adapt but cannot guarantee continuity of any specific integration.</li>
+        <li>You are solely responsible for ensuring your content complies with the rules of each platform you publish to.</li>
+      </ul>
+    </section>
+
+    <section id="disclaimers">
+      <h2><span class="sec-num">11.</span> Disclaimers</h2>
+      <div class="warning-box">
+        <p>THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS. YOUR USE OF THE SERVICES IS AT YOUR SOLE RISK.</p>
+      </div>
+      <p>One Empire does not warrant that AI-generated content will be accurate, complete, appropriate for your intended purpose, or free from third-party intellectual property claims.</p>
+    </section>
+
+    <section id="limitation">
+      <h2><span class="sec-num">12.</span> Limitation of Liability</h2>
+      <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, ONE EMPIRE AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AND LICENSORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS, DATA, GOODWILL, OR BUSINESS OPPORTUNITIES, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF OR INABILITY TO USE THE SERVICES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+      <p>IN NO EVENT SHALL ONE EMPIRE'S TOTAL CUMULATIVE LIABILITY TO YOU EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO ONE EMPIRE IN THE 12 MONTHS PRECEDING THE CLAIM, OR (B) USD $100.</p>
+      <p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability for consequential damages. In such jurisdictions, our liability is limited to the greatest extent permitted by law.</p>
+    </section>
+
+    <section id="indemnification">
+      <h2><span class="sec-num">13.</span> Indemnification</h2>
+      <p>You agree to indemnify, defend, and hold harmless One Empire and its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in any way connected with:</p>
+      <ul>
+        <li>Your access to or use of the Services.</li>
+        <li>Your User Content.</li>
+        <li>Your violation of these Terms.</li>
+        <li>Your violation of any third-party rights, including intellectual property rights or platform terms of service.</li>
+      </ul>
+    </section>
+
+    <section id="termination">
+      <h2><span class="sec-num">14.</span> Termination</h2>
+      <h3>By You</h3>
+      <p>You may close your account at any time by visiting your account settings or contacting <a href="mailto:support@one-empire.com">support@one-empire.com</a>. Closure does not entitle you to a prorated refund of any prepaid fees.</p>
+
+      <h3>By One Empire</h3>
+      <p>We may suspend or terminate your access to the Services at any time, with or without notice, for:</p>
+      <ul>
+        <li>Breach of these Terms or our Acceptable Use Policy.</li>
+        <li>Non-payment of applicable fees.</li>
+        <li>Conduct that we reasonably believe poses a legal, security, or reputational risk to One Empire or other users.</li>
+        <li>Any reason, upon 30 days' notice, where no breach has occurred (in which case we will refund any prepaid, unused subscription fees on a prorated basis).</li>
+      </ul>
+
+      <h3>Effect of Termination</h3>
+      <p>Upon termination, your licence to use the Services ends immediately. Sections 6, 7, 11, 12, 13, and 15 survive termination.</p>
+    </section>
+
+    <section id="governing-law">
+      <h2><span class="sec-num">15.</span> Governing Law &amp; Dispute Resolution</h2>
+      <h3>Governing Law</h3>
+      <p>These Terms are governed by and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law provisions.</p>
+
+      <h3>Informal Resolution</h3>
+      <p>Before initiating formal proceedings, you agree to contact us at <a href="mailto:legal@one-empire.com">legal@one-empire.com</a> and attempt to resolve the dispute informally for at least 30 days.</p>
+
+      <h3>Arbitration</h3>
+      <p>Any dispute that cannot be resolved informally shall be settled by binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules, conducted in English, with the seat of arbitration in Wilmington, Delaware. Judgment on the award may be entered in any court of competent jurisdiction.</p>
+
+      <h3>Class Action Waiver</h3>
+      <p>YOU AND ONE EMPIRE EACH WAIVE THE RIGHT TO PARTICIPATE IN CLASS ACTION LITIGATION OR CLASS-WIDE ARBITRATION. ALL CLAIMS MUST BE BROUGHT IN AN INDIVIDUAL CAPACITY.</p>
+
+      <h3>Exception</h3>
+      <p>Either party may seek injunctive or other equitable relief in any court of competent jurisdiction to prevent irreparable harm pending arbitration.</p>
+    </section>
+
+    <section id="changes">
+      <h2><span class="sec-num">16.</span> Changes to Terms</h2>
+      <p>We may modify these Terms at any time. For material changes, we will provide at least 14 days' notice by email and/or prominent in-platform notice before the changes take effect. For non-material changes, the updated Terms will be effective immediately upon posting.</p>
+      <p>Your continued use of the Services after the effective date constitutes your acceptance of the revised Terms. If you do not agree with the changes, you must stop using the Services and may close your account to receive a prorated refund of any prepaid fees.</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="sec-num">17.</span> Contact Us</h2>
+      <p>For questions about these Terms or the Services:</p>
+      <ul>
+        <li><strong>General inquiries:</strong> <a href="mailto:support@one-empire.com">support@one-empire.com</a></li>
+        <li><strong>Legal matters:</strong> <a href="mailto:legal@one-empire.com">legal@one-empire.com</a></li>
+        <li><strong>Billing:</strong> <a href="mailto:billing@one-empire.com">billing@one-empire.com</a></li>
+        <li><strong>Website:</strong> <a href="https://one-empire.com/legal">one-empire.com/legal</a></li>
+      </ul>
+    </section>
+
+  </article>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 One Empire. All rights reserved.</p>
+  <p>
+    <a href="privacy-policy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
+    <a href="terms-of-service.html">Terms of Service</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:legal@one-empire.com">legal@one-empire.com</a>
+  </p>
+</footer>
+
+</body>
+</html>
