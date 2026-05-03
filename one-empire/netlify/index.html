@@ -18,26 +18,16 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--navy-deep);color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-
-/* CIRCUIT BG */
 .circuit-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0.13}
 .circuit-bg svg{width:100%;height:100%}
-
-/* GLOW */
 .glow-top{position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(ellipse,rgba(201,153,58,0.1) 0%,rgba(26,171,204,0.04) 40%,transparent 70%);pointer-events:none;z-index:0}
-
-/* NAV */
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(5,13,26,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo-img{height:36px;width:auto;object-fit:contain}
 .nav-back{font-family:'Rajdhani',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--white-dim);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
 .nav-back:hover{color:var(--gold-bright)}
 .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
-
-/* MAIN */
 .main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:3.5rem 2rem 5rem}
-
-/* HEADER */
 .form-header{text-align:center;margin-bottom:3rem;opacity:0;animation:fadeUp .8s ease forwards .1s}
 .form-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:1.1rem}
 .form-eyebrow::before,.form-eyebrow::after{content:'';display:block;width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
@@ -45,8 +35,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .form-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:400;line-height:1.1;margin-bottom:.75rem}
 .form-header h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .form-header p{font-size:.88rem;color:var(--white-dim);line-height:1.7;max-width:480px;margin:0 auto}
-
-/* STEPS INDICATOR */
 .steps-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:2.5rem;opacity:0;animation:fadeUp .7s ease forwards .25s}
 .step-dot{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
 .step-dot-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border-md);background:var(--navy-card);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:600;color:var(--white-faint);transition:all .3s}
@@ -57,14 +45,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .step-dot.done .step-dot-label{color:var(--success)}
 .step-connector{width:50px;height:1.5px;background:var(--border);margin-bottom:18px;transition:background .3s}
 .step-connector.done{background:linear-gradient(90deg,var(--success),var(--gold-dim))}
-
-/* FORM CARD */
 .form-card{background:var(--navy-card);border:1px solid var(--border);border-radius:12px;padding:2rem 2rem 1.75rem;margin-bottom:1rem;position:relative;overflow:hidden;opacity:0;animation:fadeUp .7s ease forwards .35s}
 .form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-bright),var(--gold),transparent)}
 .step-panel{display:none}
 .step-panel.active{display:block}
-
-/* FIELD */
 .field{margin-bottom:1.5rem}
 .field:last-of-type{margin-bottom:0}
 .field-label{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;display:block}
@@ -75,11 +59,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .field-textarea{resize:vertical;min-height:120px;line-height:1.65}
 .field-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23C9993A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
 .field-select option{background:var(--navy-mid);color:var(--white)}
-
-/* CHAR COUNT */
 .char-count{font-size:.68rem;color:var(--white-faint);text-align:right;margin-top:.35rem}
-
-/* VOICE UPLOAD */
 .voice-zone{border:1.5px dashed var(--border-md);border-radius:8px;padding:1.75rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
 .voice-zone:hover,.voice-zone.drag-over{border-color:var(--gold);background:rgba(201,153,58,0.04)}
 .voice-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -88,42 +68,31 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .voice-sub{font-size:.72rem;color:var(--white-faint)}
 .voice-filename{margin-top:.75rem;font-size:.78rem;color:var(--success);display:none}
 .voice-filename.visible{display:block}
-
-/* OR DIVIDER */
 .or-divider{display:flex;align-items:center;gap:12px;margin:1.25rem 0}
 .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .or-divider span{font-family:'Rajdhani',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--white-faint)}
-
-/* PLATFORM GRID */
 .platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .platform-item{position:relative}
 .platform-item input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
 .platform-item label{display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:border-color .2s,background .2s;text-align:center}
 .platform-item label:hover{border-color:var(--border-md);background:rgba(201,153,58,0.04)}
 .platform-item input:checked + label{border-color:var(--gold);background:rgba(201,153,58,0.1)}
-.platform-item input:checked + label .plat-icon{filter:none}
 .plat-icon{font-size:1.2rem;filter:grayscale(0.4)opacity(0.7);transition:filter .2s}
 .platform-item input:checked + label .plat-icon{filter:none}
 .plat-name{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-dim)}
 .platform-item input:checked + label .plat-name{color:var(--gold-bright)}
-
-/* TONE CHIPS */
 .tone-chips{display:flex;flex-wrap:wrap;gap:8px}
 .tone-chip{position:relative}
 .tone-chip input[type=radio]{position:absolute;opacity:0;width:0;height:0}
 .tone-chip label{display:inline-block;padding:.45rem 1rem;border:1px solid var(--border);border-radius:999px;font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white-dim);cursor:pointer;transition:all .2s}
 .tone-chip label:hover{border-color:var(--border-md);color:var(--white)}
 .tone-chip input:checked + label{border-color:var(--gold);background:rgba(201,153,58,0.12);color:var(--gold-bright)}
-
-/* RANGE SLIDER */
 .range-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
 .range-label-sm{font-size:.72rem;color:var(--white-faint)}
 .range-val{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;color:var(--gold-bright)}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold) 0%,var(--border) 0%);outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-bright));border:2px solid var(--navy-deep);box-shadow:0 0 8px rgba(201,153,58,0.4);cursor:pointer}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-bright));border:2px solid var(--navy-deep);cursor:pointer}
-
-/* NAV BUTTONS */
 .form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;gap:12px;opacity:0;animation:fadeUp .6s ease forwards .5s}
 .btn-prev{flex:0 0 auto;padding:.75rem 1.5rem;background:transparent;border:1px solid var(--border-md);color:var(--white-dim);font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
 .btn-prev:hover{border-color:var(--gold-dim);color:var(--white)}
@@ -131,12 +100,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .btn-next:hover{opacity:.88;transform:translateY(-1px)}
 .btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .progress-text{font-family:'Rajdhani',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white-faint)}
-
-/* TIKTOK CONNECT */
 .tiktok-connect-btn{display:inline-flex;align-items:center;gap:10px;padding:.8rem 1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy-deep);font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:opacity .2s,transform .15s;box-shadow:0 0 24px rgba(201,153,58,0.25)}
 .tiktok-connect-btn:hover{opacity:.88;transform:translateY(-1px)}
-
-/* SUCCESS */
 .success-state{display:none;text-align:center;padding:3rem 1.5rem;opacity:0;animation:fadeUp .8s ease forwards}
 .success-state.visible{display:block}
 .success-icon{font-size:3rem;margin-bottom:1.25rem}
@@ -146,16 +111,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .success-steps{display:flex;flex-direction:column;gap:8px;max-width:360px;margin:0 auto 2rem;text-align:left}
 .success-step{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--white-dim);padding:.6rem .85rem;background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.15);border-radius:6px}
 .success-step-icon{font-size:.9rem;flex-shrink:0}
-
-/* FOOTER */
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.25rem 3rem;display:flex;align-items:center;justify-content:space-between}
 .footer-logo{font-family:'Rajdhani',sans-serif;font-size:.9rem;color:rgba(201,153,58,0.35);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
 .footer-copy{font-size:.65rem;color:rgba(240,246,255,0.15);letter-spacing:.06em}
-
-/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* RESPONSIVE */
 @media(max-width:600px){
   nav{padding:1rem 1.25rem}
   .main{padding:2.5rem 1.25rem 4rem}
@@ -199,14 +158,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.
 </nav>
 
 <main class="main">
-  <!-- HEADER -->
   <div class="form-header">
     <div class="form-eyebrow">Content Brief</div>
     <h1>Tell us about your <em>content</em></h1>
     <p>Fill in your brief below — our AI will generate your full content suite across every platform, in your voice.</p>
   </div>
 
-  <!-- STEPS BAR -->
   <div class="steps-bar" id="stepsBar">
     <div class="step-dot active" id="sdot-1">
       <div class="step-dot-circle">1</div>
@@ -229,7 +186,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.
     </div>
   </div>
 
-  <!-- FORM CARD -->
   <div class="form-card" id="formCard">
 
     <!-- STEP 1: BRIEF -->
@@ -237,6 +193,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.
       <div class="field">
         <label class="field-label">Your name</label>
         <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah Chen"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Email address</label>
+        <span class="field-hint">Used to connect your social accounts and deliver your content.</span>
+        <input class="field-input" type="email" id="f-email" placeholder="you@example.com"/>
       </div>
       <div class="field">
         <label class="field-label">Content topic or idea</label>
@@ -388,12 +349,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.
         <label class="field-label">Review your brief</label>
         <span class="field-hint">Here's everything we'll use to generate your content. Edit anything before submitting.</span>
       </div>
-      <div id="reviewContent" style="display:flex;flex-direction:column;gap:10px;margin-bottom:1rem"></div>
-      <div class="field" style="margin-top:1rem">
-        <label class="field-label">Email address</label>
-        <span class="field-hint">We'll send your generated content here within 24 hours.</span>
-        <input class="field-input" type="email" id="f-email" placeholder="you@example.com"/>
-      </div>
+      <div id="reviewContent" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
 
   </div>
@@ -412,7 +368,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.
     <a href="https://app.one-empire.com" class="btn-next" style="display:inline-block;max-width:280px;text-align:center;text-decoration:none">Back to Content Studio</a>
   </div>
 
-  <!-- NAV BUTTONS -->
   <div class="form-nav" id="formNav">
     <button class="btn-prev" id="btnPrev" onclick="prevStep()" style="visibility:hidden">&larr; Back</button>
     <span class="progress-text" id="progressText">Step 1 of 4</span>
@@ -464,34 +419,42 @@ function updateStepsBar(step) {
   }
 }
 
-function buildReview() {
-  var name = document.getElementById('f-name').value || 'Not provided';
-  var topic = document.getElementById('f-topic').value || 'Not provided';
-  var audience = document.getElementById('f-audience').value || 'Not provided';
-  var message = document.getElementById('f-message').value || 'Not provided';
-  var tone = document.querySelector('input[name=tone]:checked');
-  var toneVal = tone ? tone.value : 'Not selected';
-  var freq = document.getElementById('f-freq').value || 'Not selected';
+function buildTikTokOAuthUrl() {
+  var email = document.getElementById('f-email').value || 'demo@one-empire.com';
+  return 'https://www.tiktok.com/v2/auth/authorize/?client_key=awdy8mgd1w69flpm' +
+    '&redirect_uri=https%3A%2F%2Fbrief.one-empire.com%2Ftiktok%2Fcallback' +
+    '&response_type=code&scope=user.info.basic%2Cvideo.publish&state=' + encodeURIComponent(email);
+}
 
-  var platforms = [];
+function buildReview() {
+  var name     = document.getElementById('f-name').value || 'Not provided';
+  var email    = document.getElementById('f-email').value || 'Not provided';
+  var topic    = document.getElementById('f-topic').value || 'Not provided';
+  var audience = document.getElementById('f-audience').value || 'Not provided';
+  var message  = document.getElementById('f-message').value || 'Not provided';
+  var tone     = document.querySelector('input[name=tone]:checked');
+  var toneVal  = tone ? tone.value : 'Not selected';
+  var freq     = document.getElementById('f-freq').value || 'Not selected';
+
+  var platforms = [], formats = [];
   document.querySelectorAll('input[name=platforms]:checked').forEach(function(el){ platforms.push(el.value); });
-  var formats = [];
   document.querySelectorAll('input[name=formats]:checked').forEach(function(el){ formats.push(el.value); });
 
   var rows = [
-    {label:'Name', value: name},
-    {label:'Topic', value: topic},
-    {label:'Audience', value: audience},
+    {label:'Name',        value: name},
+    {label:'Email',       value: email},
+    {label:'Topic',       value: topic},
+    {label:'Audience',    value: audience},
     {label:'Key message', value: message},
-    {label:'Platforms', value: platforms.length ? platforms.join(', ') : 'None selected'},
-    {label:'Formats', value: formats.length ? formats.join(', ') : 'None selected'},
-    {label:'Tone', value: toneVal},
-    {label:'Frequency', value: freq}
+    {label:'Platforms',   value: platforms.length ? platforms.join(', ') : 'None selected'},
+    {label:'Formats',     value: formats.length ? formats.join(', ') : 'None selected'},
+    {label:'Tone',        value: toneVal},
+    {label:'Frequency',   value: freq}
   ];
 
   var html = '';
   rows.forEach(function(r){
-    html += '<div style="display:flex;gap:12px;padding:.65rem .85rem;background:rgba(8,20,40,0.6);border:1px solid var(--border);border-radius:6px;">' +
+    html += '<div style="display:flex;gap:12px;padding:.65rem .85rem;background:rgba(8,20,40,0.6);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;">' +
       '<span style="font-family:Rajdhani,sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);min-width:100px;flex-shrink:0;padding-top:2px;">' + r.label + '</span>' +
       '<span style="font-size:.82rem;color:var(--white-dim);line-height:1.5;">' + r.value + '</span>' +
     '</div>';
@@ -530,76 +493,63 @@ function updateUI() {
 }
 
 function submitForm() {
-  var name      = document.getElementById('f-name').value;
-  var topic     = document.getElementById('f-topic').value;
-  var audience  = document.getElementById('f-audience').value;
-  var message   = document.getElementById('f-message').value;
-  var email     = document.getElementById('f-email').value;
-  var tone      = document.querySelector('input[name=tone]:checked');
-  var toneVal   = tone ? tone.value : '';
-  var freq      = document.getElementById('f-freq').value;
-  var avoid     = document.getElementById('f-avoid').value;
-  var depth     = document.getElementById('depthRange').value;
+  var email = document.getElementById('f-email').value;
+  if (!email) { alert('Please enter your email address in Step 1.'); return; }
+
+  document.getElementById('hdn-name').value      = document.getElementById('f-name').value;
+  document.getElementById('hdn-topic').value     = document.getElementById('f-topic').value;
+  document.getElementById('hdn-audience').value  = document.getElementById('f-audience').value;
+  document.getElementById('hdn-message').value   = document.getElementById('f-message').value;
+  document.getElementById('hdn-email').value     = email;
+  document.getElementById('hdn-tone').value      = (document.querySelector('input[name=tone]:checked') || {value:''}).value;
+  document.getElementById('hdn-freq').value      = document.getElementById('f-freq').value;
+  document.getElementById('hdn-avoid').value     = document.getElementById('f-avoid').value;
+  document.getElementById('hdn-depth').value     = document.getElementById('depthRange').value;
+
   var platforms = [], formats = [];
   document.querySelectorAll('input[name=platforms]:checked').forEach(function(el){ platforms.push(el.value); });
   document.querySelectorAll('input[name=formats]:checked').forEach(function(el){ formats.push(el.value); });
-
-  if (!email) { alert('Please enter your email address.'); return; }
-
-  document.getElementById('hdn-name').value     = name;
-  document.getElementById('hdn-topic').value    = topic;
-  document.getElementById('hdn-audience').value = audience;
-  document.getElementById('hdn-message').value  = message;
-  document.getElementById('hdn-email').value    = email;
-  document.getElementById('hdn-tone').value     = toneVal;
-  document.getElementById('hdn-freq').value     = freq;
-  document.getElementById('hdn-avoid').value    = avoid;
-  document.getElementById('hdn-depth').value    = depth;
   document.getElementById('hdn-platforms').value = platforms.join(', ');
   document.getElementById('hdn-formats').value   = formats.join(', ');
 
-  var formEl = document.getElementById('netlify-form');
-  var data   = new FormData(formEl);
+  var data = new FormData(document.getElementById('netlify-form'));
   fetch('/', { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: new URLSearchParams(data).toString() })
-  .then(function() {
-    document.getElementById('formCard').style.display  = 'none';
-    document.getElementById('formNav').style.display   = 'none';
-    document.getElementById('stepsBar').style.opacity  = '.4';
-    var s = document.getElementById('successState');
-    s.style.display = 'block';
-    setTimeout(function(){ s.classList.add('visible'); }, 50);
-  })
-  .catch(function() {
-    document.getElementById('formCard').style.display  = 'none';
-    document.getElementById('formNav').style.display   = 'none';
-    var s = document.getElementById('successState');
-    s.style.display = 'block';
-    setTimeout(function(){ s.classList.add('visible'); }, 50);
-  });
+  .then(function() { showSuccess(); })
+  .catch(function() { showSuccess(); });
+}
+
+function showSuccess() {
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('formNav').style.display  = 'none';
+  document.getElementById('stepsBar').style.opacity = '.4';
+  var s = document.getElementById('successState');
+  s.style.display = 'block';
+  setTimeout(function(){ s.classList.add('visible'); }, 50);
 }
 
 // init range
 updateDepth(document.getElementById('depthRange'));
 
-// TikTok OAuth connect button — shown when TikTok platform is selected
+// TikTok connect button — show when TikTok selected, update URL when email changes
 document.getElementById('p-tiktok').addEventListener('change', function() {
   var wrap = document.getElementById('tiktok-connect-wrap');
   if (this.checked) {
-    var email = document.getElementById('f-email').value || 'demo@one-empire.com';
-    var state = encodeURIComponent(email);
-    document.getElementById('tiktok-oauth-btn').href =
-      'https://www.tiktok.com/v2/auth/authorize/?client_key=awdy8mgd1w69flpm' +
-      '&redirect_uri=https%3A%2F%2Fbrief.one-empire.com%2Ftiktok%2Fcallback' +
-      '&response_type=code&scope=user.info.basic%2Cvideo.publish&state=' + state;
+    document.getElementById('tiktok-oauth-btn').href = buildTikTokOAuthUrl();
     wrap.style.display = 'block';
   } else {
     wrap.style.display = 'none';
   }
 });
+
+document.getElementById('f-email').addEventListener('input', function() {
+  var btn = document.getElementById('tiktok-oauth-btn');
+  if (document.getElementById('p-tiktok').checked) {
+    btn.href = buildTikTokOAuthUrl();
+  }
+});
 </script>
 
-<!-- Netlify form detection -->
 <form id="netlify-form" name="content-brief" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
   <input type="hidden" name="form-name" value="content-brief"/>
   <input type="text"   name="bot-field"/>
