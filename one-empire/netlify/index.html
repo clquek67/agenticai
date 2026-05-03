@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Content Brief | One Empire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Rajdhani:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy-deep:#050D1A;--navy:#081428;--navy-mid:#0B1E3D;--navy-light:#102448;--navy-card:#0D1C38;
+  --gold:#C9993A;--gold-bright:#E8B84B;--gold-glow:#F5CC6A;--gold-dim:#8A6820;
+  --gold-line:rgba(201,153,58,0.3);--cyan:#1AABCC;--white:#F0F6FF;
+  --white-dim:rgba(240,246,255,0.65);--white-faint:rgba(240,246,255,0.22);
+  --border:rgba(201,153,58,0.18);--border-md:rgba(201,153,58,0.32);
+  --success:#2ECC71;--error:#E74C3C;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--navy-deep);color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* CIRCUIT BG */
+.circuit-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0.13}
+.circuit-bg svg{width:100%;height:100%}
+
+/* GLOW */
+.glow-top{position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(ellipse,rgba(201,153,58,0.1) 0%,rgba(26,171,204,0.04) 40%,transparent 70%);pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(5,13,26,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;text-decoration:none}
+.nav-logo-img{height:36px;width:auto;object-fit:contain}
+.nav-back{font-family:'Rajdhani',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--white-dim);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--gold-bright)}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:3.5rem 2rem 5rem}
+
+/* HEADER */
+.form-header{text-align:center;margin-bottom:3rem;opacity:0;animation:fadeUp .8s ease forwards .1s}
+.form-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:1.1rem}
+.form-eyebrow::before,.form-eyebrow::after{content:'';display:block;width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.form-eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.form-header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:400;line-height:1.1;margin-bottom:.75rem}
+.form-header h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.form-header p{font-size:.88rem;color:var(--white-dim);line-height:1.7;max-width:480px;margin:0 auto}
+
+/* STEPS INDICATOR */
+.steps-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:2.5rem;opacity:0;animation:fadeUp .7s ease forwards .25s}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.step-dot-circle{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border-md);background:var(--navy-card);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:600;color:var(--white-faint);transition:all .3s}
+.step-dot.active .step-dot-circle{background:linear-gradient(135deg,var(--gold),var(--gold-bright));border-color:var(--gold-bright);color:var(--navy-deep);box-shadow:0 0 16px rgba(201,153,58,0.4)}
+.step-dot.done .step-dot-circle{background:rgba(46,204,113,0.15);border-color:var(--success);color:var(--success)}
+.step-dot-label{font-family:'Rajdhani',sans-serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--white-faint);transition:color .3s}
+.step-dot.active .step-dot-label{color:var(--gold-bright)}
+.step-dot.done .step-dot-label{color:var(--success)}
+.step-connector{width:50px;height:1.5px;background:var(--border);margin-bottom:18px;transition:background .3s}
+.step-connector.done{background:linear-gradient(90deg,var(--success),var(--gold-dim))}
+
+/* FORM CARD */
+.form-card{background:var(--navy-card);border:1px solid var(--border);border-radius:12px;padding:2rem 2rem 1.75rem;margin-bottom:1rem;position:relative;overflow:hidden;opacity:0;animation:fadeUp .7s ease forwards .35s}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-bright),var(--gold),transparent)}
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* FIELD */
+.field{margin-bottom:1.5rem}
+.field:last-of-type{margin-bottom:0}
+.field-label{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;display:block}
+.field-hint{font-size:.72rem;color:var(--white-faint);margin-bottom:.6rem;line-height:1.5}
+.field-input,.field-textarea,.field-select{width:100%;background:rgba(8,20,40,0.8);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,153,58,0.1)}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--white-faint)}
+.field-textarea{resize:vertical;min-height:120px;line-height:1.65}
+.field-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23C9993A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.field-select option{background:var(--navy-mid);color:var(--white)}
+
+/* CHAR COUNT */
+.char-count{font-size:.68rem;color:var(--white-faint);text-align:right;margin-top:.35rem}
+
+/* VOICE UPLOAD */
+.voice-zone{border:1.5px dashed var(--border-md);border-radius:8px;padding:1.75rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.voice-zone:hover,.voice-zone.drag-over{border-color:var(--gold);background:rgba(201,153,58,0.04)}
+.voice-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.voice-icon{font-size:1.8rem;margin-bottom:.6rem}
+.voice-label{font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:.3rem}
+.voice-sub{font-size:.72rem;color:var(--white-faint)}
+.voice-filename{margin-top:.75rem;font-size:.78rem;color:var(--success);display:none}
+.voice-filename.visible{display:block}
+
+/* OR DIVIDER */
+.or-divider{display:flex;align-items:center;gap:12px;margin:1.25rem 0}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.or-divider span{font-family:'Rajdhani',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--white-faint)}
+
+/* PLATFORM GRID */
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.platform-item{position:relative}
+.platform-item input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
+.platform-item label{display:flex;flex-direction:column;align-items:center;gap:6px;padding:.85rem .5rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:border-color .2s,background .2s;text-align:center}
+.platform-item label:hover{border-color:var(--border-md);background:rgba(201,153,58,0.04)}
+.platform-item input:checked + label{border-color:var(--gold);background:rgba(201,153,58,0.1)}
+.platform-item input:checked + label .plat-icon{filter:none}
+.plat-icon{font-size:1.2rem;filter:grayscale(0.4)opacity(0.7);transition:filter .2s}
+.platform-item input:checked + label .plat-icon{filter:none}
+.plat-name{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white-dim)}
+.platform-item input:checked + label .plat-name{color:var(--gold-bright)}
+
+/* TONE CHIPS */
+.tone-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tone-chip{position:relative}
+.tone-chip input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.tone-chip label{display:inline-block;padding:.45rem 1rem;border:1px solid var(--border);border-radius:999px;font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white-dim);cursor:pointer;transition:all .2s}
+.tone-chip label:hover{border-color:var(--border-md);color:var(--white)}
+.tone-chip input:checked + label{border-color:var(--gold);background:rgba(201,153,58,0.12);color:var(--gold-bright)}
+
+/* RANGE SLIDER */
+.range-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.range-label-sm{font-size:.72rem;color:var(--white-faint)}
+.range-val{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;color:var(--gold-bright)}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold) 0%,var(--border) 0%);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-bright));border:2px solid var(--navy-deep);box-shadow:0 0 8px rgba(201,153,58,0.4);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-bright));border:2px solid var(--navy-deep);cursor:pointer}
+
+/* NAV BUTTONS */
+.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;gap:12px;opacity:0;animation:fadeUp .6s ease forwards .5s}
+.btn-prev{flex:0 0 auto;padding:.75rem 1.5rem;background:transparent;border:1px solid var(--border-md);color:var(--white-dim);font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-prev:hover{border-color:var(--gold-dim);color:var(--white)}
+.btn-next{flex:1;padding:.8rem 2rem;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy-deep);font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:4px;border:none;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 0 24px rgba(201,153,58,0.25)}
+.btn-next:hover{opacity:.88;transform:translateY(-1px)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.progress-text{font-family:'Rajdhani',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white-faint)}
+
+/* TIKTOK CONNECT */
+.tiktok-connect-btn{display:inline-flex;align-items:center;gap:10px;padding:.8rem 1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy-deep);font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:opacity .2s,transform .15s;box-shadow:0 0 24px rgba(201,153,58,0.25)}
+.tiktok-connect-btn:hover{opacity:.88;transform:translateY(-1px)}
+
+/* SUCCESS */
+.success-state{display:none;text-align:center;padding:3rem 1.5rem;opacity:0;animation:fadeUp .8s ease forwards}
+.success-state.visible{display:block}
+.success-icon{font-size:3rem;margin-bottom:1.25rem}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--white);margin-bottom:.75rem}
+.success-title em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.success-sub{font-size:.88rem;color:var(--white-dim);line-height:1.7;max-width:380px;margin:0 auto 1.75rem}
+.success-steps{display:flex;flex-direction:column;gap:8px;max-width:360px;margin:0 auto 2rem;text-align:left}
+.success-step{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--white-dim);padding:.6rem .85rem;background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.15);border-radius:6px}
+.success-step-icon{font-size:.9rem;flex-shrink:0}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.25rem 3rem;display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:'Rajdhani',sans-serif;font-size:.9rem;color:rgba(201,153,58,0.35);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.footer-copy{font-size:.65rem;color:rgba(240,246,255,0.15);letter-spacing:.06em}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  nav{padding:1rem 1.25rem}
+  .main{padding:2.5rem 1.25rem 4rem}
+  .platform-grid{grid-template-columns:repeat(2,1fr)}
+  footer{flex-direction:column;gap:.4rem;text-align:center;padding:1.25rem}
+  .steps-bar{gap:0}
+  .step-connector{width:28px}
+}
+</style>
+</head>
+<body>
+
+<div class="circuit-bg">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C9993A" stroke-width="0.8" fill="none">
+      <polyline points="0,120 80,120 80,80 200,80 200,160 340,160"/>
+      <polyline points="0,200 60,200 60,260 180,260 180,200 300,200"/>
+      <polyline points="0,480 90,480 90,540 220,540 220,460 360,460"/>
+      <polyline points="1440,120 1360,120 1360,80 1240,80 1240,160 1100,160"/>
+      <polyline points="1440,200 1380,200 1380,260 1260,260 1260,200 1140,200"/>
+      <polyline points="1440,480 1350,480 1350,540 1220,540 1220,460 1080,460"/>
+      <circle cx="80" cy="120" r="3" fill="#C9993A"/>
+      <circle cx="200" cy="80" r="3" fill="#C9993A"/>
+      <circle cx="60" cy="200" r="3" fill="#C9993A"/>
+      <circle cx="1360" cy="120" r="3" fill="#C9993A"/>
+      <circle cx="1240" cy="80" r="3" fill="#C9993A"/>
+      <circle cx="1380" cy="200" r="3" fill="#C9993A"/>
+    </g>
+  </svg>
+</div>
+<div class="glow-top"></div>
+
+<nav>
+  <a href="https://app.one-empire.com" class="nav-logo">
+    <img src="one-empire-logo.jpg" alt="One Empire" class="nav-logo-img"/>
+  </a>
+  <a href="https://app.one-empire.com" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Studio
+  </a>
+</nav>
+
+<main class="main">
+  <!-- HEADER -->
+  <div class="form-header">
+    <div class="form-eyebrow">Content Brief</div>
+    <h1>Tell us about your <em>content</em></h1>
+    <p>Fill in your brief below — our AI will generate your full content suite across every platform, in your voice.</p>
+  </div>
+
+  <!-- STEPS BAR -->
+  <div class="steps-bar" id="stepsBar">
+    <div class="step-dot active" id="sdot-1">
+      <div class="step-dot-circle">1</div>
+      <div class="step-dot-label">Brief</div>
+    </div>
+    <div class="step-connector" id="scon-1"></div>
+    <div class="step-dot" id="sdot-2">
+      <div class="step-dot-circle">2</div>
+      <div class="step-dot-label">Platforms</div>
+    </div>
+    <div class="step-connector" id="scon-2"></div>
+    <div class="step-dot" id="sdot-3">
+      <div class="step-dot-circle">3</div>
+      <div class="step-dot-label">Voice</div>
+    </div>
+    <div class="step-connector" id="scon-3"></div>
+    <div class="step-dot" id="sdot-4">
+      <div class="step-dot-circle">4</div>
+      <div class="step-dot-label">Review</div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="form-card" id="formCard">
+
+    <!-- STEP 1: BRIEF -->
+    <div class="step-panel active" id="panel-1">
+      <div class="field">
+        <label class="field-label">Your name</label>
+        <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah Chen"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Content topic or idea</label>
+        <span class="field-hint">What do you want to talk about this week? Be as specific as possible.</span>
+        <textarea class="field-textarea" id="f-topic" placeholder="e.g. How I went from $0 to $10k/month as a solo consultant using AI automation — the 3 systems I built..." oninput="updateChar(this,'char-topic',400)"></textarea>
+        <div class="char-count" id="char-topic">0 / 400</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Or upload a voice note</label>
+        <span class="field-hint">Record yourself talking about the topic — we'll transcribe and write from it.</span>
+        <div class="voice-zone" id="voiceZone">
+          <input type="file" accept="audio/*,video/*" id="voiceFile" onchange="handleFile(this)"/>
+          <div class="voice-icon">&#127897;&#65039;</div>
+          <div class="voice-label">Drop your voice note here</div>
+          <div class="voice-sub">MP3, M4A, WAV, MP4 &middot; up to 50MB</div>
+          <div class="voice-filename" id="voiceFilename"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">Target audience</label>
+        <input class="field-input" type="text" id="f-audience" placeholder="e.g. Solo founders, consultants, coaches building online businesses"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Key message or takeaway</label>
+        <input class="field-input" type="text" id="f-message" placeholder="e.g. You don't need a team — you need the right systems"/>
+      </div>
+    </div>
+
+    <!-- STEP 2: PLATFORMS -->
+    <div class="step-panel" id="panel-2">
+      <div class="field">
+        <label class="field-label">Select your platforms</label>
+        <span class="field-hint">Choose every platform you want content published to this week.</span>
+        <div class="platform-grid">
+          <div class="platform-item">
+            <input type="checkbox" id="p-linkedin" name="platforms" value="linkedin"/>
+            <label for="p-linkedin"><span class="plat-icon">&#128188;</span><span class="plat-name">LinkedIn</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="p-instagram" name="platforms" value="instagram"/>
+            <label for="p-instagram"><span class="plat-icon">&#128247;</span><span class="plat-name">Instagram</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="p-tiktok" name="platforms" value="tiktok"/>
+            <label for="p-tiktok"><span class="plat-icon">&#127925;</span><span class="plat-name">TikTok</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="p-youtube" name="platforms" value="youtube"/>
+            <label for="p-youtube"><span class="plat-icon">&#9654;&#65039;</span><span class="plat-name">YouTube</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="p-facebook" name="platforms" value="facebook"/>
+            <label for="p-facebook"><span class="plat-icon">&#128101;</span><span class="plat-name">Facebook</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="p-podcast" name="platforms" value="podcast"/>
+            <label for="p-podcast"><span class="plat-icon">&#127897;&#65039;</span><span class="plat-name">Podcast</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIKTOK CONNECT (shown when TikTok is selected) -->
+      <div class="field" id="tiktok-connect-wrap" style="margin-top:1.25rem;display:none">
+        <label class="field-label">Authorise TikTok</label>
+        <span class="field-hint">Connect your TikTok account so One Empire can publish content on your behalf.</span>
+        <div style="margin-top:.75rem">
+          <a id="tiktok-oauth-btn" href="#" class="tiktok-connect-btn">
+            &#127925; Connect TikTok Account
+          </a>
+          <p id="tiktok-connected-msg" style="display:none;color:var(--success);font-size:.82rem;margin-top:.75rem">&#10003; TikTok account connected</p>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:1.5rem">
+        <label class="field-label">Content formats needed</label>
+        <span class="field-hint">Select all the formats you want generated from this brief.</span>
+        <div class="platform-grid">
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-post" name="formats" value="post"/>
+            <label for="fmt-post"><span class="plat-icon">&#128221;</span><span class="plat-name">Long-form post</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-carousel" name="formats" value="carousel"/>
+            <label for="fmt-carousel"><span class="plat-icon">&#128444;&#65039;</span><span class="plat-name">Carousel</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-short" name="formats" value="short"/>
+            <label for="fmt-short"><span class="plat-icon">&#127909;</span><span class="plat-name">Short video</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-hooks" name="formats" value="hooks"/>
+            <label for="fmt-hooks"><span class="plat-icon">&#127907;</span><span class="plat-name">Video hooks</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-infographic" name="formats" value="infographic"/>
+            <label for="fmt-infographic"><span class="plat-icon">&#128202;</span><span class="plat-name">Infographic</span></label>
+          </div>
+          <div class="platform-item">
+            <input type="checkbox" id="fmt-shownotes" name="formats" value="shownotes"/>
+            <label for="fmt-shownotes"><span class="plat-icon">&#128203;</span><span class="plat-name">Show notes</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: VOICE & TONE -->
+    <div class="step-panel" id="panel-3">
+      <div class="field">
+        <label class="field-label">Writing tone</label>
+        <span class="field-hint">How should your content sound? Pick one.</span>
+        <div class="tone-chips">
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-1" value="bold"/><label for="tone-1">Bold &amp; Direct</label></div>
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-2" value="story"/><label for="tone-2">Story-driven</label></div>
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-3" value="educational"/><label for="tone-3">Educational</label></div>
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-4" value="motivational"/><label for="tone-4">Motivational</label></div>
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-5" value="conversational"/><label for="tone-5">Conversational</label></div>
+          <div class="tone-chip"><input type="radio" name="tone" id="tone-6" value="luxury"/><label for="tone-6">Premium &amp; Refined</label></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:1.5rem">
+        <label class="field-label">Content depth</label>
+        <div class="range-row">
+          <span class="range-label-sm">Quick &amp; punchy</span>
+          <span class="range-val" id="depthVal">Medium</span>
+          <span class="range-label-sm">Deep &amp; detailed</span>
+        </div>
+        <input type="range" min="1" max="5" value="3" id="depthRange" oninput="updateDepth(this)"/>
+      </div>
+      <div class="field" style="margin-top:1.5rem">
+        <label class="field-label">Posting frequency</label>
+        <select class="field-select" id="f-freq">
+          <option value="">Select frequency...</option>
+          <option value="daily">Daily</option>
+          <option value="3x">3x per week</option>
+          <option value="2x">2x per week</option>
+          <option value="weekly">Weekly</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:1.5rem">
+        <label class="field-label">Anything to avoid?</label>
+        <span class="field-hint">Topics, phrases, competitors, or styles to keep out of your content.</span>
+        <input class="field-input" type="text" id="f-avoid" placeholder="e.g. No mention of competitors, avoid jargon, no negativity"/>
+      </div>
+    </div>
+
+    <!-- STEP 4: REVIEW -->
+    <div class="step-panel" id="panel-4">
+      <div class="field">
+        <label class="field-label">Review your brief</label>
+        <span class="field-hint">Here's everything we'll use to generate your content. Edit anything before submitting.</span>
+      </div>
+      <div id="reviewContent" style="display:flex;flex-direction:column;gap:10px;margin-bottom:1rem"></div>
+      <div class="field" style="margin-top:1rem">
+        <label class="field-label">Email address</label>
+        <span class="field-hint">We'll send your generated content here within 24 hours.</span>
+        <input class="field-input" type="email" id="f-email" placeholder="you@example.com"/>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">&#9889;</div>
+    <div class="success-title">Your <em>empire</em> is being built</div>
+    <div class="success-sub">Your content brief has been received. Our AI is generating your full content suite — you'll receive it within 24 hours.</div>
+    <div class="success-steps">
+      <div class="success-step"><span class="success-step-icon">&#9989;</span> Brief received &amp; processing started</div>
+      <div class="success-step"><span class="success-step-icon">&#129504;</span> AI generating content in your voice</div>
+      <div class="success-step"><span class="success-step-icon">&#128233;</span> Delivery to your email within 24 hrs</div>
+      <div class="success-step"><span class="success-step-icon">&#128640;</span> Ready to schedule &amp; publish</div>
+    </div>
+    <a href="https://app.one-empire.com" class="btn-next" style="display:inline-block;max-width:280px;text-align:center;text-decoration:none">Back to Content Studio</a>
+  </div>
+
+  <!-- NAV BUTTONS -->
+  <div class="form-nav" id="formNav">
+    <button class="btn-prev" id="btnPrev" onclick="prevStep()" style="visibility:hidden">&larr; Back</button>
+    <span class="progress-text" id="progressText">Step 1 of 4</span>
+    <button class="btn-next" id="btnNext" onclick="nextStep()">Continue &rarr;</button>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-logo">One Empire</span>
+  <span class="footer-copy">&copy; 2025. All rights reserved.</span>
+</footer>
+
+<script>
+var currentStep = 1;
+var totalSteps = 4;
+var depthLabels = ['Quick & punchy','Fairly brief','Medium','Fairly detailed','Deep & detailed'];
+
+function updateChar(el, countId, max) {
+  var len = el.value.length;
+  document.getElementById(countId).textContent = len + ' / ' + max;
+  if (len > max) el.value = el.value.substring(0, max);
+}
+
+function updateDepth(el) {
+  document.getElementById('depthVal').textContent = depthLabels[el.value - 1];
+  var pct = ((el.value - 1) / 4) * 100;
+  el.style.background = 'linear-gradient(90deg, var(--gold) ' + pct + '%, var(--border) ' + pct + '%)';
+}
+
+function handleFile(input) {
+  if (input.files && input.files[0]) {
+    var fn = document.getElementById('voiceFilename');
+    fn.textContent = '✓ ' + input.files[0].name;
+    fn.classList.add('visible');
+    document.getElementById('voiceZone').style.borderColor = 'var(--success)';
+  }
+}
+
+function updateStepsBar(step) {
+  for (var i = 1; i <= totalSteps; i++) {
+    var dot = document.getElementById('sdot-' + i);
+    dot.classList.remove('active', 'done');
+    if (i < step) dot.classList.add('done');
+    else if (i === step) dot.classList.add('active');
+    if (i < totalSteps) {
+      var con = document.getElementById('scon-' + i);
+      con.classList.toggle('done', i < step);
+    }
+  }
+}
+
+function buildReview() {
+  var name = document.getElementById('f-name').value || 'Not provided';
+  var topic = document.getElementById('f-topic').value || 'Not provided';
+  var audience = document.getElementById('f-audience').value || 'Not provided';
+  var message = document.getElementById('f-message').value || 'Not provided';
+  var tone = document.querySelector('input[name=tone]:checked');
+  var toneVal = tone ? tone.value : 'Not selected';
+  var freq = document.getElementById('f-freq').value || 'Not selected';
+
+  var platforms = [];
+  document.querySelectorAll('input[name=platforms]:checked').forEach(function(el){ platforms.push(el.value); });
+  var formats = [];
+  document.querySelectorAll('input[name=formats]:checked').forEach(function(el){ formats.push(el.value); });
+
+  var rows = [
+    {label:'Name', value: name},
+    {label:'Topic', value: topic},
+    {label:'Audience', value: audience},
+    {label:'Key message', value: message},
+    {label:'Platforms', value: platforms.length ? platforms.join(', ') : 'None selected'},
+    {label:'Formats', value: formats.length ? formats.join(', ') : 'None selected'},
+    {label:'Tone', value: toneVal},
+    {label:'Frequency', value: freq}
+  ];
+
+  var html = '';
+  rows.forEach(function(r){
+    html += '<div style="display:flex;gap:12px;padding:.65rem .85rem;background:rgba(8,20,40,0.6);border:1px solid var(--border);border-radius:6px;">' +
+      '<span style="font-family:Rajdhani,sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);min-width:100px;flex-shrink:0;padding-top:2px;">' + r.label + '</span>' +
+      '<span style="font-size:.82rem;color:var(--white-dim);line-height:1.5;">' + r.value + '</span>' +
+    '</div>';
+  });
+  document.getElementById('reviewContent').innerHTML = html;
+}
+
+function nextStep() {
+  if (currentStep === 4) {
+    submitForm();
+    return;
+  }
+  document.getElementById('panel-' + currentStep).classList.remove('active');
+  currentStep++;
+  document.getElementById('panel-' + currentStep).classList.add('active');
+  if (currentStep === 4) buildReview();
+  updateUI();
+}
+
+function prevStep() {
+  if (currentStep === 1) return;
+  document.getElementById('panel-' + currentStep).classList.remove('active');
+  currentStep--;
+  document.getElementById('panel-' + currentStep).classList.add('active');
+  updateUI();
+}
+
+function updateUI() {
+  updateStepsBar(currentStep);
+  document.getElementById('progressText').textContent = 'Step ' + currentStep + ' of ' + totalSteps;
+  var prev = document.getElementById('btnPrev');
+  var next = document.getElementById('btnNext');
+  prev.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
+  next.textContent = currentStep === 4 ? 'Submit Brief →' : 'Continue →';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function submitForm() {
+  var name      = document.getElementById('f-name').value;
+  var topic     = document.getElementById('f-topic').value;
+  var audience  = document.getElementById('f-audience').value;
+  var message   = document.getElementById('f-message').value;
+  var email     = document.getElementById('f-email').value;
+  var tone      = document.querySelector('input[name=tone]:checked');
+  var toneVal   = tone ? tone.value : '';
+  var freq      = document.getElementById('f-freq').value;
+  var avoid     = document.getElementById('f-avoid').value;
+  var depth     = document.getElementById('depthRange').value;
+  var platforms = [], formats = [];
+  document.querySelectorAll('input[name=platforms]:checked').forEach(function(el){ platforms.push(el.value); });
+  document.querySelectorAll('input[name=formats]:checked').forEach(function(el){ formats.push(el.value); });
+
+  if (!email) { alert('Please enter your email address.'); return; }
+
+  document.getElementById('hdn-name').value     = name;
+  document.getElementById('hdn-topic').value    = topic;
+  document.getElementById('hdn-audience').value = audience;
+  document.getElementById('hdn-message').value  = message;
+  document.getElementById('hdn-email').value    = email;
+  document.getElementById('hdn-tone').value     = toneVal;
+  document.getElementById('hdn-freq').value     = freq;
+  document.getElementById('hdn-avoid').value    = avoid;
+  document.getElementById('hdn-depth').value    = depth;
+  document.getElementById('hdn-platforms').value = platforms.join(', ');
+  document.getElementById('hdn-formats').value   = formats.join(', ');
+
+  var formEl = document.getElementById('netlify-form');
+  var data   = new FormData(formEl);
+  fetch('/', { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams(data).toString() })
+  .then(function() {
+    document.getElementById('formCard').style.display  = 'none';
+    document.getElementById('formNav').style.display   = 'none';
+    document.getElementById('stepsBar').style.opacity  = '.4';
+    var s = document.getElementById('successState');
+    s.style.display = 'block';
+    setTimeout(function(){ s.classList.add('visible'); }, 50);
+  })
+  .catch(function() {
+    document.getElementById('formCard').style.display  = 'none';
+    document.getElementById('formNav').style.display   = 'none';
+    var s = document.getElementById('successState');
+    s.style.display = 'block';
+    setTimeout(function(){ s.classList.add('visible'); }, 50);
+  });
+}
+
+// init range
+updateDepth(document.getElementById('depthRange'));
+
+// TikTok OAuth connect button — shown when TikTok platform is selected
+document.getElementById('p-tiktok').addEventListener('change', function() {
+  var wrap = document.getElementById('tiktok-connect-wrap');
+  if (this.checked) {
+    var email = document.getElementById('f-email').value || 'demo@one-empire.com';
+    var state = encodeURIComponent(email);
+    document.getElementById('tiktok-oauth-btn').href =
+      'https://www.tiktok.com/v2/auth/authorize/?client_key=awdy8mgd1w69flpm' +
+      '&redirect_uri=https%3A%2F%2Fbrief.one-empire.com%2Ftiktok%2Fcallback' +
+      '&response_type=code&scope=user.info.basic%2Cvideo.publish&state=' + state;
+    wrap.style.display = 'block';
+  } else {
+    wrap.style.display = 'none';
+  }
+});
+</script>
+
+<!-- Netlify form detection -->
+<form id="netlify-form" name="content-brief" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+  <input type="hidden" name="form-name" value="content-brief"/>
+  <input type="text"   name="bot-field"/>
+  <input type="text"   id="hdn-name"      name="name"/>
+  <input type="email"  id="hdn-email"     name="email"/>
+  <input type="text"   id="hdn-topic"     name="topic"/>
+  <input type="text"   id="hdn-audience"  name="audience"/>
+  <input type="text"   id="hdn-message"   name="key_message"/>
+  <input type="text"   id="hdn-platforms" name="platforms"/>
+  <input type="text"   id="hdn-formats"   name="formats"/>
+  <input type="text"   id="hdn-tone"      name="tone"/>
+  <input type="text"   id="hdn-freq"      name="frequency"/>
+  <input type="text"   id="hdn-depth"     name="depth"/>
+  <input type="text"   id="hdn-avoid"     name="avoid"/>
+  <button type="submit">Submit</button>
+</form>
+</body>
+</html>
