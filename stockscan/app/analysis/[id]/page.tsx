@@ -150,28 +150,28 @@ export default function AnalysisPage() {
         }),
       })
         .then((r) => r.json())
-        .then((data) => {
-          setVerdict(data)
-          // Save to Supabase
-          return fetch('/api/analyses', {
-            method: 'POST',
+        .then((verdictData) => {
+          setVerdict(verdictData)
+          // Update the existing record with all stage data and verdict
+          return fetch(`/api/analyses/${id}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              ticker,
-              company_name: company,
+              company_name: company || null,
               stage1: stage1.data,
               stage2: stage2.data,
               stage3: stage3.data,
               stage4: stage4.data,
               stage5: stage5.data,
-              verdict: data.verdict,
-              final_summary: data.final_summary,
+              verdict: verdictData.verdict,
+              final_summary: verdictData.final_summary,
             }),
           })
         })
         .catch(() => setVerdict({ verdict: 'watchlist', final_summary: 'Analysis complete.' }))
         .finally(() => setVerdictLoading(false))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStage, stage5.data])
 
   function renderBusiness(data: any) {
