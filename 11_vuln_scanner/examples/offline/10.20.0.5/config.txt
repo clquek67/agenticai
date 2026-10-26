@@ -1,0 +1,25 @@
+#
+ version 7.1.070, Release 3208P10
+#
+ sysname sw-core-01
+#
+ telnet server enable
+#
+ info-center loghost 10.10.0.200
+#
+ ntp-service unicast-server 10.10.0.201
+#
+ snmp-agent
+ snmp-agent community read simple public
+ snmp-agent sys-info version all
+#
+line vty 0 63
+ authentication-mode scheme
+#
+local-user admin class manage
+ password hash $h$6$EXAMPLEONLY
+ service-type ssh telnet
+#
+ ssh server enable
+#
+return

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "CVE-2023-20198",
+    "platform": "cisco_ios",
+    "os": "IOS XE",
+    "title": "Cisco IOS XE web UI privilege escalation (creates admin account)",
+    "cvss": 10.0,
+    "description": "An unauthenticated remote attacker can create a privilege-15 account through the HTTP/HTTPS web UI and take full control of the device. Release trains without a listed fix are reported as affected; confirm newer trains against the Cisco advisory.",
+    "affected": {
+      "version_regex": "^1[67]\\.",
+      "fixed_by_train": {"17.9": "17.9.4a", "17.6": "17.6.6a", "17.3": "17.3.8a", "16.12": "16.12.10a"}
+    },
+    "requires_config": "^ip http (secure-)?server",
+    "remediation": "Upgrade to a fixed release (17.9.4a, 17.6.6a, 17.3.8a, 16.12.10a or later). Until then run 'no ip http server' and 'no ip http secure-server', and check for unknown local accounts.",
+    "references": ["https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"]
+  },
+  {
+    "id": "CVE-2023-20273",
+    "platform": "cisco_ios",
+    "os": "IOS XE",
+    "title": "Cisco IOS XE web UI command injection (root implant)",
+    "cvss": 7.2,
+    "description": "Used together with CVE-2023-20198 to run commands as root and install an implant. Release trains without a listed fix are reported as affected; confirm newer trains against the Cisco advisory.",
+    "affected": {
+      "version_regex": "^1[67]\\.",
+      "fixed_by_train": {"17.9": "17.9.4a", "17.6": "17.6.6a", "17.3": "17.3.8a", "16.12": "16.12.10a"}
+    },
+    "requires_config": "^ip http (secure-)?server",
+    "remediation": "Upgrade to a fixed release. Until then disable the HTTP/HTTPS server.",
+    "references": ["https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"]
+  },
+  {
+    "id": "CVE-2020-3452",
+    "platform": "cisco_asa",
+    "os": "ASA",
+    "title": "Cisco ASA web services read-only path traversal",
+    "cvss": 7.5,
+    "description": "An unauthenticated remote attacker can read files from the web services file system when WebVPN or AnyConnect is configured.",
+    "affected": {
+      "version_regex": "^9\\.",
+      "not_affected_from": "9.15",
+      "fixed_by_train": {"9.6": "9.6.4.42", "9.8": "9.8.4.20", "9.9": "9.9.2.74", "9.10": "9.10.1.42", "9.12": "9.12.3.12", "9.13": "9.13.1.10", "9.14": "9.14.1.10"}
+    },
+    "requires_config": "^webvpn",
+    "remediation": "Upgrade to a fixed release for your train (e.g. 9.8.4.20, 9.12.3.12, 9.14.1.10 or later). Trains with no fix (9.7 and older than 9.6) need a move to a supported train.",
+    "references": ["https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-ro-path-KJuQhB86"]
+  }
+]

@@ -1,0 +1,16 @@
+Building configuration...
+!
+version 15.1
+!
+hostname rtr-branch-old
+!
+enable password 7 EXAMPLE0000
+!
+snmp-server community private RW
+!
+line vty 0 4
+ password 7 EXAMPLE0001
+ login
+ transport input telnet
+!
+end

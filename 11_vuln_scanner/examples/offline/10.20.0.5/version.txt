@@ -1,0 +1,7 @@
+HPE Comware Software, Version 7.1.070, Release 3208P10
+Copyright (c) 2010-2020 Hewlett Packard Enterprise Development LP
+HPE 5130-48G-PoE+-4SFP+ (370W) EI Switch uptime is 0 weeks, 5 days, 2 hours, 41 minutes
+Last reboot reason : User reboot
+
+Boot image: flash:/5130ei-cmw710-boot-r3208p10.bin
+System image: flash:/5130ei-cmw710-system-r3208p10.bin

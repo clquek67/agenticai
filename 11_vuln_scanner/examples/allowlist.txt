@@ -1,0 +1,4 @@
+# Networks this scanner is approved to scan (one CIDR per line)
+10.10.0.0/24
+10.20.0.0/22
+10.30.5.0/24

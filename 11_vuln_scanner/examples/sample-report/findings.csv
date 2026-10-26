@@ -1,0 +1,36 @@
+device,host,site,model,version,priority,severity,id,title,cvss,kev,category,remediation
+rtr-wan-01,10.10.0.1,HQ,ISR4331/K9,17.06.04,P1,critical,CVE-2023-20198,Cisco IOS XE web UI privilege escalation (creates admin account),10.0,yes,vulnerability,"Upgrade to a fixed release (17.9.4a, 17.6.6a, 17.3.8a, 16.12.10a or later). Until then run 'no ip http server' and 'no ip http secure-server', and check for unknown local accounts."
+rtr-wan-01,10.10.0.1,HQ,ISR4331/K9,17.06.04,P1,high,CVE-2023-20273,Cisco IOS XE web UI command injection (root implant),7.2,yes,vulnerability,Upgrade to a fixed release. Until then disable the HTTP/HTTPS server.
+rtr-wan-01,10.10.0.1,HQ,ISR4331/K9,17.06.04,P3,medium,CFG-IOS-002,Plain HTTP management server enabled,,,config,"Run 'no ip http server'. If the web UI is needed, use 'ip http secure-server' restricted by an ACL."
+rtr-wan-01,10.10.0.1,HQ,ISR4331/K9,17.06.04,P4,low,EOS-HW,ISR4331/K9 is end of sale; support is ending,,,lifecycle,Add the device to the hardware refresh plan.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P2,high,CFG-IOS-003,Default SNMP community string,,,config,Remove the default community and move to SNMPv3 (authPriv).
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P2,high,CFG-IOS-004,SNMP read-write community configured,,,config,Remove RW communities; use SNMPv3 with read-only views for monitoring.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P2,high,CFG-IOS-005,'enable password' used instead of 'enable secret',,,config,Replace with 'enable secret' (type 8 or 9) and remove 'enable password'.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P2,high,EOL-HW,2811 is past vendor end of support,,,lifecycle,"Plan a hardware replacement. Until then, restrict management access to a dedicated management network."
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P3,medium,CFG-IOS-001,Telnet allowed on VTY lines,,,config,Under 'line vty 0 15' set 'transport input ssh'.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P4,low,CFG-IOS-006,Password encryption service disabled,,,config,Run 'service password-encryption' (and prefer type 8/9 secrets).
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P4,low,CFG-IOS-007,No remote syslog server,,,config,Configure 'logging host <syslog-server>'.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P4,low,CFG-IOS-008,No NTP server configured,,,config,Configure 'ntp server <server>' so log timestamps are reliable.
+rtr-branch-old,10.10.0.2,Branch 3,2811,15.1(4)M12a,P4,info,CFG-IOS-010,No login banner,,,config,Add a 'banner login' with an authorised-use warning.
+sw-access-01,10.10.0.11,HQ,WS-C2960X-24TS-L,15.2(7)E8,P2,high,CFG-IOS-003,Default SNMP community string,,,config,Remove the default community and move to SNMPv3 (authPriv).
+sw-access-01,10.10.0.11,HQ,WS-C2960X-24TS-L,15.2(7)E8,P3,medium,CFG-IOS-001,Telnet allowed on VTY lines,,,config,Under 'line vty 0 15' set 'transport input ssh'.
+sw-access-01,10.10.0.11,HQ,WS-C2960X-24TS-L,15.2(7)E8,P4,low,CFG-IOS-006,Password encryption service disabled,,,config,Run 'service password-encryption' (and prefer type 8/9 secrets).
+sw-access-01,10.10.0.11,HQ,WS-C2960X-24TS-L,15.2(7)E8,P4,low,EOS-HW,WS-C2960X-24TS-L is end of sale; support is ending,,,lifecycle,Add the device to the hardware refresh plan.
+sw-access-01,10.10.0.11,HQ,WS-C2960X-24TS-L,15.2(7)E8,P4,info,CFG-IOS-010,No login banner,,,config,Add a 'banner login' with an authorised-use warning.
+asa-dmz-01,10.30.5.20,HQ DMZ,ASA5525,9.8(4)15,P1,high,CVE-2020-3452,Cisco ASA web services read-only path traversal,7.5,yes,vulnerability,"Upgrade to a fixed release for your train (e.g. 9.8.4.20, 9.12.3.12, 9.14.1.10 or later). Trains with no fix (9.7 and older than 9.6) need a move to a supported train."
+asa-dmz-01,10.30.5.20,HQ DMZ,ASA5525,9.8(4)15,P2,high,CFG-ASA-002,ASDM/HTTPS management open to any address,,,config,Restrict 'http <network> <mask> <interface>' to the management network.
+asa-dmz-01,10.30.5.20,HQ DMZ,ASA5525,9.8(4)15,P2,high,CFG-ASA-005,Firewall rule permits any to any,,,config,"Replace the rule with specific sources, destinations and services."
+asa-dmz-01,10.30.5.20,HQ DMZ,ASA5525,9.8(4)15,P2,high,EOL-HW,ASA5525 is past vendor end of support,,,lifecycle,"Plan a hardware replacement. Until then, restrict management access to a dedicated management network."
+sw-core-01,10.20.0.5,HQ,5130-48G-PoE+-4SFP+ (370W) EI,7.1.070 3208P10,P2,high,CFG-CW-003,Default SNMP community string,,,config,Remove the default community ('undo snmp-agent community ...') and use SNMPv3.
+sw-core-01,10.20.0.5,HQ,5130-48G-PoE+-4SFP+ (370W) EI,7.1.070 3208P10,P3,medium,CFG-CW-001,Telnet server enabled,,,config,Run 'undo telnet server enable' and use SSH ('ssh server enable').
+sw-core-01,10.20.0.5,HQ,5130-48G-PoE+-4SFP+ (370W) EI,7.1.070 3208P10,P3,medium,CFG-CW-004,SNMPv1/v2c enabled,,,config,Run 'snmp-agent sys-info version v3' and 'undo snmp-agent sys-info version v1 v2c'.
+sw-core-01,10.20.0.5,HQ,5130-48G-PoE+-4SFP+ (370W) EI,7.1.070 3208P10,P4,info,CFG-CW-009,No login banner,,,config,Add 'header login' with an authorised-use warning.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P2,high,CFG-CW-003,Default SNMP community string,,,config,Remove the default community ('undo snmp-agent community ...') and use SNMPv3.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P2,high,CFG-CW-005,Local password stored in plain text,,,config,Re-set the password with 'password hash' (Comware 7) or 'password cipher' (Comware 5).
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P2,high,CFG-CW-006,VTY or console line has no authentication,,,config,Set 'authentication-mode scheme' on all user-interface / line vty entries.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P3,medium,CFG-CW-001,Telnet server enabled,,,config,Run 'undo telnet server enable' and use SSH ('ssh server enable').
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P3,medium,CFG-CW-002,Plain HTTP management enabled,,,config,Run 'undo ip http enable'; use 'ip https enable' restricted by an ACL if the web UI is needed.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P3,medium,CFG-CW-004,SNMPv1/v2c enabled,,,config,Run 'snmp-agent sys-info version v3' and 'undo snmp-agent sys-info version v1 v2c'.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P4,low,CFG-CW-007,No remote syslog server,,,config,Configure 'info-center loghost <server>'.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P4,low,CFG-CW-008,No NTP server configured,,,config,Configure 'ntp-service unicast-server <server>'.
+sw-dist-02,10.20.0.6,HQ,A5500-24G-4SFP HI,5.20.99 5501P28,P4,info,CFG-CW-009,No login banner,,,config,Add 'header login' with an authorised-use warning.

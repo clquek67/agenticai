@@ -1,0 +1,12 @@
+Cisco IOS Software, 2800 Software (C2800NM-ADVIPSERVICESK9-M), Version 15.1(4)M12a, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2016 by Cisco Systems, Inc.
+
+ROM: System Bootstrap, Version 12.4(13r)T, RELEASE SOFTWARE (fc1)
+
+rtr-branch-old uptime is 3 years, 12 weeks, 1 day, 4 hours, 40 minutes
+System image file is "flash:c2800nm-advipservicesk9-mz.151-4.M12a.bin"
+
+Cisco 2811 (revision 53.51) with 249856K/12288K bytes of memory.
+Processor board ID FTX0000A0BC
+2 FastEthernet interfaces

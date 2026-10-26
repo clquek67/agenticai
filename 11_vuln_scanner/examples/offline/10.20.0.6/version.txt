@@ -1,0 +1,4 @@
+H3C Comware Platform Software
+Comware Software, Version 5.20.99, Release 5501P28
+Copyright (c) 2010-2016 Hewlett-Packard Development Company, L.P.
+HP A5500-24G-4SFP HI Switch with 2 Interface Slots uptime is 52 weeks, 1 day, 6 hours, 3 minutes

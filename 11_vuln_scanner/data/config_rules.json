@@ -1,0 +1,262 @@
+[
+  {
+    "id": "CFG-IOS-001",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^\\s*transport input .*\\b(telnet|all)\\b",
+    "severity": "medium",
+    "title": "Telnet allowed on VTY lines",
+    "description": "Telnet sends passwords and sessions in clear text.",
+    "remediation": "Under 'line vty 0 15' set 'transport input ssh'."
+  },
+  {
+    "id": "CFG-IOS-002",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^ip http server\\b",
+    "severity": "medium",
+    "title": "Plain HTTP management server enabled",
+    "description": "The HTTP server is unencrypted and has been the entry point for several critical IOS XE attacks.",
+    "remediation": "Run 'no ip http server'. If the web UI is needed, use 'ip http secure-server' restricted by an ACL."
+  },
+  {
+    "id": "CFG-IOS-003",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^snmp-server community (public|private)\\b",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "'public' and 'private' are the first values attackers try.",
+    "remediation": "Remove the default community and move to SNMPv3 (authPriv)."
+  },
+  {
+    "id": "CFG-IOS-004",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^snmp-server community \\S+ RW\\b",
+    "severity": "high",
+    "title": "SNMP read-write community configured",
+    "description": "Anyone with the string can change the configuration.",
+    "remediation": "Remove RW communities; use SNMPv3 with read-only views for monitoring."
+  },
+  {
+    "id": "CFG-IOS-005",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^enable password\\b",
+    "severity": "high",
+    "title": "'enable password' used instead of 'enable secret'",
+    "description": "The enable password is stored with weak, reversible encoding.",
+    "remediation": "Replace with 'enable secret' (type 8 or 9) and remove 'enable password'."
+  },
+  {
+    "id": "CFG-IOS-006",
+    "platform": "cisco_ios",
+    "type": "absent",
+    "pattern": "^service password-encryption",
+    "severity": "low",
+    "title": "Password encryption service disabled",
+    "description": "Passwords appear in clear text in the configuration.",
+    "remediation": "Run 'service password-encryption' (and prefer type 8/9 secrets)."
+  },
+  {
+    "id": "CFG-IOS-007",
+    "platform": "cisco_ios",
+    "type": "absent",
+    "pattern": "^logging (host )?\\d{1,3}(\\.\\d{1,3}){3}",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "Without remote logs, an attacker can erase evidence on the device.",
+    "remediation": "Configure 'logging host <syslog-server>'."
+  },
+  {
+    "id": "CFG-IOS-008",
+    "platform": "cisco_ios",
+    "type": "absent",
+    "pattern": "^ntp server",
+    "severity": "low",
+    "title": "No NTP server configured",
+    "description": "",
+    "remediation": "Configure 'ntp server <server>' so log timestamps are reliable."
+  },
+  {
+    "id": "CFG-IOS-009",
+    "platform": "cisco_ios",
+    "type": "present",
+    "pattern": "^ip ssh version 1\\b",
+    "severity": "medium",
+    "title": "SSH version 1 enabled",
+    "description": "SSHv1 has known cryptographic weaknesses.",
+    "remediation": "Run 'ip ssh version 2'."
+  },
+  {
+    "id": "CFG-IOS-010",
+    "platform": "cisco_ios",
+    "type": "absent",
+    "pattern": "^banner (login|motd)",
+    "severity": "info",
+    "title": "No login banner",
+    "description": "",
+    "remediation": "Add a 'banner login' with an authorised-use warning."
+  },
+  {
+    "id": "CFG-ASA-001",
+    "platform": "cisco_asa",
+    "type": "present",
+    "pattern": "^telnet \\d{1,3}(\\.\\d{1,3}){3} ",
+    "severity": "medium",
+    "title": "Telnet management enabled",
+    "description": "Telnet sends passwords in clear text.",
+    "remediation": "Remove 'telnet' lines and manage with SSH only."
+  },
+  {
+    "id": "CFG-ASA-002",
+    "platform": "cisco_asa",
+    "type": "present",
+    "pattern": "^http 0\\.0\\.0\\.0 0\\.0\\.0\\.0 \\S+",
+    "severity": "high",
+    "title": "ASDM/HTTPS management open to any address",
+    "description": "",
+    "remediation": "Restrict 'http <network> <mask> <interface>' to the management network."
+  },
+  {
+    "id": "CFG-ASA-003",
+    "platform": "cisco_asa",
+    "type": "present",
+    "pattern": "^ssh 0\\.0\\.0\\.0 0\\.0\\.0\\.0 \\S+",
+    "severity": "high",
+    "title": "SSH management open to any address",
+    "description": "",
+    "remediation": "Restrict 'ssh <network> <mask> <interface>' to the management network."
+  },
+  {
+    "id": "CFG-ASA-004",
+    "platform": "cisco_asa",
+    "type": "present",
+    "pattern": "^snmp-server (host .* )?community (public|private)\\b",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "",
+    "remediation": "Remove the default community and use SNMPv3."
+  },
+  {
+    "id": "CFG-ASA-005",
+    "platform": "cisco_asa",
+    "type": "present",
+    "pattern": "^access-list \\S+ extended permit ip any4? any4?\\s*$",
+    "severity": "high",
+    "title": "Firewall rule permits any to any",
+    "description": "A permit-any rule removes the protection the firewall should give.",
+    "remediation": "Replace the rule with specific sources, destinations and services."
+  },
+  {
+    "id": "CFG-ASA-006",
+    "platform": "cisco_asa",
+    "type": "absent",
+    "pattern": "^logging host",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "",
+    "remediation": "Configure 'logging host <interface> <server>'."
+  },
+  {
+    "id": "CFG-ASA-007",
+    "platform": "cisco_asa",
+    "type": "absent",
+    "pattern": "^ntp server",
+    "severity": "low",
+    "title": "No NTP server configured",
+    "description": "",
+    "remediation": "Configure 'ntp server <server>'."
+  },
+  {
+    "id": "CFG-CW-001",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*telnet server enable",
+    "severity": "medium",
+    "title": "Telnet server enabled",
+    "description": "Telnet sends passwords in clear text.",
+    "remediation": "Run 'undo telnet server enable' and use SSH ('ssh server enable')."
+  },
+  {
+    "id": "CFG-CW-002",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*ip http enable",
+    "severity": "medium",
+    "title": "Plain HTTP management enabled",
+    "description": "",
+    "remediation": "Run 'undo ip http enable'; use 'ip https enable' restricted by an ACL if the web UI is needed."
+  },
+  {
+    "id": "CFG-CW-003",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*snmp-agent community (read|write) (simple |cipher )?(public|private)\\b",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "",
+    "remediation": "Remove the default community ('undo snmp-agent community ...') and use SNMPv3."
+  },
+  {
+    "id": "CFG-CW-004",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*snmp-agent sys-info version .*\\b(v1|v2c|all)\\b",
+    "severity": "medium",
+    "title": "SNMPv1/v2c enabled",
+    "description": "SNMPv1/v2c sends community strings in clear text.",
+    "remediation": "Run 'snmp-agent sys-info version v3' and 'undo snmp-agent sys-info version v1 v2c'."
+  },
+  {
+    "id": "CFG-CW-005",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*password simple \\S+",
+    "severity": "high",
+    "title": "Local password stored in plain text",
+    "description": "",
+    "remediation": "Re-set the password with 'password hash' (Comware 7) or 'password cipher' (Comware 5)."
+  },
+  {
+    "id": "CFG-CW-006",
+    "platform": "hpe_comware",
+    "type": "present",
+    "pattern": "^\\s*authentication-mode none",
+    "severity": "high",
+    "title": "VTY or console line has no authentication",
+    "description": "",
+    "remediation": "Set 'authentication-mode scheme' on all user-interface / line vty entries."
+  },
+  {
+    "id": "CFG-CW-007",
+    "platform": "hpe_comware",
+    "type": "absent",
+    "pattern": "^\\s*info-center loghost",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "",
+    "remediation": "Configure 'info-center loghost <server>'."
+  },
+  {
+    "id": "CFG-CW-008",
+    "platform": "hpe_comware",
+    "type": "absent",
+    "pattern": "^\\s*(ntp-service unicast-server|sntp unicast-server)",
+    "severity": "low",
+    "title": "No NTP server configured",
+    "description": "",
+    "remediation": "Configure 'ntp-service unicast-server <server>'."
+  },
+  {
+    "id": "CFG-CW-009",
+    "platform": "hpe_comware",
+    "type": "absent",
+    "pattern": "^\\s*header (login|motd|shell)",
+    "severity": "info",
+    "title": "No login banner",
+    "description": "",
+    "remediation": "Add 'header login' with an authorised-use warning."
+  }
+]

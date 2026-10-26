@@ -1,0 +1,13 @@
+Cisco IOS XE Software, Version 17.06.04
+Cisco IOS Software [Bengaluru], ISR Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.6.4, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2022 by Cisco Systems, Inc.
+
+ROM: 16.12(2r)
+
+rtr-wan-01 uptime is 1 year, 8 weeks, 3 days, 22 hours, 5 minutes
+System image file is "bootflash:isr4300-universalk9.17.06.04.SPA.bin"
+
+cisco ISR4331/K9 (1RU) processor with 1795999K/6147K bytes of memory.
+Processor board ID FDO0000A1BC
+3 Gigabit Ethernet interfaces

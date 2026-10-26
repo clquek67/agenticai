@@ -1,0 +1,9 @@
+[
+  {"model_regex": "^(CISCO)?28\\d\\d", "status": "end_of_support", "note": "Cisco 2800 series ISR: last date of support has passed. Confirm the date in Cisco's end-of-life notice.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^WS-C3750G", "status": "end_of_support", "note": "Catalyst 3750G: last date of support has passed. Confirm the date in Cisco's end-of-life notice.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^ASA ?5520", "status": "end_of_support", "note": "ASA 5520: last date of support has passed. Confirm the date in Cisco's end-of-life notice.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^ASA ?5512", "status": "end_of_support", "note": "ASA 5512-X: last date of support has passed. Confirm the date in Cisco's end-of-life notice.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^ASA ?5525", "status": "end_of_support", "note": "ASA 5525-X: last date of support has passed. Confirm the date in Cisco's end-of-life notice.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^WS-C2960X", "status": "end_of_sale", "note": "Catalyst 2960-X: end of sale; check Cisco's notice for the last date of support.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"},
+  {"model_regex": "^ISR ?4331", "status": "end_of_sale", "note": "ISR 4331: end of sale; check Cisco's notice for the last date of support.", "source": "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"}
+]

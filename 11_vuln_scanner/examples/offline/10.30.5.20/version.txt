@@ -1,0 +1,14 @@
+Cisco Adaptive Security Appliance Software Version 9.8(4)15
+Firepower Extensible Operating System Version 2.2(2.121)
+Device Manager Version 7.8(2)
+
+Compiled on Wed 25-Mar-20 08:13 PDT by builders
+System image file is "disk0:/asa984-15-smp-k8.bin"
+Config file at boot was "startup-config"
+
+asa-dmz-01 up 210 days 4 hours
+
+Hardware:   ASA5525, 8192 MB RAM, CPU Lynnfield 2394 MHz, 1 CPU (4 cores)
+Internal ATA Compact Flash, 8192MB
+
+Serial Number: FCH0000A0BC

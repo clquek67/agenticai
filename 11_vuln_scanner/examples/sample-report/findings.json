@@ -1,0 +1,777 @@
+{
+  "scanner": "VulnScan 0.1.0",
+  "started": "2026-10-26T04:51:48.364654+00:00",
+  "finished": "2026-10-26T04:51:48.377073+00:00",
+  "risk_score": 65,
+  "severity_counts": {
+    "critical": 1,
+    "high": 14,
+    "medium": 8,
+    "low": 8,
+    "info": 4
+  },
+  "kev_count": 3,
+  "devices": [
+    {
+      "host": "10.10.0.1",
+      "name": "rtr-wan-01",
+      "site": "HQ",
+      "platform": "cisco_ios",
+      "status": "ok",
+      "error": "",
+      "hostname": "rtr-wan-01",
+      "model": "ISR4331/K9",
+      "os": "IOS XE",
+      "version": "17.06.04",
+      "release": "",
+      "serial": "FDO0000A1BC",
+      "lifecycle": "end_of_sale",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CVE-2023-20198",
+          "title": "Cisco IOS XE web UI privilege escalation (creates admin account)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 10.0,
+          "cves": [
+            "CVE-2023-20198"
+          ],
+          "kev": true,
+          "description": "An unauthenticated remote attacker can create a privilege-15 account through the HTTP/HTTPS web UI and take full control of the device. Release trains without a listed fix are reported as affected; confirm newer trains against the Cisco advisory.",
+          "remediation": "Upgrade to a fixed release (17.9.4a, 17.6.6a, 17.3.8a, 16.12.10a or later). Until then run 'no ip http server' and 'no ip http secure-server', and check for unknown local accounts.",
+          "evidence": [
+            "IOS XE 17.06.04 is in the affected range",
+            "Affected feature enabled: ip http server"
+          ],
+          "references": [
+            "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CVE-2023-20273",
+          "title": "Cisco IOS XE web UI command injection (root implant)",
+          "severity": "high",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 7.2,
+          "cves": [
+            "CVE-2023-20273"
+          ],
+          "kev": true,
+          "description": "Used together with CVE-2023-20198 to run commands as root and install an implant. Release trains without a listed fix are reported as affected; confirm newer trains against the Cisco advisory.",
+          "remediation": "Upgrade to a fixed release. Until then disable the HTTP/HTTPS server.",
+          "evidence": [
+            "IOS XE 17.06.04 is in the affected range",
+            "Affected feature enabled: ip http server"
+          ],
+          "references": [
+            "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CFG-IOS-002",
+          "title": "Plain HTTP management server enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The HTTP server is unencrypted and has been the entry point for several critical IOS XE attacks.",
+          "remediation": "Run 'no ip http server'. If the web UI is needed, use 'ip http secure-server' restricted by an ACL.",
+          "evidence": [
+            "ip http server"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "EOS-HW",
+          "title": "ISR4331/K9 is end of sale; support is ending",
+          "severity": "low",
+          "priority": "P4",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The model is no longer sold. Security fixes continue only until the vendor's last date of support.",
+          "remediation": "Add the device to the hardware refresh plan.",
+          "evidence": [
+            "ISR 4331: end of sale; check Cisco's notice for the last date of support."
+          ],
+          "references": [
+            "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
+          ],
+          "source": "Lifecycle data"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.2",
+      "name": "rtr-branch-old",
+      "site": "Branch 3",
+      "platform": "cisco_ios",
+      "status": "ok",
+      "error": "",
+      "hostname": "rtr-branch-old",
+      "model": "2811",
+      "os": "IOS",
+      "version": "15.1(4)M12a",
+      "release": "",
+      "serial": "FTX0000A0BC",
+      "lifecycle": "end_of_support",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CFG-IOS-003",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "'public' and 'private' are the first values attackers try.",
+          "remediation": "Remove the default community and move to SNMPv3 (authPriv).",
+          "evidence": [
+            "snmp-server community ****"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-004",
+          "title": "SNMP read-write community configured",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Anyone with the string can change the configuration.",
+          "remediation": "Remove RW communities; use SNMPv3 with read-only views for monitoring.",
+          "evidence": [
+            "snmp-server community **** RW"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-005",
+          "title": "'enable password' used instead of 'enable secret'",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The enable password is stored with weak, reversible encoding.",
+          "remediation": "Replace with 'enable secret' (type 8 or 9) and remove 'enable password'.",
+          "evidence": [
+            "enable password"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "EOL-HW",
+          "title": "2811 is past vendor end of support",
+          "severity": "high",
+          "priority": "P2",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The vendor no longer releases security fixes for this model, so new vulnerabilities on it will stay unpatched.",
+          "remediation": "Plan a hardware replacement. Until then, restrict management access to a dedicated management network.",
+          "evidence": [
+            "Cisco 2800 series ISR: last date of support has passed. Confirm the date in Cisco's end-of-life notice."
+          ],
+          "references": [
+            "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
+          ],
+          "source": "Lifecycle data"
+        },
+        {
+          "id": "CFG-IOS-001",
+          "title": "Telnet allowed on VTY lines",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Telnet sends passwords and sessions in clear text.",
+          "remediation": "Under 'line vty 0 15' set 'transport input ssh'.",
+          "evidence": [
+            "transport input telnet"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-006",
+          "title": "Password encryption service disabled",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Passwords appear in clear text in the configuration.",
+          "remediation": "Run 'service password-encryption' (and prefer type 8/9 secrets).",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-007",
+          "title": "No remote syslog server",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Without remote logs, an attacker can erase evidence on the device.",
+          "remediation": "Configure 'logging host <syslog-server>'.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-008",
+          "title": "No NTP server configured",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Configure 'ntp server <server>' so log timestamps are reliable.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-010",
+          "title": "No login banner",
+          "severity": "info",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Add a 'banner login' with an authorised-use warning.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.11",
+      "name": "sw-access-01",
+      "site": "HQ",
+      "platform": "cisco_ios",
+      "status": "ok",
+      "error": "",
+      "hostname": "sw-access-01",
+      "model": "WS-C2960X-24TS-L",
+      "os": "IOS",
+      "version": "15.2(7)E8",
+      "release": "",
+      "serial": "FOC0000X0AB",
+      "lifecycle": "end_of_sale",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CFG-IOS-003",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "'public' and 'private' are the first values attackers try.",
+          "remediation": "Remove the default community and move to SNMPv3 (authPriv).",
+          "evidence": [
+            "snmp-server community ****"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-001",
+          "title": "Telnet allowed on VTY lines",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Telnet sends passwords and sessions in clear text.",
+          "remediation": "Under 'line vty 0 15' set 'transport input ssh'.",
+          "evidence": [
+            "transport input telnet",
+            "(2 matching lines in total)"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-IOS-006",
+          "title": "Password encryption service disabled",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Passwords appear in clear text in the configuration.",
+          "remediation": "Run 'service password-encryption' (and prefer type 8/9 secrets).",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "EOS-HW",
+          "title": "WS-C2960X-24TS-L is end of sale; support is ending",
+          "severity": "low",
+          "priority": "P4",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The model is no longer sold. Security fixes continue only until the vendor's last date of support.",
+          "remediation": "Add the device to the hardware refresh plan.",
+          "evidence": [
+            "Catalyst 2960-X: end of sale; check Cisco's notice for the last date of support."
+          ],
+          "references": [
+            "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
+          ],
+          "source": "Lifecycle data"
+        },
+        {
+          "id": "CFG-IOS-010",
+          "title": "No login banner",
+          "severity": "info",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Add a 'banner login' with an authorised-use warning.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.50",
+      "name": "sw-lab-07",
+      "site": "Lab",
+      "platform": "cisco_ios",
+      "status": "failed",
+      "error": "no saved output found for sw-lab-07",
+      "hostname": "",
+      "model": "",
+      "os": "",
+      "version": "",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "findings": []
+    },
+    {
+      "host": "10.30.5.20",
+      "name": "asa-dmz-01",
+      "site": "HQ DMZ",
+      "platform": "cisco_asa",
+      "status": "ok",
+      "error": "",
+      "hostname": "asa-dmz-01",
+      "model": "ASA5525",
+      "os": "ASA",
+      "version": "9.8(4)15",
+      "release": "",
+      "serial": "FCH0000A0BC",
+      "lifecycle": "end_of_support",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CVE-2020-3452",
+          "title": "Cisco ASA web services read-only path traversal",
+          "severity": "high",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 7.5,
+          "cves": [
+            "CVE-2020-3452"
+          ],
+          "kev": true,
+          "description": "An unauthenticated remote attacker can read files from the web services file system when WebVPN or AnyConnect is configured.",
+          "remediation": "Upgrade to a fixed release for your train (e.g. 9.8.4.20, 9.12.3.12, 9.14.1.10 or later). Trains with no fix (9.7 and older than 9.6) need a move to a supported train.",
+          "evidence": [
+            "ASA 9.8(4)15 is in the affected range",
+            "Affected feature enabled: webvpn"
+          ],
+          "references": [
+            "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-ro-path-KJuQhB86"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CFG-ASA-002",
+          "title": "ASDM/HTTPS management open to any address",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Restrict 'http <network> <mask> <interface>' to the management network.",
+          "evidence": [
+            "http 0.0.0.0 0.0.0.0 outside"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-ASA-005",
+          "title": "Firewall rule permits any to any",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "A permit-any rule removes the protection the firewall should give.",
+          "remediation": "Replace the rule with specific sources, destinations and services.",
+          "evidence": [
+            "access-list dmz_out extended permit ip any any"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "EOL-HW",
+          "title": "ASA5525 is past vendor end of support",
+          "severity": "high",
+          "priority": "P2",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The vendor no longer releases security fixes for this model, so new vulnerabilities on it will stay unpatched.",
+          "remediation": "Plan a hardware replacement. Until then, restrict management access to a dedicated management network.",
+          "evidence": [
+            "ASA 5525-X: last date of support has passed. Confirm the date in Cisco's end-of-life notice."
+          ],
+          "references": [
+            "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
+          ],
+          "source": "Lifecycle data"
+        }
+      ]
+    },
+    {
+      "host": "10.20.0.5",
+      "name": "sw-core-01",
+      "site": "HQ",
+      "platform": "hpe_comware",
+      "status": "ok",
+      "error": "",
+      "hostname": "sw-core-01",
+      "model": "5130-48G-PoE+-4SFP+ (370W) EI",
+      "os": "Comware 7",
+      "version": "7.1.070",
+      "release": "3208P10",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CFG-CW-003",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Remove the default community ('undo snmp-agent community ...') and use SNMPv3.",
+          "evidence": [
+            "snmp-agent community read simple ****"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-001",
+          "title": "Telnet server enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Telnet sends passwords in clear text.",
+          "remediation": "Run 'undo telnet server enable' and use SSH ('ssh server enable').",
+          "evidence": [
+            "telnet server enable"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-004",
+          "title": "SNMPv1/v2c enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "SNMPv1/v2c sends community strings in clear text.",
+          "remediation": "Run 'snmp-agent sys-info version v3' and 'undo snmp-agent sys-info version v1 v2c'.",
+          "evidence": [
+            "snmp-agent sys-info version all"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-009",
+          "title": "No login banner",
+          "severity": "info",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Add 'header login' with an authorised-use warning.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        }
+      ]
+    },
+    {
+      "host": "10.20.0.6",
+      "name": "sw-dist-02",
+      "site": "HQ",
+      "platform": "hpe_comware",
+      "status": "ok",
+      "error": "",
+      "hostname": "sw-dist-02",
+      "model": "A5500-24G-4SFP HI",
+      "os": "Comware 5",
+      "version": "5.20.99",
+      "release": "5501P28",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "findings": [
+        {
+          "id": "CFG-CW-003",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Remove the default community ('undo snmp-agent community ...') and use SNMPv3.",
+          "evidence": [
+            "snmp-agent community read ****"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-005",
+          "title": "Local password stored in plain text",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Re-set the password with 'password hash' (Comware 7) or 'password cipher' (Comware 5).",
+          "evidence": [
+            "password simple ****"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-006",
+          "title": "VTY or console line has no authentication",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Set 'authentication-mode scheme' on all user-interface / line vty entries.",
+          "evidence": [
+            "authentication-mode none"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-001",
+          "title": "Telnet server enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Telnet sends passwords in clear text.",
+          "remediation": "Run 'undo telnet server enable' and use SSH ('ssh server enable').",
+          "evidence": [
+            "telnet server enable"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-002",
+          "title": "Plain HTTP management enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Run 'undo ip http enable'; use 'ip https enable' restricted by an ACL if the web UI is needed.",
+          "evidence": [
+            "ip http enable"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-004",
+          "title": "SNMPv1/v2c enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "SNMPv1/v2c sends community strings in clear text.",
+          "remediation": "Run 'snmp-agent sys-info version v3' and 'undo snmp-agent sys-info version v1 v2c'.",
+          "evidence": [
+            "snmp-agent sys-info version v2c"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-007",
+          "title": "No remote syslog server",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Configure 'info-center loghost <server>'.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-008",
+          "title": "No NTP server configured",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Configure 'ntp-service unicast-server <server>'.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        },
+        {
+          "id": "CFG-CW-009",
+          "title": "No login banner",
+          "severity": "info",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Add 'header login' with an authorised-use warning.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule"
+        }
+      ]
+    },
+    {
+      "host": "192.168.99.1",
+      "name": "sw-guest-01",
+      "site": "Guest",
+      "platform": "cisco_ios",
+      "status": "skipped",
+      "error": "outside the scan allowlist",
+      "hostname": "",
+      "model": "",
+      "os": "",
+      "version": "",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "findings": []
+    }
+  ]
+}

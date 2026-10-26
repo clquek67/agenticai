@@ -1,0 +1,22 @@
+#
+ version 5.20.99, Release 5501P28
+#
+ sysname sw-dist-02
+#
+ telnet server enable
+#
+ ip http enable
+#
+local-user admin
+ password simple EXAMPLE-NOT-REAL
+ authorization-attribute level 3
+ service-type telnet
+#
+ snmp-agent
+ snmp-agent community read private
+ snmp-agent sys-info version v2c
+#
+user-interface vty 0 15
+ authentication-mode none
+#
+return

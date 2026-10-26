@@ -1,0 +1,24 @@
+: Saved
+:
+ASA Version 9.8(4)15
+!
+hostname asa-dmz-01
+enable password ***** pbkdf2
+!
+access-list outside_in extended permit tcp any object WEB-SERVERS eq https
+access-list dmz_out extended permit ip any any
+!
+logging enable
+logging host inside 10.10.0.200
+!
+http server enable
+http 0.0.0.0 0.0.0.0 outside
+ssh 10.10.0.0 255.255.255.0 inside
+ssh version 2
+!
+webvpn
+ enable outside
+ anyconnect enable
+!
+ntp server 10.10.0.201
+: end
