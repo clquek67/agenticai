@@ -27,6 +27,7 @@ class Scanner:
         self.workers = workers
         self.config_rules = checks.load_json("config_rules.json", data_dir)
         self.advisories = checks.load_json("advisories.json", data_dir)
+        self.advisories += checks.load_comware_rules(os.path.join(data_dir, "comware_rules.csv"))
         self.lifecycle = checks.load_json("lifecycle.json", data_dir)
         self.software_lifecycle = checks.load_json("software_lifecycle.json", data_dir)
 
@@ -42,14 +43,17 @@ class Scanner:
             result.status, result.error = "skipped", "outside the scan allowlist"
             return result
         platform = get_platform(device.platform)
-        try:
-            outputs = self.collector.collect(device, platform)
-        except CollectionError as exc:
-            result.status, result.error = "failed", str(exc)
-            log.warning("%s: %s", device.label, exc)
-            return result
-
-        facts = platform.parse(outputs)
+        if platform.transport == "none":  # no login: product and version come from the inventory
+            outputs, facts = {}, platform.facts_for(device)
+            result.notes.append("Not logged in: the version comes from the inventory and was not verified on the device.")
+        else:
+            try:
+                outputs = self.collector.collect(device, platform)
+            except CollectionError as exc:
+                result.status, result.error = "failed", str(exc)
+                log.warning("%s: %s", device.label, exc)
+                return result
+            facts = platform.parse(outputs)
         facts.raw = outputs
         result.facts = facts
         if not facts.version:
@@ -79,6 +83,7 @@ class Scanner:
                 result.notes.append(f"Cisco openVuln lookup failed: {exc}")
         findings += checks.run_software_advisories(platform.name, facts, self.advisories)
         findings += checks.check_software_lifecycle(facts, self.software_lifecycle)
+        findings += checks.check_firmware_age(facts)
         findings += checks.run_config_rules(platform.name, outputs.get("config", ""), self.config_rules)
 
         result.findings = _dedupe(findings)
@@ -110,7 +115,12 @@ class Scanner:
             found, notes = feeds.windows_findings(facts)
             findings += found
         else:
-            findings += feeds.nvd_findings(platform.nvd_products(facts), f"Upgrade {platform.label} software")
+            products = platform.nvd_products(facts)
+            findings += feeds.nvd_findings(products, f"Upgrade {platform.label} software")
+            if products and feeds.has("nvd") and not feeds.nvd_knows(products):
+                names = ", ".join(sorted({f"{v}:{p}" for v, p, _ in products}))
+                notes.append(f"NVD has no CVEs under {names}: check the product name "
+                             "(data/nvd_products.json, or the product column for manual devices).")
         # PHP that isn't a distribution package (Windows, Remi, Plesk...) is matched against NVD.
         for inst in facts.software:
             if inst["name"] == "php" and not checks.is_distro_build(inst, facts):

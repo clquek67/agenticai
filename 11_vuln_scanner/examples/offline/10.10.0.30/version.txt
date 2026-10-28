@@ -1,0 +1,9 @@
+Aruba Operating System Software.
+ArubaOS (MODEL: Aruba7205), Version 6.5.4.19
+Website: http://www.arubanetworks.com
+(c) Copyright 2020 Hewlett Packard Enterprise Development LP.
+Compiled on 2020-11-26 at 06:43:24 UTC (build 77445) by p4build
+ROM: System Bootstrap, Version CPBoot 1.2.4.0 (build 39183)
+
+Switch uptime is 120 days 2 hours 3 minutes 10 seconds
+Reboot Cause: User reboot.

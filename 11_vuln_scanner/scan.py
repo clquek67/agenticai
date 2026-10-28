@@ -51,6 +51,7 @@ def parse_args(argv=None):
     sync.add_argument("--distros", help="add Linux releases, e.g. ubuntu:22.04,debian:12,rhel:8,alma:9")
     sync.add_argument("--windows", help="add Windows Server versions, e.g. 2016,2019,2022,2025")
     sync.add_argument("--cisco", help="add Cisco versions, e.g. 'IOS XE|17.9.4a,ASA|9.16(4),IOS|15.2(7)E10'")
+    sync.add_argument("--nvd-products", help="add NVD products, e.g. 'talariax:sendquick,trendmicro:tippingpoint_operating_system'")
     sync.add_argument("--show-request", action="store_true", help="print what the feed folder will download, then stop")
     sync.add_argument("--skip", default="", help="feeds to skip: osv,nvd,msrc,kev,epss,cisco")
     sync.add_argument("--msrc-since", type=int, default=2022, help="first year of Microsoft updates to download")
@@ -64,7 +65,8 @@ def run_sync(args):
 
     out = args.out or "feeds"
     split = lambda value: [v.strip() for v in (value or "").split(",") if v.strip()]
-    extra = {"distros": split(args.distros), "windows_products": split(args.windows), "cisco_versions": split(args.cisco)}
+    extra = {"distros": split(args.distros), "windows_products": split(args.windows), "cisco_versions": split(args.cisco),
+             "nvd_products": split(args.nvd_products)}
     try:
         os.makedirs(out, exist_ok=True)
         req = load_request(out, args.request, extra)
@@ -74,7 +76,8 @@ def run_sync(args):
     print("  Linux:   " + ", ".join(req["distros"] or [d + " (default)" for d in DEFAULT_DISTROS]))
     print("  Windows: " + ", ".join(req["windows_products"] or [w + " (default)" for w in DEFAULT_WINDOWS]))
     print("  Cisco:   " + (", ".join(req["cisco_versions"]) or "none yet (add with --cisco or a scan's feed-request.json)"))
-    print("  NVD:     all products in data/nvd_products.json (Fortinet, Juniper, Aruba, Comware, PHP, ...)")
+    print("  NVD:     all products in data/nvd_products.json (Fortinet, Juniper, Aruba, Comware, PHP, ...)"
+          + (" plus " + ", ".join(req["nvd_products"]) if req["nvd_products"] else ""))
     if args.show_request:
         return 0
     print(f"Updating vulnerability feeds in {out} ...")

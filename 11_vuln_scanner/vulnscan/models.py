@@ -28,6 +28,8 @@ class Device:
     credential: str = ""
     name: str = ""
     site: str = ""
+    product: str = ""  # manual appliances: NVD "vendor:product" (several separated by ";")
+    version: str = ""  # manual appliances: software/firmware version from the inventory
 
     @property
     def label(self):

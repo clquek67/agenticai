@@ -224,10 +224,13 @@ def compact_nvd_cve(cve, products):
     return {"cvss": score, "sev": severity_label(None, score), "desc": desc.strip()[:200], "matches": matches}
 
 
-def sync_nvd(out_dir, api_key=None, products_file=None, session=None):
+def sync_nvd(out_dir, api_key=None, products_file=None, session=None, extra_products=()):
     session = session or requests.Session()
     with open(products_file or os.path.join(DATA_DIR, "nvd_products.json"), encoding="utf-8") as f:
         products = {tuple(p) for p in json.load(f)}
+    products |= {tuple(vp.split(":", 1)) for vp in extra_products}
+    if store_products_changed(out_dir, products):
+        os.remove(os.path.join(out_dir, "nvd.json.gz"))  # new products: CVEs already seen must be re-read
     path = os.path.join(out_dir, "nvd.json.gz")
     store = read_json_gz(path, {"updated": None, "cves": {}})
     headers = {"apiKey": api_key} if api_key else {}
@@ -258,6 +261,11 @@ def sync_nvd(out_dir, api_key=None, products_file=None, session=None):
             time.sleep(pause)
     store["updated"] = now.isoformat()
     write_json_gz(path, store)
+    found = {(m[0], m[1]) for entry in store["cves"].values() for m in entry["matches"]}
+    missing = sorted(f"{v}:{p}" for v, p in products - found)
+    if missing:
+        # Several spellings are listed on purpose; only worry if none for a product family matched.
+        print(f"\n    NVD has no CVEs under: {', '.join(missing)} (alternative names; fine if a sibling matched)")
     return "nvd.json.gz", len(store["cves"])
 
 
@@ -317,6 +325,19 @@ def sync_msrc(out_dir, products, since_year=2022, session=None):
 
 
 # --- small feeds --------------------------------------------------------------------
+
+def store_products_changed(out_dir, products):
+    """True when the product list grew since the last NVD download (a full download is then needed,
+    because incremental updates only bring CVEs that changed)."""
+    path = os.path.join(out_dir, "nvd-products.json")
+    old = set()
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            old = {tuple(p) for p in json.load(f)}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(sorted(products), f)
+    return bool(products - old) and os.path.exists(os.path.join(out_dir, "nvd.json.gz"))
+
 
 def sync_kev(out_dir, session=None):
     session = session or requests.Session()
@@ -395,7 +416,7 @@ CISCO_OS = ("IOS", "IOS XE", "ASA")
 
 def normalize_request(req):
     """Check and tidy a request: 'ubuntu:24.04', 'Windows Server 2019' (or '2019'), 'IOS XE|17.9.4a'."""
-    out, errors = {"distros": set(), "windows_products": set(), "cisco_versions": set()}, []
+    out, errors = {"distros": set(), "windows_products": set(), "cisco_versions": set(), "nvd_products": set()}, []
     for d in req.get("distros", []):
         d = d.strip().lower()
         family, _, release = d.partition(":")
@@ -416,6 +437,12 @@ def normalize_request(req):
             out["cisco_versions"].add(f"{os_name}|{version.strip()}")
         else:
             errors.append(f"Cisco version '{c}' (use e.g. IOS XE|17.9.4a, IOS|15.2(7)E8, ASA|9.16(4))")
+    for vp in req.get("nvd_products", []):
+        vendor, sep, product = vp.strip().lower().partition(":")
+        if sep and vendor and product and " " not in vp.strip():
+            out["nvd_products"].add(f"{vendor}:{product}")
+        else:
+            errors.append(f"NVD product '{vp}' (use vendor:product as in NVD, e.g. talariax:sendquick)")
     if errors:
         raise ValueError("Not understood: " + "; ".join(errors))
     return {k: sorted(v) for k, v in out.items()}
@@ -427,7 +454,7 @@ def load_request(out_dir, request_files=(), extra=None):
     if isinstance(request_files, str):
         request_files = [request_files]
     path = os.path.join(out_dir, "request.json")
-    req = {"distros": [], "windows_products": [], "cisco_versions": []}
+    req = {"distros": [], "windows_products": [], "cisco_versions": [], "nvd_products": []}
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             req.update(json.load(f))
@@ -470,7 +497,7 @@ def sync_all(out_dir, request_file=None, distros=None, skip=(), nvd_api_key=None
     if "epss" not in skip:
         jobs.append(("epss", lambda: sync_epss(out_dir, session)))
     if "nvd" not in skip:
-        jobs.append(("nvd", lambda: sync_nvd(out_dir, nvd_api_key, session=session)))
+        jobs.append(("nvd", lambda: sync_nvd(out_dir, nvd_api_key, session=session, extra_products=req["nvd_products"])))
     if "msrc" not in skip:
         jobs.append(("msrc", lambda: sync_msrc(out_dir, windows, msrc_since, session)))
     if "cisco" not in skip:

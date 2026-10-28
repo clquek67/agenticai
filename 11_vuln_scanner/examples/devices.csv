@@ -1,13 +1,18 @@
-host,name,platform,credential,site
-10.10.0.1,rtr-wan-01,cisco_ios,cisco_ro,HQ
-10.10.0.2,rtr-branch-old,cisco_ios,cisco_ro,Branch 3
-10.10.0.11,sw-access-01,cisco_ios,cisco_ro,HQ
-10.10.0.50,sw-lab-07,cisco_ios,cisco_ro,Lab
-10.30.5.20,asa-dmz-01,cisco_asa,asa_ro,HQ DMZ
-10.20.0.5,sw-core-01,hpe_comware,comware_ro,HQ
-10.20.0.6,sw-dist-02,hpe_comware,comware_ro,HQ
-192.168.99.1,sw-guest-01,cisco_ios,cisco_ro,Guest
-10.20.1.10,web-lnx-01,linux,linux_ro,HQ DMZ
-10.20.1.11,web-lnx-02,linux,linux_ro,HQ DMZ
-10.20.1.20,web-win-01,windows,windows_ro,HQ DMZ
-10.20.1.21,web-win-02,windows,windows_ro,Branch 3
+host,name,platform,credential,site,product,version
+10.10.0.1,rtr-wan-01,cisco_ios,cisco_ro,HQ,,
+10.10.0.2,rtr-branch-old,cisco_ios,cisco_ro,Branch 3,,
+10.10.0.11,sw-access-01,cisco_ios,cisco_ro,HQ,,
+10.10.0.50,sw-lab-07,cisco_ios,cisco_ro,Lab,,
+10.30.5.20,asa-dmz-01,cisco_asa,asa_ro,HQ DMZ,,
+10.20.0.5,sw-core-01,hpe_comware,comware_ro,HQ,,
+10.20.0.6,sw-dist-02,hpe_comware,comware_ro,HQ,,
+192.168.99.1,sw-guest-01,cisco_ios,cisco_ro,Guest,,
+10.20.1.10,web-lnx-01,linux,linux_ro,HQ DMZ,,
+10.20.1.11,web-lnx-02,linux,linux_ro,HQ DMZ,,
+10.20.1.20,web-win-01,windows,windows_ro,HQ DMZ,,
+10.20.1.21,web-win-02,windows,windows_ro,Branch 3,,
+10.10.0.30,ctrl-7205-01,aruba_os,aruba_ro,HQ,,
+10.10.0.31,sw-3810-01,aruba_switch,aruba_ro,HQ,,
+10.10.0.32,sw-cx6200-01,aruba_cx,aruba_ro,HQ,,
+10.10.0.33,cppm-01,clearpass,clearpass_ro,HQ,,
+10.40.0.5,sendquick-01,manual,,HQ,talariax:sendquick_alert_plus_server_admin,20150606

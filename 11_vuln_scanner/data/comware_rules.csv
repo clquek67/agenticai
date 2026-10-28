@@ -1,0 +1,11 @@
+# HPE Comware vulnerability rules, one row per bulletin and switch series. Copy the values from the
+# HPE security bulletin (support.hpe.com, "HPESBNW..."/"HPESBHF..."). Lines starting with # are ignored.
+#
+# series:         text or regex matched against the model in 'display version', e.g. "5130.*EI" or "5940"
+# fixed_release:  first fixed release from the bulletin, e.g. R3507P10 (empty = no fix: every release affected)
+# first_affected: optional, oldest affected release
+# requires_config: optional regex; the rule only fires if the running config matches (feature in use)
+#
+# Example (not a real bulletin):
+# HPESBNW99999,CVE-0000-00000,Example SSH denial of service,7.5,,5130.*EI,R3507P10,,^\s*ssh server enable,https://support.hpe.com/...
+bulletin,cves,title,cvss,severity,series,fixed_release,first_affected,requires_config,url

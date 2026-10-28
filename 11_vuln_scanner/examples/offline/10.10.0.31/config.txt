@@ -1,0 +1,5 @@
+; JL073A Configuration Editor; Created on release #KB.16.11.0004
+hostname "sw-3810-01"
+snmp-server community "public" unrestricted
+sntp server priority 1 10.10.0.201
+ip ssh

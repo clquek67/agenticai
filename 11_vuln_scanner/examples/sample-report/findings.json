@@ -1,13 +1,13 @@
 {
   "scanner": "VulnScan 0.1.0",
-  "started": "2026-10-28T06:46:25.560365+00:00",
-  "finished": "2026-10-28T06:46:25.581702+00:00",
-  "risk_score": 76,
+  "started": "2026-10-28T08:50:07.234131+00:00",
+  "finished": "2026-10-28T08:50:07.263119+00:00",
+  "risk_score": 70,
   "severity_counts": {
-    "critical": 7,
-    "high": 32,
-    "medium": 15,
-    "low": 9,
+    "critical": 8,
+    "high": 37,
+    "medium": 18,
+    "low": 12,
     "info": 4
   },
   "kev_count": 9,
@@ -640,7 +640,7 @@
           "description": "",
           "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
           "evidence": [
-            "comware 7.1.070 matches NVD's affected range"
+            "comware 3208p10 matches NVD's affected range"
           ],
           "references": [
             "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0002"
@@ -1870,6 +1870,358 @@
           ],
           "source": "Lifecycle data",
           "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.30",
+      "name": "ctrl-7205-01",
+      "site": "HQ",
+      "platform": "aruba_os",
+      "status": "ok",
+      "error": "",
+      "hostname": "ctrl-7205-01",
+      "model": "Aruba7205",
+      "os": "ArubaOS",
+      "version": "6.5.4.19",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [],
+      "findings": [
+        {
+          "id": "SAMPLE-NVD-0004",
+          "title": "SAMPLE: ArubaOS PAPI buffer overflow",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.8,
+          "cves": [
+            "SAMPLE-NVD-0004"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "arubaos 6.5.4.19 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0004"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade HPE Aruba ArubaOS controller software",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOS-002",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Remove the default community and use SNMPv3.",
+          "evidence": [
+            "snmp-server community ****"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOS-001",
+          "title": "Telnet management enabled",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Telnet sends passwords in clear text.",
+          "remediation": "Run 'no telnet cli' and manage the controller over SSH.",
+          "evidence": [
+            "telnet cli"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOS-004",
+          "title": "No NTP server configured",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Configure 'ntp server <server>'.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.31",
+      "name": "sw-3810-01",
+      "site": "HQ",
+      "platform": "aruba_switch",
+      "status": "ok",
+      "error": "",
+      "hostname": "sw-3810-01",
+      "model": "3810M-24G-PoE+-1-slot JL073A",
+      "os": "ArubaOS-Switch",
+      "version": "KB.16.11.0004",
+      "release": "",
+      "serial": "SG00EXAMPLE",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [],
+      "findings": [
+        {
+          "id": "SAMPLE-NVD-0005",
+          "title": "SAMPLE: ArubaOS-Switch web management command injection",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.2,
+          "cves": [
+            "SAMPLE-NVD-0005"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "arubaos-switch kb.16.11.0004 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0005"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade HPE Aruba ArubaOS-Switch software",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOSS-003",
+          "title": "Default SNMP community string",
+          "severity": "high",
+          "priority": "P2",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "ArubaOS-Switch ships with community 'public'.",
+          "remediation": "Remove it ('no snmp-server community public') and use SNMPv3.",
+          "evidence": [
+            "snmp-server community ****"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOSS-001",
+          "title": "Telnet server enabled (default)",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "ArubaOS-Switch enables Telnet unless it is turned off.",
+          "remediation": "Run 'no telnet-server' and manage the switch over SSH.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOSS-002",
+          "title": "Plain HTTP web management enabled (default)",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Run 'no web-management plaintext' (keep 'web-management ssl' if the GUI is needed).",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CFG-AOSS-004",
+          "title": "No remote syslog server",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Configure 'logging <server>'.",
+          "evidence": [
+            "Not found in the running configuration"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.32",
+      "name": "sw-cx6200-01",
+      "site": "HQ",
+      "platform": "aruba_cx",
+      "status": "ok",
+      "error": "",
+      "hostname": "sw-cx6200-01",
+      "model": "JL724A 6200F 24G 4SFP+ Switch",
+      "os": "AOS-CX",
+      "version": "ML.10.13.1010",
+      "release": "",
+      "serial": "SG00EXAMPLE2",
+      "lifecycle": "unknown",
+      "notes": [
+        "NVD has no CVEs under arubanetworks:aos-cx, arubanetworks:arubaos-cx, hpe:aos-cx, hpe:arubaos-cx: check the product name (data/nvd_products.json, or the product column for manual devices)."
+      ],
+      "software": [],
+      "findings": [
+        {
+          "id": "CFG-CX-004",
+          "title": "Web management enabled on the default (data) VRF",
+          "severity": "low",
+          "priority": "P4",
+          "category": "config",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "",
+          "remediation": "Prefer 'https-server vrf mgmt' so the web UI is only reachable from the management network.",
+          "evidence": [
+            "https-server vrf default"
+          ],
+          "references": [],
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
+        }
+      ]
+    },
+    {
+      "host": "10.10.0.33",
+      "name": "cppm-01",
+      "site": "HQ",
+      "platform": "clearpass",
+      "status": "ok",
+      "error": "",
+      "hostname": "",
+      "model": "ClearPass C2000",
+      "os": "ClearPass",
+      "version": "6.10.5.185484",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [],
+      "findings": [
+        {
+          "id": "SAMPLE-NVD-0006",
+          "title": "SAMPLE: ClearPass Policy Manager web interface flaw",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 8.8,
+          "cves": [
+            "SAMPLE-NVD-0006"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "clearpass_policy_manager 6.10.5.185484 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0006"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade HPE Aruba ClearPass software",
+          "epss": null,
+          "confidence": "confirmed"
+        }
+      ]
+    },
+    {
+      "host": "10.40.0.5",
+      "name": "sendquick-01",
+      "site": "HQ",
+      "platform": "manual",
+      "status": "ok",
+      "error": "",
+      "hostname": "",
+      "model": "talariax:sendquick_alert_plus_server_admin",
+      "os": "manual",
+      "version": "20150606",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [
+        "Not logged in: the version comes from the inventory and was not verified on the device.",
+        "NVD has no CVEs under talariax:sendquick_alert_plus_server_admin: check the product name (data/nvd_products.json, or the product column for manual devices)."
+      ],
+      "software": [],
+      "findings": [
+        {
+          "id": "FW-AGE",
+          "title": "Firmware is about 11 years old (2015-06-06)",
+          "severity": "high",
+          "priority": "P2",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "Firmware this old is very likely missing years of security fixes, including ones that are not tracked as CVEs by the vendor.",
+          "remediation": "Check the vendor's support portal for the current firmware and upgrade; if the product is no longer supported, plan its replacement.",
+          "evidence": [
+            "Version 20150606"
+          ],
+          "references": [],
+          "source": "Lifecycle data",
+          "fix_group": "Upgrade appliance firmware",
           "epss": null,
           "confidence": "confirmed"
         }

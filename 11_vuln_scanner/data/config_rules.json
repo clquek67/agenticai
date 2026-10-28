@@ -258,5 +258,135 @@
     "title": "No login banner",
     "description": "",
     "remediation": "Add 'header login' with an authorised-use warning."
+  },
+  {
+    "id": "CFG-AOS-001",
+    "platform": "aruba_os",
+    "type": "present",
+    "pattern": "^telnet (cli|soe)\\b",
+    "severity": "medium",
+    "title": "Telnet management enabled",
+    "description": "Telnet sends passwords in clear text.",
+    "remediation": "Run 'no telnet cli' and manage the controller over SSH."
+  },
+  {
+    "id": "CFG-AOS-002",
+    "platform": "aruba_os",
+    "type": "present",
+    "pattern": "^snmp-server community \"?(public|private)\"?\\b",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "",
+    "remediation": "Remove the default community and use SNMPv3."
+  },
+  {
+    "id": "CFG-AOS-003",
+    "platform": "aruba_os",
+    "type": "absent",
+    "pattern": "^logging \\d{1,3}(\\.\\d{1,3}){3}",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "",
+    "remediation": "Configure 'logging <server>'."
+  },
+  {
+    "id": "CFG-AOS-004",
+    "platform": "aruba_os",
+    "type": "absent",
+    "pattern": "^ntp server",
+    "severity": "low",
+    "title": "No NTP server configured",
+    "description": "",
+    "remediation": "Configure 'ntp server <server>'."
+  },
+  {
+    "id": "CFG-AOSS-001",
+    "platform": "aruba_switch",
+    "type": "absent",
+    "pattern": "^no telnet-server",
+    "severity": "medium",
+    "title": "Telnet server enabled (default)",
+    "description": "ArubaOS-Switch enables Telnet unless it is turned off.",
+    "remediation": "Run 'no telnet-server' and manage the switch over SSH."
+  },
+  {
+    "id": "CFG-AOSS-002",
+    "platform": "aruba_switch",
+    "type": "absent",
+    "pattern": "^no web-management plaintext",
+    "severity": "medium",
+    "title": "Plain HTTP web management enabled (default)",
+    "description": "",
+    "remediation": "Run 'no web-management plaintext' (keep 'web-management ssl' if the GUI is needed)."
+  },
+  {
+    "id": "CFG-AOSS-003",
+    "platform": "aruba_switch",
+    "type": "present",
+    "pattern": "^snmp-server community \"?(public|private)\"?",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "ArubaOS-Switch ships with community 'public'.",
+    "remediation": "Remove it ('no snmp-server community public') and use SNMPv3."
+  },
+  {
+    "id": "CFG-AOSS-004",
+    "platform": "aruba_switch",
+    "type": "absent",
+    "pattern": "^logging \\d{1,3}(\\.\\d{1,3}){3}",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "",
+    "remediation": "Configure 'logging <server>'."
+  },
+  {
+    "id": "CFG-AOSS-005",
+    "platform": "aruba_switch",
+    "type": "absent",
+    "pattern": "^(sntp|ntp) server",
+    "severity": "low",
+    "title": "No time server configured",
+    "description": "",
+    "remediation": "Configure 'sntp server' or 'ntp server'."
+  },
+  {
+    "id": "CFG-CX-001",
+    "platform": "aruba_cx",
+    "type": "present",
+    "pattern": "^snmp-server community (public|private)\\b",
+    "severity": "high",
+    "title": "Default SNMP community string",
+    "description": "",
+    "remediation": "Remove the default community and use SNMPv3."
+  },
+  {
+    "id": "CFG-CX-002",
+    "platform": "aruba_cx",
+    "type": "absent",
+    "pattern": "^logging \\d{1,3}(\\.\\d{1,3}){3}",
+    "severity": "low",
+    "title": "No remote syslog server",
+    "description": "",
+    "remediation": "Configure 'logging <server>'."
+  },
+  {
+    "id": "CFG-CX-003",
+    "platform": "aruba_cx",
+    "type": "absent",
+    "pattern": "^ntp server",
+    "severity": "low",
+    "title": "No NTP server configured",
+    "description": "",
+    "remediation": "Configure 'ntp server <server>'."
+  },
+  {
+    "id": "CFG-CX-004",
+    "platform": "aruba_cx",
+    "type": "present",
+    "pattern": "^https-server vrf default\\b",
+    "severity": "low",
+    "title": "Web management enabled on the default (data) VRF",
+    "description": "",
+    "remediation": "Prefer 'https-server vrf mgmt' so the web UI is only reachable from the management network."
   }
 ]

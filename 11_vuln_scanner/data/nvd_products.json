@@ -1,16 +1,106 @@
 [
-  ["cisco", "ios"],
-  ["cisco", "ios_xe"],
-  ["cisco", "adaptive_security_appliance_software"],
-  ["cisco", "nx-os"],
-  ["fortinet", "fortios"],
-  ["juniper", "junos"],
-  ["arubanetworks", "arubaos"],
-  ["arubanetworks", "clearpass_policy_manager"],
-  ["hp", "arubaos-switch"],
-  ["hpe", "arubaos-cx"],
-  ["hp", "comware"],
-  ["h3c", "comware"],
-  ["trendmicro", "tippingpoint_threat_protection_system"],
-  ["php", "php"]
+  [
+    "cisco",
+    "ios"
+  ],
+  [
+    "cisco",
+    "ios_xe"
+  ],
+  [
+    "cisco",
+    "adaptive_security_appliance_software"
+  ],
+  [
+    "cisco",
+    "nx-os"
+  ],
+  [
+    "fortinet",
+    "fortios"
+  ],
+  [
+    "juniper",
+    "junos"
+  ],
+  [
+    "arubanetworks",
+    "arubaos"
+  ],
+  [
+    "arubanetworks",
+    "clearpass_policy_manager"
+  ],
+  [
+    "hp",
+    "arubaos-switch"
+  ],
+  [
+    "hpe",
+    "arubaos-cx"
+  ],
+  [
+    "hp",
+    "comware"
+  ],
+  [
+    "h3c",
+    "comware"
+  ],
+  [
+    "trendmicro",
+    "tippingpoint_threat_protection_system"
+  ],
+  [
+    "php",
+    "php"
+  ],
+  [
+    "arubanetworks",
+    "arubaos-switch"
+  ],
+  [
+    "hpe",
+    "arubaos-switch"
+  ],
+  [
+    "arubanetworks",
+    "arubaos-cx"
+  ],
+  [
+    "arubanetworks",
+    "aos-cx"
+  ],
+  [
+    "hpe",
+    "aos-cx"
+  ],
+  [
+    "hpe",
+    "arubaos"
+  ],
+  [
+    "hpe",
+    "clearpass_policy_manager"
+  ],
+  [
+    "hpe",
+    "comware"
+  ],
+  [
+    "talariax",
+    "sendquick_alert_plus_server_admin"
+  ],
+  [
+    "talariax",
+    "sendquick"
+  ],
+  [
+    "sendquick",
+    "alert_plus"
+  ],
+  [
+    "trendmicro",
+    "tippingpoint_operating_system"
+  ]
 ]

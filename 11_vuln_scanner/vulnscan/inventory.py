@@ -12,7 +12,9 @@ from .platforms import PLATFORMS
 
 
 def load_inventory(path):
-    """Read a CSV with columns: host, platform, credential[, name, site]."""
+    """Read a CSV with columns: host, platform, credential[, name, site, product, version].
+
+    ``product`` and ``version`` are only used for platform ``manual`` (devices without a login)."""
     devices = []
     with open(path, newline="", encoding="utf-8") as f:
         for lineno, row in enumerate(csv.DictReader(f), start=2):
@@ -23,6 +25,8 @@ def load_inventory(path):
             platform = row.get("platform", "")
             if platform not in PLATFORMS:
                 raise ValueError(f"{path}:{lineno}: unknown platform '{platform}' (use one of {', '.join(PLATFORMS)})")
+            if platform == "manual" and not (row.get("product") and row.get("version")):
+                raise ValueError(f"{path}:{lineno}: platform 'manual' needs the product and version columns")
             devices.append(
                 Device(
                     host=host,
@@ -30,6 +34,8 @@ def load_inventory(path):
                     credential=row.get("credential", ""),
                     name=row.get("name", ""),
                     site=row.get("site", ""),
+                    product=row.get("product", ""),
+                    version=row.get("version", ""),
                 )
             )
     return devices

@@ -30,7 +30,7 @@
     },
     "nvd": {
       "file": "nvd.json.gz",
-      "sha256": "d77e391fba98d38ee7a2072dbcea8212cd024a722ba61b79570572bd0cdc3fba",
+      "sha256": "8c46785f0f3c717e1c3aaa749bf39f52ce5250219c6d53d395bad961a0a9130d",
       "updated": "2026-10-28T06:45:44+00:00",
       "status": "ok",
       "error": ""

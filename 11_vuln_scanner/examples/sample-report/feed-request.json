@@ -12,5 +12,8 @@
     "IOS XE|17.06.04",
     "IOS|15.1(4)M12a",
     "IOS|15.2(7)E8"
+  ],
+  "nvd_products": [
+    "talariax:sendquick_alert_plus_server_admin"
   ]
 }

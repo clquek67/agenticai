@@ -1,0 +1,5 @@
+Image stamp:    /ws/swbuildm/rel_kowloon_qaoff/code/build/bom(swbuildm_rel_kowloon_qaoff_rel_kowloon)
+                Jun  3 2022 05:46:43
+                KB.16.11.0004
+                1060
+Boot Image:     Primary

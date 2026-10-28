@@ -118,7 +118,132 @@ class HPEComware(Platform):
 
     def nvd_products(self, facts):
         # NVD's Comware data is sparse; this catches the CVEs that do list Comware versions.
-        return [("h3c", "comware", [facts.version]), ("hp", "comware", [facts.version])]
+        spellings = [facts.release, f"r{facts.release}", f"{facts.version}_r{facts.release}", facts.version]
+        return [(v, "comware", spellings) for v in ("h3c", "hp", "hpe")]
+
+
+
+# --- HPE Aruba ------------------------------------------------------------------
+
+def _hostname(cfg):
+    return _search(r'^hostname\s+"?([^"\n]+?)"?\s*$', cfg)
+
+
+class ArubaOS(Platform):
+    """HPE Aruba mobility controllers running ArubaOS 6.x / 8.x (7205, 7210, 7240, ...)."""
+
+    name = "aruba_os"
+    label = "HPE Aruba ArubaOS controller"
+    netmiko_type = "aruba_os"
+    commands = {"version": "show version", "config": "show running-config"}
+
+    def parse(self, outputs):
+        ver = outputs.get("version", "")
+        return Facts(
+            hostname=_hostname(outputs.get("config", "")),
+            model=_search(r"ArubaOS \(MODEL:\s*([^)]+)\)", ver),
+            os_name="ArubaOS",
+            version=_search(r"ArubaOS \(MODEL:[^)]*\),\s*Version\s+(\S+)", ver),
+        )
+
+    def nvd_products(self, facts):
+        return [("arubanetworks", "arubaos", [facts.version]), ("hpe", "arubaos", [facts.version])]
+
+
+class ArubaOSSwitch(Platform):
+    """HPE Aruba switches running ArubaOS-Switch / ProVision (2930, 3810M, 5400R: KB., WC., YA. ...)."""
+
+    name = "aruba_switch"
+    label = "HPE Aruba ArubaOS-Switch"
+    netmiko_type = "aruba_osswitch"
+    commands = {"version": "show version", "modules": "show modules", "config": "show running-config"}
+
+    def parse(self, outputs):
+        ver = outputs.get("version", "")
+        mods = outputs.get("modules", "")
+        return Facts(
+            hostname=_hostname(outputs.get("config", "")),
+            model=_search(r"Chassis:\s*(.+?)\s{2,}", mods) or _search(r"Chassis:\s*(.+?)\s*Serial", mods),
+            os_name="ArubaOS-Switch",
+            version=_search(r"^\s*([A-Z]{1,3}\.\d{2}\.\d{2}\.\d{4})\s*$", ver),
+            serial=_search(r"Serial Number:\s*(\S+)", mods),
+        )
+
+    def nvd_products(self, facts):
+        bare = re.sub(r"^[A-Z]+\.", "", facts.version)  # KB.16.11.0004 -> 16.11.0004
+        spellings = [facts.version, bare]
+        return [(v, "arubaos-switch", spellings) for v in ("arubanetworks", "hpe", "hp")]
+
+
+class ArubaCX(Platform):
+    """HPE Aruba switches running AOS-CX (4100i, 6000, 6100, 6200, 6300, 8100, 8320, 8360, ...)."""
+
+    name = "aruba_cx"
+    label = "HPE Aruba AOS-CX"
+    netmiko_type = "aruba_aoscx"
+    commands = {"version": "show version", "system": "show system", "config": "show running-config"}
+
+    def parse(self, outputs):
+        ver, system = outputs.get("version", ""), outputs.get("system", "")
+        return Facts(
+            hostname=_hostname(outputs.get("config", "")) or _search(r"^Hostname\s*:\s*(\S+)", system),
+            model=_search(r"^Product Name\s*:\s*(.+?)\s*$", system),
+            os_name="AOS-CX",
+            version=_search(r"^Version\s*:\s*(\S+)", ver),
+            serial=_search(r"^Chassis Serial Nbr\s*:\s*(\S+)", system),
+        )
+
+    def nvd_products(self, facts):
+        bare = re.sub(r"^[A-Z]+\.", "", facts.version)  # FL.10.13.1000 -> 10.13.1000
+        spellings = [facts.version, bare]
+        return [(v, p, spellings) for v in ("arubanetworks", "hpe") for p in ("arubaos-cx", "aos-cx")]
+
+
+class ClearPass(Platform):
+    """HPE Aruba ClearPass Policy Manager (appadmin CLI)."""
+
+    name = "clearpass"
+    label = "HPE Aruba ClearPass"
+    netmiko_type = "generic"
+    commands = {"version": "show version"}
+
+    def parse(self, outputs):
+        ver = outputs.get("version", "")
+        return Facts(
+            model="ClearPass " + _search(r"model number\s*:?\s*(\S+)", ver, flags=re.IGNORECASE | re.MULTILINE),
+            os_name="ClearPass",
+            version=_search(r"software version\s*:?\s*(\d+\.\d+\.\d+(?:\.\d+)?)", ver, flags=re.IGNORECASE),
+        )
+
+    def nvd_products(self, facts):
+        short = ".".join(facts.version.split(".")[:3])  # 6.10.5.185484 -> 6.10.5 (NVD's spelling)
+        return [(v, "clearpass_policy_manager", [facts.version, short]) for v in ("arubanetworks", "hpe")]
+
+
+# --- appliances without a supported login ----------------------------------------
+
+class ManualAppliance(Platform):
+    """Devices the scanner can't log in to (SendQuick, TippingPoint, ...). The inventory gives the
+    product and version; they are checked against NVD and reported as unverified."""
+
+    name = "manual"
+    label = "Appliance (version from inventory)"
+    transport = "none"
+    commands = {}
+
+    def facts_for(self, device):
+        return Facts(model=device.product, os_name="manual", version=device.version)
+
+    def parse(self, outputs):
+        return Facts()
+
+    def nvd_products(self, facts):
+        products = []
+        for vp in (facts.model or "").split(";"):
+            vendor, _, product = vp.strip().partition(":")
+            if vendor and product:
+                products.append((vendor, product, [facts.version]))
+        return products
 
 
 # --- servers -------------------------------------------------------------------
@@ -262,7 +387,8 @@ class WindowsServer(Platform):
         )
 
 
-PLATFORMS = {p.name: p for p in (CiscoIOS(), CiscoASA(), HPEComware(), LinuxServer(), WindowsServer())}
+PLATFORMS = {p.name: p for p in (CiscoIOS(), CiscoASA(), HPEComware(), ArubaOS(), ArubaOSSwitch(), ArubaCX(),
+                                  ClearPass(), LinuxServer(), WindowsServer(), ManualAppliance())}
 
 
 def get_platform(name):

@@ -1,0 +1,8 @@
+-----------------------------------------------------------------------------
+ArubaOS-CX
+(c) Copyright 2017-2024 Hewlett Packard Enterprise Development LP
+-----------------------------------------------------------------------------
+Version      : ML.10.13.1010
+Build Date   : 2024-05-14 10:12:44 UTC
+Build ID     : ArubaOS-CX:ML.10.13.1010:EXAMPLE
+Active Image : primary

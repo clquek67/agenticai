@@ -1,0 +1,5 @@
+hostname sw-cx6200-01
+ntp server 10.10.0.201
+logging 10.10.0.200
+ssh server vrf mgmt
+https-server vrf default

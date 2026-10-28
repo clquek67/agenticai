@@ -1,0 +1,4 @@
+Hostname           : sw-cx6200-01
+System Description : ML.10.13.1010
+Product Name       : JL724A 6200F 24G 4SFP+ Switch
+Chassis Serial Nbr : SG00EXAMPLE2

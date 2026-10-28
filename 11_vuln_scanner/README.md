@@ -101,6 +101,11 @@ scanner keeps working with slightly older data and says so in the report.
 | `cisco_ios` | IOS and IOS XE: 2811, 2960X, 3750G, ISR 4331, ... | `show version`, `show running-config` |
 | `cisco_asa` | ASA 5512-X, 5520, 5525-X, ... | `show version`, `show running-config` |
 | `hpe_comware` | Comware 5/7: 5130, 5500, A5500, 5510, 5900, 5700, 5940, HP 850 | `display version`, `display current-configuration` |
+| `aruba_os` | ArubaOS 6.x / 8.x mobility controllers (7205, 7210, ...) | `show version`, `show running-config` |
+| `aruba_switch` | ArubaOS-Switch / ProVision (3810M, 2930, 5400R; KB./WC./YA. images) | `show version`, `show modules`, `show running-config` |
+| `aruba_cx` | AOS-CX (6200, 6300, 8100, 8320, ...) | `show version`, `show system`, `show running-config` |
+| `clearpass` | ClearPass Policy Manager (appadmin CLI) | `show version` |
+| `manual` | anything without a supported login (SendQuick, TippingPoint, ...): `product` and `version` columns in the inventory | none: version checked against NVD, firmware age flagged |
 | `linux` | Ubuntu, Debian, RHEL, Rocky, Alma (SSH, no sudo needed) | `cat /etc/os-release`, `php -v` / `php -i`, package list and changelogs, process list |
 | `windows` | Windows Server (WinRM over HTTPS) | one read-only PowerShell script: OS info, PHP on PATH / IIS FastCGI / common folders, `php -v` / `php -i` |
 
@@ -117,7 +122,31 @@ server is reported as fixed. The report also shows whether the partial interim m
 
 Windows needs WinRM (HTTPS, port 5986) enabled and an account in *Remote Management Users*.
 
-Next modules planned: Aruba (AOS-CX, ArubaOS, ArubaOS-Switch, ClearPass), Juniper Junos, TippingPoint.
+### HPE Comware: rules from HPE bulletins
+
+HPE publishes no machine-readable feed for Comware, and NVD lists few Comware releases, so Comware
+CVEs come mainly from `data/comware_rules.csv`: one row per HPE bulletin and switch series with the
+first fixed release, copied from the bulletin (support.hpe.com, *HPESBNW...*). Example row:
+
+```
+bulletin,cves,title,cvss,severity,series,fixed_release,first_affected,requires_config,url
+HPESBNW0xxxx,CVE-20xx-xxxxx,SSH denial of service,7.5,,5130.*EI,R3507P10,,^\s*ssh server enable,https://support.hpe.com/...
+```
+The release on the device (`display version`, e.g. *Release 3507P02*) is compared with
+`fixed_release` for devices whose model matches `series`. Only the template ships today.
+
+### Devices without a supported login
+
+Add them with platform `manual` and the NVD product name and version, e.g.
+```
+host,name,platform,credential,site,product,version
+10.40.0.5,sendquick-01,manual,,HQ,talariax:sendquick_alert_plus_server_admin,20150606
+```
+The product is added to the next feed sync automatically (via `feed-request.json`). If NVD has no
+CVEs under that name the report says so, so a wrong name doesn't go unnoticed. Versions that are
+dates (SendQuick firmware) are also flagged when older than 3 years.
+
+Next modules planned: Juniper Junos, TippingPoint (SMS API).
 
 ## Safety
 
@@ -151,6 +180,7 @@ python scan.py --inventory examples/devices.csv --offline examples/offline \
    export VULNSCAN_ASA_PASSWORD='...'    VULNSCAN_ASA_ENABLE='...'
    export VULNSCAN_COMWARE_PASSWORD='...'
    export VULNSCAN_LINUX_PASSWORD='...'  VULNSCAN_WINDOWS_PASSWORD='...'
+   export VULNSCAN_ARUBA_PASSWORD='...'  VULNSCAN_CLEARPASS_PASSWORD='...'
    ```
 4. Optional but recommended: get a free Cisco openVuln API client at
    https://developer.cisco.com/psirt/ and export `CISCO_CLIENT_ID` / `CISCO_CLIENT_SECRET`.

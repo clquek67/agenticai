@@ -42,7 +42,7 @@ def windows_product(facts):
 
 def feed_request(results):
     """What the sync machine must download for these scan results. No hosts or addresses."""
-    req = {"distros": set(), "windows_products": set(), "cisco_versions": set()}
+    req = {"distros": set(), "windows_products": set(), "cisco_versions": set(), "nvd_products": set()}
     for r in results:
         f = r.facts
         if r.device.platform == "linux" and distro_key(f):
@@ -51,6 +51,10 @@ def feed_request(results):
             req["windows_products"].add(windows_product(f))
         elif r.device.platform.startswith("cisco") and f.version and f.os_name in ("IOS", "IOS XE", "ASA"):
             req["cisco_versions"].add(f"{f.os_name}|{f.version}")
+        elif r.device.platform == "manual":
+            for vp in r.device.product.split(";"):
+                if ":" in vp:
+                    req["nvd_products"].add(vp.strip().lower())
     return {k: sorted(v) for k, v in req.items()}
 
 
@@ -246,6 +250,11 @@ class FeedStore:
                     )
                     break
         return list(findings.values())
+
+    def nvd_knows(self, product_versions):
+        """False if NVD has no CVEs at all under any of these vendor:product names (likely a wrong name)."""
+        index = self.nvd_index()
+        return any((v, p) in index for v, p, _ in product_versions)
 
     def cisco_findings(self, facts):
         os_type = {"IOS": "IOS", "IOS XE": "IOS XE", "ASA": "ASA"}.get(facts.os_name)

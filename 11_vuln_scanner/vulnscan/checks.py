@@ -257,3 +257,73 @@ def check_software_lifecycle(facts, software_lifecycle):
                 )
             )
     return findings
+
+
+def check_firmware_age(facts, max_years=3):
+    """Versions that are dates (e.g. SendQuick 'Version 20150606'): flag firmware older than ``max_years``."""
+    m = re.fullmatch(r"(?:Version\s*)?((?:19|20)\d{2})(\d{2})(\d{2})", (facts.version or "").strip())
+    if not m:
+        return []
+    from datetime import date
+
+    try:
+        built = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    except ValueError:
+        return []
+    years = (date.today() - built).days // 365
+    if years < max_years:
+        return []
+    return [Finding(
+        id="FW-AGE",
+        title=f"Firmware is about {years} years old ({built.isoformat()})",
+        severity="high" if years >= 5 else "medium",
+        category="lifecycle",
+        description="Firmware this old is very likely missing years of security fixes, including ones "
+        "that are not tracked as CVEs by the vendor.",
+        remediation="Check the vendor's support portal for the current firmware and upgrade; if the "
+        "product is no longer supported, plan its replacement.",
+        evidence=[f"Version {facts.version}"],
+        source="Lifecycle data",
+        fix_group="Upgrade appliance firmware",
+    )]
+
+
+def load_comware_rules(path):
+    """Turn the HPE bulletin sheet (data/comware_rules.csv) into advisory rules for hpe_comware."""
+    import csv
+
+    if not path or not os.path.exists(path):
+        return []
+    rules = []
+    with open(path, newline="", encoding="utf-8") as f:
+        lines = [line for line in f if line.strip() and not line.lstrip().startswith("#")]
+    for lineno, row in enumerate(csv.DictReader(lines), start=1):
+        row = {k.strip(): (v or "").strip() for k, v in row.items() if k}
+        cves = [c.strip() for c in re.split(r"[;\s]+", row.get("cves", "")) if c.strip()]
+        if not (cves or row.get("bulletin")) or not row.get("series"):
+            raise ValueError(f"{path} row {lineno}: needs cves (or bulletin) and series")
+        affected = {"field": "release"}
+        if row.get("fixed_release"):
+            affected["fixed_in"] = re.sub(r"^[Rr]", "", row["fixed_release"])
+        if row.get("first_affected"):
+            affected["introduced"] = re.sub(r"^[Rr]", "", row["first_affected"])
+        rule = {
+            "id": cves[0] if cves else row["bulletin"],
+            "cves": cves or [row["bulletin"]],
+            "platform": "hpe_comware",
+            "model_regex": row["series"].replace(" ", ".*"),
+            "title": row.get("title") or row.get("bulletin") or cves[0],
+            "description": f"HPE bulletin {row.get('bulletin', '')}".strip(),
+            "affected": affected,
+            "remediation": f"Upgrade to release {row['fixed_release']} or later for this series."
+            if row.get("fixed_release") else "No fixed release listed by HPE: apply the bulletin's workaround.",
+            "references": [row["url"]] if row.get("url") else [],
+        }
+        if row.get("cvss"):
+            rule["cvss"] = float(row["cvss"])
+        if row.get("severity"):
+            rule["severity"] = row["severity"].lower()
+        if row.get("requires_config"):
+            rule["requires_config"] = row["requires_config"]
+        rules.append(rule)
+    return rules

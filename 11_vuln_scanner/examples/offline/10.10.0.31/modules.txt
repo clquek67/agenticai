@@ -1,0 +1,3 @@
+ Status and Counters - Module Information
+
+  Chassis: 3810M-24G-PoE+-1-slot JL073A         Serial Number:   SG00EXAMPLE

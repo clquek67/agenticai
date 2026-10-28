@@ -170,7 +170,7 @@ def test_feed_request_has_no_hosts_and_merges(tmp_path):
     ]
     req = feed_request(results)
     assert req == {"distros": ["ubuntu:24.04"], "windows_products": ["Windows Server 2022"],
-                   "cisco_versions": ["IOS XE|17.06.04"]}
+                   "cisco_versions": ["IOS XE|17.06.04"], "nvd_products": []}
     assert "10.0.0" not in json.dumps(req)
     req_file = tmp_path / "feed-request.json"
     req_file.write_text(json.dumps(req))
@@ -212,7 +212,7 @@ def test_request_additions_are_normalised_and_validated(tmp_path):
     req = load_request(str(tmp_path), [], {"distros": ["Ubuntu:22.04"], "windows_products": ["2019", "Windows Server 2025"],
                                            "cisco_versions": ["iosxe|17.9.4a", "asa|9.16(4)"]})
     assert req == {"distros": ["ubuntu:22.04"], "windows_products": ["Windows Server 2019", "Windows Server 2025"],
-                   "cisco_versions": ["ASA|9.16(4)", "IOS XE|17.9.4a"]}
+                   "cisco_versions": ["ASA|9.16(4)", "IOS XE|17.9.4a"], "nvd_products": []}
     with pytest.raises(ValueError, match="ubunto"):
         load_request(str(tmp_path), [], {"distros": ["ubunto:24.04"]})
     assert load_request(str(tmp_path))["distros"] == ["ubuntu:22.04"]  # the bad value was not saved
