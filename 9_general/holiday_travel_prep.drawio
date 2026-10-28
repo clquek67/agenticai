@@ -1,0 +1,88 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="holiday-prep" name="Holiday Travel Prep">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Nodes -->
+        <mxCell id="start" value="Decide to take a holiday" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="20" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="budget" value="Set budget &amp; travel dates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="120" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dest" value="Research &amp; choose destination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="220" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="passport" value="Passport valid 6+ months &amp; visa in place?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="300" y="320" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="renew" value="Renew passport / apply for visa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="600" y="345" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flights" value="Book flights" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hotel" value="Book accommodation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="580" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="insurance" value="Buy travel insurance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="680" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="itinerary" value="Plan itinerary, activities &amp; local transport" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="780" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="health" value="Vaccinations or medication needed?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="300" y="880" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="doctor" value="Visit doctor / pharmacy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="600" y="905" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="money" value="Notify bank, get local currency / travel card, set up roaming or eSIM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1040" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="home" value="Arrange home: pet/plant care, hold mail, secure house" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1150" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="pack" value="Make packing list &amp; pack (check weather &amp; baggage limits)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1260" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="docs" value="All documents ready? (passport, tickets, bookings, insurance)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="285" y="1370" width="250" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="gather" value="Print / download missing documents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="600" y="1405" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="checkin" value="Check in online &amp; head to the airport" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1550" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end" value="Enjoy the holiday!" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1650" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="start" target="budget"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="budget" target="dest"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="dest" target="passport"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="passport" target="renew"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="renew" target="dest"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="700" y="250" /></Array></mxGeometry></mxCell>
+        <mxCell id="e6" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="passport" target="flights"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="flights" target="hotel"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="hotel" target="insurance"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="insurance" target="itinerary"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="itinerary" target="health"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="health" target="doctor"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="doctor" target="money"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="700" y="1075" /></Array></mxGeometry></mxCell>
+        <mxCell id="e13" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="health" target="money"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="money" target="home"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="home" target="pack"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="pack" target="docs"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e17" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="docs" target="gather"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gather" target="checkin"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="700" y="1580" /></Array></mxGeometry></mxCell>
+        <mxCell id="e19" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="docs" target="checkin"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="checkin" target="end"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
