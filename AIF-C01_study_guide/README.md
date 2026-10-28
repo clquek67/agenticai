@@ -9,6 +9,8 @@ All 535 practice questions from the AIF-C01 question bank, **grouped by exam dom
 
 > The question wording isn't reproduced here (the source is a copyrighted, commercial question bank). Scenarios are paraphrased and the explanations were written for this guide.
 
+> 🌐 **HTML version:** open [`index.html`](index.html) in a browser for a single page with topic navigation, search and a quiz mode that hides answers.
+
 ## How to study
 
 1. Read the **Key concepts** block of a topic first; most questions are recall of those tables.
