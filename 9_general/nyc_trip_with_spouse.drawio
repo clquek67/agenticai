@@ -1,63 +1,63 @@
 <mxfile host="app.diagrams.net">
-  <diagram id="holiday-prep" name="Holiday Travel Prep">
+  <diagram id="nyc-trip" name="NYC Trip with Spouse">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
         <!-- Nodes -->
-        <mxCell id="start" value="Decide to take a holiday" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="start" value="Decide on a New York City trip with my spouse" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="310" y="20" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="budget" value="Set budget &amp; travel dates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="budget" value="Agree budget &amp; dates together (check both work leave)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="120" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="dest" value="Research &amp; choose destination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="dest" value="Decide trip style &amp; where to stay (e.g. Midtown, SoHo, Brooklyn)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="220" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="passport" value="Passport valid 6+ months &amp; visa in place?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="passport" value="Both passports valid &amp; ESTA / US visa approved?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="300" y="320" width="220" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="renew" value="Renew passport / apply for visa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+        <mxCell id="renew" value="Renew passport / apply for ESTA or visa for both" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="600" y="345" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="flights" value="Book flights" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="flights" value="Book flights to NYC (JFK / EWR / LGA)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="480" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="hotel" value="Book accommodation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="hotel" value="Book hotel for two" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="580" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="insurance" value="Buy travel insurance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="insurance" value="Buy travel insurance for both (US medical costs are high)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="680" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="itinerary" value="Plan itinerary, activities &amp; local transport" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="310" y="780" width="200" height="60" as="geometry" />
+        <mxCell id="itinerary" value="Plan itinerary: Central Park, Statue of Liberty, The Met, Broadway show, Top of the Rock; book tickets &amp; dinner reservations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="290" y="770" width="240" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="health" value="Vaccinations or medication needed?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="health" value="Celebrating something special? (anniversary, birthday)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="300" y="880" width="220" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="doctor" value="Visit doctor / pharmacy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+        <mxCell id="doctor" value="Plan a surprise: romantic dinner, rooftop bar or sunset cruise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="600" y="905" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="money" value="Notify bank, get local currency / travel card, set up roaming or eSIM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="money" value="Notify bank, get some USD, set up eSIM; use contactless card for subway (OMNY)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="1040" width="200" height="70" as="geometry" />
         </mxCell>
         <mxCell id="home" value="Arrange home: pet/plant care, hold mail, secure house" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="1150" width="200" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="pack" value="Make packing list &amp; pack (check weather &amp; baggage limits)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="pack" value="Pack: check NYC weather, comfy walking shoes, layers, an outfit for the show" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="1260" width="200" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="docs" value="All documents ready? (passport, tickets, bookings, insurance)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="docs" value="All documents ready? (passports, ESTA, flights, hotel, show tickets, insurance)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="285" y="1370" width="250" height="130" as="geometry" />
         </mxCell>
         <mxCell id="gather" value="Print / download missing documents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="600" y="1405" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="checkin" value="Check in online &amp; head to the airport" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="checkin" value="Check in online &amp; head to the airport together" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="310" y="1550" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="end" value="Enjoy the holiday!" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="end" value="Enjoy New York together!" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="310" y="1650" width="200" height="60" as="geometry" />
         </mxCell>
 
