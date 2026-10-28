@@ -87,7 +87,7 @@ Linux (cron, 05:15 every day):
 Windows (Task Scheduler, run as a service account):
 ```powershell
 schtasks /Create /TN "VulnScan feed sync" /SC DAILY /ST 05:15 /RU "DOMAIN\svc-vulnsync" /RP * ^
-  /TR "C:\vulnscan\.venv\Scripts\python.exe C:\vulnscan\scan.py --sync-feeds --out D:\vulnscan-feeds"
+  /TR "C:\vulnscan\.venv\Scripts\python.exe C:\vulnscan\scan.py --sync-feeds --all --out D:\vulnscan-feeds"
 ```
 Then sync the feed folder to the scanner with whatever your transfer process is (e.g. `robocopy`/`rsync`
 to a share the scanner can read).
