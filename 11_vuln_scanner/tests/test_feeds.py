@@ -216,3 +216,24 @@ def test_request_additions_are_normalised_and_validated(tmp_path):
     with pytest.raises(ValueError, match="ubunto"):
         load_request(str(tmp_path), [], {"distros": ["ubunto:24.04"]})
     assert load_request(str(tmp_path))["distros"] == ["ubuntu:22.04"]  # the bad value was not saved
+
+
+def test_cisco_asa_queries_both_version_formats():
+    from unittest import mock
+
+    from vulnscan.feeds import CiscoOpenVuln, asa_spellings
+
+    assert asa_spellings("9.12(4)40") == ["9.12.4.40"] and asa_spellings("8.0(4)") == ["8.0.4"]
+    api = CiscoOpenVuln("id", "secret")
+    api._token = "token"
+    asked = []
+
+    def fake_get(url, params, **kwargs):
+        asked.append(params["version"])
+        resp = mock.Mock(status_code=200 if params["version"] == "9.12.4.40" else 404)
+        resp.json = lambda: {"advisories": [{"advisoryId": "cisco-sa-1"}]}
+        return resp
+
+    with mock.patch("vulnscan.feeds.requests.get", fake_get):
+        assert [a["advisoryId"] for a in api.advisories("ASA", "9.12(4)40")] == ["cisco-sa-1"]
+    assert asked == ["9.12(4)40", "9.12.4.40"]

@@ -1,6 +1,7 @@
 """Online vulnerability feeds: CISA KEV and the Cisco PSIRT openVuln API."""
 
 import json
+import re
 import os
 import time
 
@@ -86,6 +87,15 @@ class CiscoOpenVuln:
             return []
         if ostype == "iosxe":
             version = normalize_dotted(version)
+        merged = {}
+        # ASA appears as 9.12(4)40 on the device and as 9.12.4.40 in some Cisco tools; ask for
+        # both so a format mismatch can't silently return "no advisories".
+        for spelling in dict.fromkeys([version] + asa_spellings(version) if ostype == "asa" else [version]):
+            for adv in self._query(ostype, spelling):
+                merged.setdefault(adv.get("advisoryId") or id(adv), adv)
+        return list(merged.values())
+
+    def _query(self, ostype, version):
         key = (ostype, version)
         if key not in self._cache:
             resp = requests.get(
@@ -94,7 +104,7 @@ class CiscoOpenVuln:
                 headers={"Authorization": f"Bearer {self._get_token()}", "Accept": "application/json"},
                 timeout=self.timeout,
             )
-            if resp.status_code == 404:  # no advisories for this version
+            if resp.status_code in (400, 404):  # unknown version format or no advisories
                 self._cache[key] = []
             else:
                 resp.raise_for_status()
@@ -103,6 +113,14 @@ class CiscoOpenVuln:
 
     def findings(self, facts):
         return [advisory_finding(adv, facts) for adv in self.advisories(facts.os_name, facts.version)]
+
+
+def asa_spellings(version):
+    """'9.12(4)40' -> ['9.12.4.40']; '8.0(4)' -> ['8.0.4']."""
+    m = re.fullmatch(r"(\d+)\.(\d+)\((\d+)\)(\d*)", version.strip())
+    if not m:
+        return []
+    return [".".join(p for p in m.groups() if p)]
 
 
 def advisory_finding(adv, facts):
