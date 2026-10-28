@@ -1,0 +1,41 @@
+{
+  "feeds": {
+    "osv-ubuntu": {
+      "file": "osv-ubuntu.json.gz",
+      "sha256": "c5e1f6203ed614a0be3d7df7113489c97f3a1fac7980a2036ee9e942c3e77f88",
+      "updated": "2026-10-28T06:45:44+00:00",
+      "status": "ok",
+      "error": ""
+    },
+    "osv-rocky": {
+      "file": "osv-rocky.json.gz",
+      "sha256": "d0b7cfc1add77bc8c3a66e2318fc4714b9d426641717f1aefcd215996f90b551",
+      "updated": "2026-10-28T06:45:44+00:00",
+      "status": "ok",
+      "error": ""
+    },
+    "kev": {
+      "file": "kev.json",
+      "sha256": "4052616923c8394a23cf48a0b292ca04f1c3bd44418443ee857fe7f83b864924",
+      "updated": "2026-10-28T06:45:44+00:00",
+      "status": "ok",
+      "error": ""
+    },
+    "msrc": {
+      "file": "msrc.json.gz",
+      "sha256": "c9fd2a150de9d96c663d7510c38f38690bb85571e447752691cd67f441d929a5",
+      "updated": "2026-10-28T06:45:44+00:00",
+      "status": "ok",
+      "error": ""
+    },
+    "nvd": {
+      "file": "nvd.json.gz",
+      "sha256": "d77e391fba98d38ee7a2072dbcea8212cd024a722ba61b79570572bd0cdc3fba",
+      "updated": "2026-10-28T06:45:44+00:00",
+      "status": "ok",
+      "error": ""
+    }
+  },
+  "created": "2026-10-28T06:45:44+00:00",
+  "note": "Example feed folder for the offline demo. OSV and KEV entries are real subsets; MSRC and NVD entries are SAMPLE data."
+}
