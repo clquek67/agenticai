@@ -388,28 +388,70 @@ def _download(session, url, dest):
 
 # --- orchestration ------------------------------------------------------------------
 
-def load_request(out_dir, request_file=None):
-    """Merge what the scanner asked for (feed-request.json) into the feed folder's saved request."""
+WINDOWS_NAMES = {"2012": "Windows Server 2012", "2012r2": "Windows Server 2012 R2", "2016": "Windows Server 2016",
+                 "2019": "Windows Server 2019", "2022": "Windows Server 2022", "2025": "Windows Server 2025"}
+CISCO_OS = ("IOS", "IOS XE", "ASA")
+
+
+def normalize_request(req):
+    """Check and tidy a request: 'ubuntu:24.04', 'Windows Server 2019' (or '2019'), 'IOS XE|17.9.4a'."""
+    out, errors = {"distros": set(), "windows_products": set(), "cisco_versions": set()}, []
+    for d in req.get("distros", []):
+        d = d.strip().lower()
+        family, _, release = d.partition(":")
+        if family in OSV_ECOSYSTEMS and release:
+            out["distros"].add(d)
+        else:
+            errors.append(f"distro '{d}' (use e.g. ubuntu:24.04, debian:12, rhel:9, rocky:9, alma:9)")
+    for w in req.get("windows_products", []):
+        key = w.strip().lower().replace("windows server", "").replace(" ", "")
+        if key in WINDOWS_NAMES:
+            out["windows_products"].add(WINDOWS_NAMES[key])
+        else:
+            errors.append(f"Windows version '{w}' (use 2016, 2019, 2022, 2025, 2012r2)")
+    for c in req.get("cisco_versions", []):
+        os_name, sep, version = c.partition("|")
+        os_name = {"IOSXE": "IOS XE", "IOS-XE": "IOS XE"}.get(os_name.strip().upper(), os_name.strip().upper())
+        if sep and os_name in CISCO_OS and version.strip():
+            out["cisco_versions"].add(f"{os_name}|{version.strip()}")
+        else:
+            errors.append(f"Cisco version '{c}' (use e.g. IOS XE|17.9.4a, IOS|15.2(7)E8, ASA|9.16(4))")
+    if errors:
+        raise ValueError("Not understood: " + "; ".join(errors))
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def load_request(out_dir, request_files=(), extra=None):
+    """Merge scanner requests (feed-request.json files) and command-line additions into the
+    feed folder's saved request, which is remembered for later syncs."""
+    if isinstance(request_files, str):
+        request_files = [request_files]
     path = os.path.join(out_dir, "request.json")
     req = {"distros": [], "windows_products": [], "cisco_versions": []}
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             req.update(json.load(f))
-    if request_file:
+    sources = []
+    for request_file in request_files or []:
         with open(request_file, encoding="utf-8") as f:
-            new = json.load(f)
+            sources.append(json.load(f))
+    if extra:
+        sources.append(extra)
+    for new in sources:
         for key in req:
             req[key] = sorted(set(req[key]) | set(new.get(key, [])))
+    req = normalize_request(req)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(req, f, indent=2)
     return req
 
 
 def sync_all(out_dir, request_file=None, distros=None, skip=(), nvd_api_key=None, msrc_since=2022,
-             cisco_id=None, cisco_secret=None):
+             cisco_id=None, cisco_secret=None, windows=None, cisco_versions=None):
     os.makedirs(out_dir, exist_ok=True)
-    req = load_request(out_dir, request_file)
-    distros = sorted(set(distros or []) | set(req["distros"])) or DEFAULT_DISTROS
+    extra = {"distros": distros or [], "windows_products": windows or [], "cisco_versions": cisco_versions or []}
+    req = load_request(out_dir, request_file, extra)
+    distros = req["distros"] or DEFAULT_DISTROS
     windows = sorted(set(req["windows_products"])) or DEFAULT_WINDOWS
     manifest_path = os.path.join(out_dir, "manifest.json")
     manifest = {"feeds": {}}

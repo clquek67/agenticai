@@ -46,8 +46,12 @@ def parse_args(argv=None):
     p.add_argument("-v", "--verbose", action="store_true")
     sync = p.add_argument_group("sync machine (internet access)")
     sync.add_argument("--sync-feeds", action="store_true", help="download/refresh the vulnerability feeds into --out")
-    sync.add_argument("--request", help="feed-request.json written by the scanner (which OS releases and versions to fetch)")
-    sync.add_argument("--distros", help="extra Linux releases, e.g. ubuntu:24.04,rhel:9,rocky:9")
+    sync.add_argument("--request", nargs="+", default=[],
+                      help="one or more feed-request.json files written by scans (e.g. one per site)")
+    sync.add_argument("--distros", help="add Linux releases, e.g. ubuntu:22.04,debian:12,rhel:8,alma:9")
+    sync.add_argument("--windows", help="add Windows Server versions, e.g. 2016,2019,2022,2025")
+    sync.add_argument("--cisco", help="add Cisco versions, e.g. 'IOS XE|17.9.4a,ASA|9.16(4),IOS|15.2(7)E10'")
+    sync.add_argument("--show-request", action="store_true", help="print what the feed folder will download, then stop")
     sync.add_argument("--skip", default="", help="feeds to skip: osv,nvd,msrc,kev,epss,cisco")
     sync.add_argument("--msrc-since", type=int, default=2022, help="first year of Microsoft updates to download")
     return p.parse_args(argv)
@@ -56,12 +60,26 @@ def parse_args(argv=None):
 def run_sync(args):
     from vulnscan.feedsync import sync_all
 
+    from vulnscan.feedsync import DEFAULT_DISTROS, DEFAULT_WINDOWS, load_request
+
     out = args.out or "feeds"
+    split = lambda value: [v.strip() for v in (value or "").split(",") if v.strip()]
+    extra = {"distros": split(args.distros), "windows_products": split(args.windows), "cisco_versions": split(args.cisco)}
+    try:
+        os.makedirs(out, exist_ok=True)
+        req = load_request(out, args.request, extra)
+    except (ValueError, OSError, json.JSONDecodeError) as exc:
+        sys.exit(f"Request problem: {exc}")
+    print(f"Feed folder {out} will cover:")
+    print("  Linux:   " + ", ".join(req["distros"] or [d + " (default)" for d in DEFAULT_DISTROS]))
+    print("  Windows: " + ", ".join(req["windows_products"] or [w + " (default)" for w in DEFAULT_WINDOWS]))
+    print("  Cisco:   " + (", ".join(req["cisco_versions"]) or "none yet (add with --cisco or a scan's feed-request.json)"))
+    print("  NVD:     all products in data/nvd_products.json (Fortinet, Juniper, Aruba, Comware, PHP, ...)")
+    if args.show_request:
+        return 0
     print(f"Updating vulnerability feeds in {out} ...")
     manifest = sync_all(
         out,
-        request_file=args.request,
-        distros=[d.strip() for d in (args.distros or "").split(",") if d.strip()],
         skip={s.strip() for s in args.skip.split(",") if s.strip()},
         nvd_api_key=os.environ.get("NVD_API_KEY"),
         msrc_since=args.msrc_since,

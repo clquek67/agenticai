@@ -61,6 +61,22 @@ Only these outbound HTTPS hosts are needed **on the sync machine**: `osv-vulnera
    run `python scan.py --sync-feeds --out feeds --request feed-request.json` so the next sync
    includes them. The feed folder remembers earlier requests.
 
+**Choosing what the feeds cover**
+
+`feed-request.json` lists only what that scan found. To cover equipment that hasn't been scanned
+yet (other sites, new builds), add it on the sync machine; additions are remembered:
+```bash
+python scan.py --sync-feeds --out feeds \
+    --request site-a/feed-request.json site-b/feed-request.json \
+    --distros ubuntu:22.04,debian:12,rhel:8,alma:9 \
+    --windows 2016,2019,2022,2025 \
+    --cisco "IOS XE|17.9.4a,IOS|15.2(7)E10,ASA|9.16(4)"
+python scan.py --sync-feeds --out feeds --show-request    # print the coverage without downloading
+```
+You can also edit `feeds/request.json` by hand. NVD-based products (Fortinet, Juniper, Aruba,
+Comware, PHP, ...) need no request: the whole list in `data/nvd_products.json` is always
+downloaded; add `["vendor", "product"]` pairs there for other products.
+
 **Daily schedule on the sync machine**
 
 Linux (cron, 05:15 every day):

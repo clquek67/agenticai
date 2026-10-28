@@ -206,3 +206,13 @@ def test_rpm_module_streams_are_not_mixed(tmp_path):
     module = Facts(os_id="rocky", version="9.4", pkg_records=[
         {"name": "php-cli", "version": "0:8.3.26-1.module+el9.7.0+40049+21bbec6b", "source": "php", "source_version": ""}])
     assert [f.id for f in store.linux_findings(module)[0]] == ["CVE-2026-8002"]
+
+
+def test_request_additions_are_normalised_and_validated(tmp_path):
+    req = load_request(str(tmp_path), [], {"distros": ["Ubuntu:22.04"], "windows_products": ["2019", "Windows Server 2025"],
+                                           "cisco_versions": ["iosxe|17.9.4a", "asa|9.16(4)"]})
+    assert req == {"distros": ["ubuntu:22.04"], "windows_products": ["Windows Server 2019", "Windows Server 2025"],
+                   "cisco_versions": ["ASA|9.16(4)", "IOS XE|17.9.4a"]}
+    with pytest.raises(ValueError, match="ubunto"):
+        load_request(str(tmp_path), [], {"distros": ["ubunto:24.04"]})
+    assert load_request(str(tmp_path))["distros"] == ["ubuntu:22.04"]  # the bad value was not saved
