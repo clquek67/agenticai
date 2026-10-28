@@ -2,3 +2,4 @@ credentials.yaml
 reports/
 __pycache__/
 .pytest_cache/
+feeds/

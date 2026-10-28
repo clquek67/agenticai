@@ -1,4 +1,4 @@
-php-cli 8.0.30-1.el9_2
-php-common 8.0.30-1.el9_2
-php84-php-cli 8.4.20-1.el9.remi
-php84-php-fpm 8.4.20-1.el9.remi
+rpm|php-cli|0:8.0.30-1.el9_2|php-8.0.30-1.el9_2.src.rpm
+rpm|php-common|0:8.0.30-1.el9_2|php-8.0.30-1.el9_2.src.rpm
+rpm|php84-php-cli|0:8.4.20-1.el9.remi|php84-php-8.4.20-1.el9.remi.src.rpm
+rpm|php84-php-fpm|0:8.4.20-1.el9.remi|php84-php-8.4.20-1.el9.remi.src.rpm

@@ -3,3 +3,4 @@ NAME="Ubuntu"
 VERSION_ID="24.04"
 ID=ubuntu
 HOSTNAME=web-lnx-01
+KERNEL=6.8.0-85-generic

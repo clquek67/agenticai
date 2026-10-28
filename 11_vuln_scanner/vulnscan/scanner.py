@@ -15,10 +15,14 @@ log = logging.getLogger("vulnscan")
 
 
 class Scanner:
-    def __init__(self, collector, kev, cisco_api=None, allowlist=None, workers=5, data_dir=checks.DATA_DIR):
+    def __init__(self, collector, kev, cisco_api=None, allowlist=None, workers=5, data_dir=checks.DATA_DIR, feeds=None,
+                 include_unfixed=False):
         self.collector = collector
         self.kev = kev
         self.cisco_api = cisco_api
+        self.feeds = feeds
+        self.include_unfixed = include_unfixed
+        self.epss = feeds.epss if feeds else {}
         self.allowlist = allowlist
         self.workers = workers
         self.config_rules = checks.load_json("config_rules.json", data_dir)
@@ -62,31 +66,70 @@ class Scanner:
         result.lifecycle, eol = checks.check_lifecycle(facts, self.lifecycle)
         if eol:
             findings.append(eol)
+        # Order matters for duplicates: the first finding for a CVE is kept and later ones add their
+        # evidence. Config-aware local rules come first, then the vendor/distribution feeds (exact
+        # fixed versions), then the generic software rules.
         findings += checks.run_local_advisories(platform.name, facts, self.advisories)
-        findings += checks.run_software_advisories(platform.name, facts, self.advisories)
-        findings += checks.check_software_lifecycle(facts, self.software_lifecycle)
-        if self.cisco_api and platform.name.startswith("cisco"):
+        if self.feeds:
+            findings += self._feed_findings(platform, facts, result)
+        elif self.cisco_api and platform.name.startswith("cisco"):
             try:
                 findings += self.cisco_api.findings(facts)
             except Exception as exc:  # network/API problems must not stop the scan
                 result.notes.append(f"Cisco openVuln lookup failed: {exc}")
+        findings += checks.run_software_advisories(platform.name, facts, self.advisories)
+        findings += checks.check_software_lifecycle(facts, self.software_lifecycle)
         findings += checks.run_config_rules(platform.name, outputs.get("config", ""), self.config_rules)
 
         result.findings = _dedupe(findings)
         for f in result.findings:
             f.kev = any(c in self.kev for c in f.cves)
+            scores = [self.epss[c][0] for c in f.cves if c in self.epss]
+            f.epss = max(scores) if scores else None
         result.findings.sort(key=lambda f: f.sort_key())
         facts.raw = {}  # drop full configs as soon as checks are done
         log.info("%s: %s %s, %d findings", device.label, facts.model, facts.version, len(result.findings))
         return result
 
 
+    def _feed_findings(self, platform, facts, result):
+        """CVEs from the downloaded feed folder (offline)."""
+        feeds, findings, notes = self.feeds, [], []
+        if platform.name.startswith("cisco"):
+            cisco = feeds.cisco_findings(facts)
+            if cisco is not None:
+                findings += cisco
+            else:
+                notes.append("Cisco advisories for this version are not in the feed folder yet, so NVD data was "
+                             "used. Take feed-request.json to the sync machine to add them.")
+                findings += feeds.nvd_findings(platform.nvd_products(facts), f"Upgrade {facts.os_name} software")
+        elif platform.name == "linux":
+            found, notes = feeds.linux_findings(facts, self.include_unfixed)
+            findings += found
+        elif platform.name == "windows":
+            found, notes = feeds.windows_findings(facts)
+            findings += found
+        else:
+            findings += feeds.nvd_findings(platform.nvd_products(facts), f"Upgrade {platform.label} software")
+        # PHP that isn't a distribution package (Windows, Remi, Plesk...) is matched against NVD.
+        for inst in facts.software:
+            if inst["name"] == "php" and not checks.is_distro_build(inst, facts):
+                findings += feeds.nvd_findings([("php", "php", [inst["version"]])], f"Upgrade PHP ({inst['path']})")
+        result.notes += notes
+        return findings
+
+
 def _dedupe(findings):
-    """Keep one finding per ID; the first one wins (local rules know about config exposure)."""
+    """Keep one finding per ID; the first one wins and the others add their evidence and links."""
     seen = {}
     for f in findings:
         if f.id in seen:
-            seen[f.id].references = list(dict.fromkeys(seen[f.id].references + f.references))
+            first = seen[f.id]
+            first.evidence = list(dict.fromkeys(first.evidence + f.evidence))
+            first.references = list(dict.fromkeys(first.references + f.references))
+            first.fix_group = first.fix_group or f.fix_group
+            if first.cvss is None:
+                first.cvss = f.cvss
         else:
             seen[f.id] = f
     return list(seen.values())
@@ -99,6 +142,8 @@ class ScanResult:
         self.finished = finished
         self.kev_source = scanner.kev.source
         self.cisco_api_used = scanner.cisco_api is not None
+        self.feed_dates = scanner.feeds.feed_dates() if scanner.feeds else {}
+        self.feed_warnings = scanner.feeds.warnings if scanner.feeds else []
         self.rule_counts = {
             "config": len(scanner.config_rules),
             "advisories": len(scanner.advisories),
@@ -147,3 +192,21 @@ class ScanResult:
 def default_report_dir(base="reports"):
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     return os.path.join(base, f"scan-{stamp}")
+
+
+def fix_plan(scan):
+    """Group CVE findings by the action that fixes them, across all devices."""
+    plan = {}
+    for r, f in scan.all_findings():
+        if f.category != "vulnerability" or not f.fix_group:
+            continue
+        g = plan.setdefault(f.fix_group, {"action": f.fix_group, "cves": set(), "devices": set(), "kev": set(),
+                                          "worst": f, "epss": 0.0})
+        g["cves"].add(f.id)
+        g["devices"].add(r.device.label)
+        if f.kev:
+            g["kev"].add(f.id)
+        g["epss"] = max(g["epss"], f.epss or 0)
+        if f.sort_key() < g["worst"].sort_key():
+            g["worst"] = f
+    return sorted(plan.values(), key=lambda g: (g["worst"].priority, -len(g["kev"]), -g["epss"], -len(g["cves"])))

@@ -102,29 +102,30 @@ class CiscoOpenVuln:
         return self._cache[key]
 
     def findings(self, facts):
-        results = []
-        for adv in self.advisories(facts.os_name, facts.version):
-            cves = [c for c in adv.get("cves", []) if c and c != "NA"]
-            try:
-                cvss = float(adv.get("cvssBaseScore"))
-            except (TypeError, ValueError):
-                cvss = None
-            sir = (adv.get("sir") or "").lower()
-            severity = sir if sir in ("critical", "high", "medium", "low") else severity_from_cvss(cvss)
-            fixed = ", ".join(adv.get("firstFixed") or []) or "see advisory"
-            results.append(
-                Finding(
-                    id=cves[0] if cves else adv.get("advisoryId", "cisco-advisory"),
-                    title=adv.get("advisoryTitle", ""),
-                    severity=severity,
-                    category="vulnerability",
-                    description=f"Cisco advisory {adv.get('advisoryId', '')}",
-                    remediation=f"Upgrade to a fixed release (first fixed: {fixed}).",
-                    cvss=cvss,
-                    cves=cves,
-                    evidence=[f"{facts.os_name} {facts.version} listed as affected by Cisco PSIRT"],
-                    references=[u for u in [adv.get("publicationUrl")] if u],
-                    source="Cisco openVuln API",
-                )
-            )
-        return results
+        return [advisory_finding(adv, facts) for adv in self.advisories(facts.os_name, facts.version)]
+
+
+def advisory_finding(adv, facts):
+    """Turn one Cisco openVuln advisory (live or from the feed folder) into a finding."""
+    cves = [c for c in adv.get("cves") or [] if c and c != "NA"]
+    try:
+        cvss = float(adv.get("cvssBaseScore"))
+    except (TypeError, ValueError):
+        cvss = None
+    sir = (adv.get("sir") or "").lower()
+    severity = sir if sir in ("critical", "high", "medium", "low") else severity_from_cvss(cvss)
+    fixed = ", ".join(adv.get("firstFixed") or []) or "see advisory"
+    return Finding(
+        id=cves[0] if cves else adv.get("advisoryId", "cisco-advisory"),
+        title=adv.get("advisoryTitle", ""),
+        severity=severity,
+        category="vulnerability",
+        description=f"Cisco advisory {adv.get('advisoryId', '')}",
+        remediation=f"Upgrade to a fixed release (first fixed: {fixed}).",
+        cvss=cvss,
+        cves=cves,
+        evidence=[f"{facts.os_name} {facts.version} listed as affected by Cisco PSIRT"],
+        references=[u for u in [adv.get("publicationUrl")] if u],
+        source="Cisco openVuln API",
+        fix_group=f"Upgrade {facts.os_name} software",
+    )

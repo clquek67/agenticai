@@ -1,6 +1,8 @@
 OS=Microsoft Windows Server 2022 Standard
 OSVERSION=10.0.20348
 HOSTNAME=WEB-WIN-01
+BUILD=10.0.20348.2700
+INSTALLTYPE=Server
 ### PHP C:\php\php-cgi.exe
 PHP 8.3.30 (cgi-fcgi) (built: Sep 30 2026 14:02:11) (NTS Visual C++ 2019 x64)
 expose_php => On => On

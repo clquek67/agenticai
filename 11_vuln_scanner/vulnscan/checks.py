@@ -226,6 +226,7 @@ def run_software_advisories(platform_name, facts, advisories):
                     evidence=affected_lines + notes,
                     references=adv.get("references", []),
                     source="Local advisory rule",
+                    fix_group=f"Upgrade {adv['software'].upper()}",
                 )
             )
     return findings

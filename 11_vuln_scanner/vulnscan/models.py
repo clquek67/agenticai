@@ -49,6 +49,11 @@ class Facts:
     software: list = field(default_factory=list)
     packages: dict = field(default_factory=dict)  # Linux package name -> version
     fixed_cves: set = field(default_factory=set)  # CVEs the distro package changelogs say are fixed
+    os_id: str = ""  # Linux os-release ID (ubuntu, rhel, rocky, ...)
+    kernel: str = ""  # running Linux kernel (uname -r)
+    pkg_records: list = field(default_factory=list)  # Linux: name, version, source, source_version
+    build: str = ""  # Windows: 10.0.<build>.<UBR>
+    install_type: str = ""  # Windows: "Server" or "Server Core"
 
 
 @dataclass
@@ -65,15 +70,21 @@ class Finding:
     evidence: list = field(default_factory=list)
     references: list = field(default_factory=list)
     source: str = ""
+    fix_group: str = ""  # the action that fixes it, e.g. "Update package php8.3"
+    epss: float | None = None  # probability of exploitation in the next 30 days (FIRST EPSS)
+    confidence: str = "confirmed"  # or "possible" when the match depends on things not checked
 
     @property
     def priority(self):
-        if self.kev or self.severity == "critical":
+        epss = self.epss or 0
+        if self.kev or self.severity == "critical" or epss >= 0.5:
             return "P1"
-        return {"high": "P2", "medium": "P3"}.get(self.severity, "P4")
+        if self.severity == "high" or epss >= 0.1:
+            return "P2"
+        return "P3" if self.severity == "medium" else "P4"
 
     def sort_key(self):
-        return (self.priority, SEVERITY_ORDER.get(self.severity, 9), -(self.cvss or 0), self.id)
+        return (self.priority, SEVERITY_ORDER.get(self.severity, 9), -(self.epss or 0), -(self.cvss or 0), self.id)
 
 
 @dataclass

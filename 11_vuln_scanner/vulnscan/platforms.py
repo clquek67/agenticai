@@ -7,6 +7,7 @@ type, implement ``parse`` and register it in ``PLATFORMS``.
 import re
 
 from .models import Facts
+from .versions import normalize_dotted
 
 
 def _search(pattern, text, group=1, flags=re.MULTILINE):
@@ -27,6 +28,10 @@ class Platform:
 
     def parse(self, outputs):
         raise NotImplementedError
+
+    def nvd_products(self, facts):
+        """[(vendor, product, [version spellings])] used to look the device up in NVD."""
+        return []
 
 
 class CiscoIOS(Platform):
@@ -56,6 +61,11 @@ class CiscoIOS(Platform):
             serial=_search(r"^(?:System [Ss]erial [Nn]umber\s*:|Processor board ID)\s*(\S+)", ver),
         )
 
+    def nvd_products(self, facts):
+        if facts.os_name == "IOS XE":
+            return [("cisco", "ios_xe", [normalize_dotted(facts.version), facts.version])]
+        return [("cisco", "ios", [facts.version])]
+
 
 class CiscoASA(Platform):
     """Cisco ASA firewalls (5512-X, 5520, 5525-X, ...)."""
@@ -75,6 +85,10 @@ class CiscoASA(Platform):
             version=_search(r"Adaptive Security Appliance Software Version\s+(\S+)", ver),
             serial=_search(r"^Serial Number:\s*(\S+)", ver),
         )
+
+    def nvd_products(self, facts):
+        dotted = re.sub(r"[()]", ".", facts.version).replace("..", ".").strip(".")
+        return [("cisco", "adaptive_security_appliance_software", [facts.version, dotted])]
 
 
 class HPEComware(Platform):
@@ -101,6 +115,10 @@ class HPEComware(Platform):
             release=_search(r"Comware Software, Version\s+[\d.]+,\s*Release\s+(\S+)", ver),
             serial=_search(r"DEVICE_SERIAL_NUMBER\s*:\s*(\S+)", ver),
         )
+
+    def nvd_products(self, facts):
+        # NVD's Comware data is sparse; this catches the CVEs that do list Comware versions.
+        return [("h3c", "comware", [facts.version]), ("hp", "comware", [facts.version])]
 
 
 # --- servers -------------------------------------------------------------------
@@ -139,15 +157,17 @@ class LinuxServer(Platform):
     _bins = ("/usr/bin/php /usr/bin/php[0-9]* /usr/local/bin/php /opt/remi/*/root/usr/bin/php "
              "/opt/plesk/php/*/bin/php /opt/cpanel/ea-php*/root/usr/bin/php")
     commands = {
-        "os": "cat /etc/os-release; echo HOSTNAME=$(uname -n)",
+        "os": "cat /etc/os-release; echo HOSTNAME=$(uname -n); echo KERNEL=$(uname -r)",
         "php": (
             f"for p in $(for x in {_bins}; do [ -x \"$x\" ] && readlink -f \"$x\"; done | sort -u); do "
             "echo \"### PHP $p\"; \"$p\" -v 2>/dev/null | head -1; "
             f"\"$p\" -i 2>/dev/null | grep -E '^({_INI_KEYS}) '; done"
         ),
+        # Every installed package: deb|name|version|source|source version, or rpm|name|epoch:version-release|source rpm
         "packages": (
-            "dpkg-query -W -f='${Package} ${Version}\\n' 'php*' 2>/dev/null; "
-            "rpm -qa --qf '%{NAME} %{VERSION}-%{RELEASE}\\n' 'php*' 2>/dev/null; true"
+            "dpkg-query -W -f='${db:Status-Abbrev}|${Package}|${Version}|${source:Package}|${source:Version}\\n' "
+            "2>/dev/null | grep '^ii' | sed 's/^ii */deb/'; "
+            "rpm -qa --qf 'rpm|%{NAME}|%{EPOCHNUM}:%{VERSION}-%{RELEASE}|%{SOURCERPM}\\n' 2>/dev/null; true"
         ),
         # Distro packages list the CVEs they fix in their changelogs (backports keep the old version number).
         "fixed_cves": (
@@ -160,26 +180,48 @@ class LinuxServer(Platform):
 
     def parse(self, outputs):
         osr = outputs.get("os", "")
-        packages = {}
-        for line in outputs.get("packages", "").splitlines():
-            parts = line.split()
-            if len(parts) == 2:
-                packages[parts[0]] = parts[1]
+        records = parse_packages(outputs.get("packages", ""))
         return Facts(
             hostname=_search(r"^HOSTNAME=(\S+)", osr),
             model=_search(r'^PRETTY_NAME="?([^"\n]+)"?', osr),
             os_name="Linux",
+            os_id=_search(r'^ID="?([^"\n]+)"?', osr).lower(),
             version=_search(r'^VERSION_ID="?([^"\n]+)"?', osr),
+            kernel=_search(r"^KERNEL=(\S+)", osr),
             software=parse_php_blocks(outputs.get("php", "")),
-            packages=packages,
+            packages={r["name"]: r["version"] for r in records if r["name"].startswith("php")},
+            pkg_records=records,
             fixed_cves=set(re.findall(r"CVE-\d{4}-\d+", outputs.get("fixed_cves", ""))),
         )
+
+
+def parse_packages(text):
+    records = []
+    for line in (text or "").splitlines():
+        parts = line.strip().split("|")
+        if parts[0] == "deb" and len(parts) == 5:
+            _, name, version, source, source_version = parts
+            name = name.split(":")[0]  # drop :amd64
+            records.append({"name": name, "version": version, "source": source or name,
+                            "source_version": source_version or version})
+        elif parts[0] == "rpm" and len(parts) == 4:
+            _, name, version, srpm = parts
+            if name == "gpg-pubkey":
+                continue
+            source = re.sub(r"-[^-]+-[^-]+\.src\.rpm$", "", srpm) if srpm.endswith(".src.rpm") else ""
+            records.append({"name": name, "version": version, "source": source, "source_version": version})
+        elif len(parts) == 1 and len(line.split()) == 2:  # older "name version" format
+            name, version = line.split()
+            records.append({"name": name, "version": version, "source": name, "source_version": version})
+    return records
 
 
 _WINDOWS_SCRIPT = r"""
 $ErrorActionPreference = 'SilentlyContinue'
 $os = Get-CimInstance Win32_OperatingSystem
 "OS=$($os.Caption)"; "OSVERSION=$($os.Version)"; "HOSTNAME=$($os.CSName)"
+$cv = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+"BUILD=10.0.$($cv.CurrentBuild).$($cv.UBR)"; "INSTALLTYPE=$($cv.InstallationType)"
 $paths = @()
 Get-Command php.exe -All | ForEach-Object { $paths += $_.Source }
 $cfg = "$env:windir\system32\inetsrv\config\applicationHost.config"
@@ -214,6 +256,8 @@ class WindowsServer(Platform):
             model=_search(r"^OS=(.+)$", text),
             os_name="Windows",
             version=_search(r"^OSVERSION=(.+)$", text),
+            build=_search(r"^BUILD=(10\.0\.\d+\.\d+)\s*$", text),
+            install_type=_search(r"^INSTALLTYPE=(.+)$", text),
             software=parse_php_blocks(text),
         )
 

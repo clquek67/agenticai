@@ -9,6 +9,14 @@ from html import escape
 from . import __version__
 from .models import SEVERITIES
 from .platforms import PLATFORMS
+from .scanner import fix_plan
+
+MAX_CVE_ROWS = 300
+FEED_SOURCES = ("OSV.dev", "Microsoft MSRC", "NVD", "Cisco openVuln API")
+
+
+def _is_feed(f):
+    return f.source.startswith(FEED_SOURCES)
 
 SEV_LABEL = {s: s.capitalize() for s in SEVERITIES}
 LIFECYCLE_LABEL = {
@@ -42,6 +50,7 @@ def _finding_dict(f):
         "category": f.category, "cvss": f.cvss, "cves": f.cves, "kev": f.kev,
         "description": f.description, "remediation": f.remediation,
         "evidence": f.evidence, "references": f.references, "source": f.source,
+        "fix_group": f.fix_group, "epss": f.epss, "confidence": f.confidence,
     }
 
 
@@ -53,6 +62,7 @@ def to_dict(scan):
         "risk_score": scan.risk_score(),
         "severity_counts": scan.severity_counts(),
         "kev_count": scan.kev_count(),
+        "feeds": scan.feed_dates,
         "devices": [
             {
                 "host": r.device.host, "name": r.device.name, "site": r.device.site,
@@ -69,7 +79,7 @@ def to_dict(scan):
 
 def write_csv(scan, path):
     cols = ["device", "host", "site", "model", "version", "priority", "severity", "id", "title",
-            "cvss", "kev", "category", "remediation"]
+            "cvss", "epss", "kev", "category", "fix_group", "remediation", "confidence", "source"]
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(cols)
@@ -77,7 +87,8 @@ def write_csv(scan, path):
             version = " ".join(v for v in (r.facts.version, r.facts.release) if v)
             w.writerow([r.device.label, r.device.host, r.device.site, r.facts.model, version, fd.priority,
                         fd.severity, fd.id, fd.title, fd.cvss if fd.cvss is not None else "",
-                        "yes" if fd.kev else "", fd.category, fd.remediation])
+                        f"{fd.epss:.4f}" if fd.epss is not None else "", "yes" if fd.kev else "", fd.category,
+                        fd.fix_group, fd.remediation, fd.confidence, fd.source])
 
 
 # --- HTML ------------------------------------------------------------------------
@@ -113,7 +124,7 @@ def _summary_text(scan):
         parts.append(f"<strong>{len(eol)} devices are past vendor end of support</strong> and will not receive "
                      "security fixes; they belong on the hardware refresh list.")
     if scan.not_scanned:
-        parts.append(f"{len(scan.not_scanned)} devices could not be scanned (see section 6).")
+        parts.append(f"{len(scan.not_scanned)} devices could not be scanned (see section 7).")
     return " ".join(parts)
 
 
@@ -225,11 +236,27 @@ def render_html(scan, title, org):
         w("<tr><td colspan='6' class='muted'>No findings.</td></tr>")
     w("</tbody></table></div>")
     if len(issues) > 15:
-        w(f"<p class='muted'>{len(issues) - 15} more issues are listed per device in section 5 and in findings.csv.</p>")
+        w(f"<p class='muted'>{len(issues) - 15} more issues are listed per device in section 6 and in findings.csv.</p>")
     w("</section>")
 
-    # 4. by platform
-    w("<section><h2>4. Results by platform</h2><div class='table'><table>")
+    # 4. fix plan
+    plan = fix_plan(scan)
+    if plan:
+        w("<section><h2>4. Fix plan: one action fixes many CVEs</h2><div class='table'><table>")
+        w("<thead><tr><th>Priority</th><th>Action</th><th>CVEs fixed</th><th>Exploited</th><th>Max EPSS</th><th>Devices</th></tr></thead><tbody>")
+        for g in plan[:25]:
+            devices = sorted(g["devices"])
+            w(f"<tr><td><b>{g['worst'].priority}</b></td><td><b>{_e(g['action'])}</b>"
+              f"<div class='muted'>Worst: {_e(g['worst'].id)} ({_e(SEV_LABEL.get(g['worst'].severity))})</div></td>"
+              f"<td>{len(g['cves'])}</td><td>{len(g['kev']) or '—'}</td><td>{g['epss']:.0%}</td>"
+              f"<td>{len(devices)}<div class='muted'>{_e(', '.join(devices[:4]))}{'…' if len(devices) > 4 else ''}</div></td></tr>")
+        w("</tbody></table></div>")
+        if len(plan) > 25:
+            w(f"<p class='muted'>{len(plan) - 25} more actions in findings.csv (column fix_group).</p>")
+        w("<p class='muted'>EPSS = probability the CVE is exploited in the next 30 days (FIRST.org).</p></section>")
+
+    # 5. by platform
+    w("<section><h2>5. Results by platform</h2><div class='table'><table>")
     w("<thead><tr><th>Platform</th><th>Devices</th><th>Scanned</th><th>Critical</th><th>High</th><th>Medium</th><th>End of support</th></tr></thead><tbody>")
     for name, plat in PLATFORMS.items():
         rs = [r for r in scan.results if r.device.platform == name]
@@ -242,8 +269,8 @@ def render_html(scan, title, org):
           f"<td>{c['high']}</td><td>{c['medium']}</td><td>{eol}</td></tr>")
     w("</tbody></table></div></section>")
 
-    # 5. per device
-    w("<section><h2>5. Findings by device</h2>")
+    # 6. per device
+    w("<section><h2>6. Findings by device</h2>")
     for r in sorted(scan.scanned, key=lambda r: (min((f.sort_key() for f in r.findings), default=("P9",)), r.device.label)):
         c = Counter(f.severity for f in r.findings)
         version = " ".join(v for v in (r.facts.version, f"Release {r.facts.release}" if r.facts.release else "") if v)
@@ -261,7 +288,23 @@ def render_html(scan, title, org):
             w(f"<p><b>Software found:</b></p><ul style='margin:4px 0 8px'>{items}</ul>")
         if not r.findings:
             w("<p class='muted'>No findings.</p>")
-        for f in r.findings:
+        detailed = [f for f in r.findings if not _is_feed(f)]
+        feed = [f for f in r.findings if _is_feed(f)]
+        if feed:
+            w(f"<p><b>{len(feed)} CVEs from vulnerability databases</b></p><div class='table'><table>"
+              "<thead><tr><th>Priority</th><th>Severity</th><th>CVE</th><th>CVSS</th><th>EPSS</th><th>Exploited</th>"
+              "<th>Issue</th><th>Fix</th></tr></thead><tbody>")
+            for f in feed[:MAX_CVE_ROWS]:
+                epss = f"{f.epss:.1%}" if f.epss is not None else "—"
+                possible = " <span class='muted'>(possible)</span>" if f.confidence == "possible" else ""
+                link = f"<a href='{_e(f.references[0])}'>{_e(f.id)}</a>" if f.references else _e(f.id)
+                w(f"<tr><td><b>{f.priority}</b></td><td>{_sev(f.severity)}</td><td class='mono'>{link}{possible}</td>"
+                  f"<td>{_e(f.cvss if f.cvss is not None else '—')}</td><td>{epss}</td><td>{_kev(f.kev)}</td>"
+                  f"<td>{_e(f.title)}<div class='muted mono'>{_e('; '.join(f.evidence))}</div></td><td>{_e(f.remediation)}</td></tr>")
+            w("</tbody></table></div>")
+            if len(feed) > MAX_CVE_ROWS:
+                w(f"<p class='muted'>{len(feed) - MAX_CVE_ROWS} more CVEs for this device are in findings.csv.</p>")
+        for f in detailed:
             cvss = f" · CVSS {f.cvss}" if f.cvss is not None else ""
             w("<div class='finding'>")
             w(f"<p>{_sev(f.severity)} <b>{f.priority}</b> {_kev(f.kev) if f.kev else ''} <b>{_e(f.title)}</b> "
@@ -281,8 +324,8 @@ def render_html(scan, title, org):
         w("<p class='muted'>No devices were scanned successfully.</p>")
     w("</section>")
 
-    # 6. coverage gaps
-    w("<section><h2>6. Devices not scanned</h2>")
+    # 7. coverage gaps
+    w("<section><h2>7. Devices not scanned</h2>")
     if scan.not_scanned:
         w("<div class='table'><table><thead><tr><th>Device</th><th>Host</th><th>Platform</th><th>Status</th><th>Reason</th></tr></thead><tbody>")
         for r in scan.not_scanned:
@@ -293,15 +336,27 @@ def render_html(scan, title, org):
         w("<p>All devices in the inventory were scanned.</p>")
     w("</section>")
 
-    # 7. method
+    # 8. method
     rc = scan.rule_counts
-    cisco = "Cisco openVuln API (live)" if scan.cisco_api_used else "Cisco openVuln API not configured: Cisco CVEs come from local rules only"
-    w("<section><h2>7. Method and data sources</h2><p>Each device was accessed with a read-only account. "
+    if scan.feed_dates:
+        cisco = "Offline feed folder"
+    elif scan.cisco_api_used:
+        cisco = "Cisco openVuln API (live)"
+    else:
+        cisco = "Cisco openVuln API not configured: Cisco CVEs come from local rules only"
+    w("<section><h2>8. Method and data sources</h2><p>Each device was accessed with a read-only account. "
       "Only read-only commands were run (<code>show</code> / <code>display</code> on network devices, inventory queries such as <code>php -v</code> on servers); no exploits were attempted and no configuration "
       "was changed. Full configurations are not stored in this report and secrets in evidence are masked.</p>")
     w(f"<p class='muted'>Sources: {_e(cisco)} · {_e(scan.kev_source)} · {rc['advisories']} local advisory rules · "
       f"{rc['config']} configuration rules · {rc['lifecycle']} lifecycle entries. "
       "Risk score = weighted findings per scanned device (critical 10, high 4, medium 1.5, low 0.3, +10 if actively exploited), "
-      "scaled to 0–100.</p></section>")
+      "scaled to 0–100.</p>")
+    if scan.feed_dates:
+        rows = "".join(f"<tr><td>{_e(name)}</td><td>{_e(date)}</td></tr>" for name, date in scan.feed_dates.items())
+        w(f"<p><b>Vulnerability feeds used</b> (downloaded on the sync machine):</p>"
+          f"<div class='table'><table><thead><tr><th>Feed</th><th>Last updated (UTC)</th></tr></thead><tbody>{rows}</tbody></table></div>")
+        for warning in scan.feed_warnings:
+            w(f"<p class='muted'>Warning: {_e(warning)}</p>")
+    w("</section>")
     w("</main><footer>Generated by VulnScan. Confidential: contains details of security weaknesses.</footer></body></html>")
     return "".join(out)

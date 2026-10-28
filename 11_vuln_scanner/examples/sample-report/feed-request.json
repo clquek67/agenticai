@@ -1,0 +1,16 @@
+{
+  "distros": [
+    "rocky:9",
+    "ubuntu:24.04"
+  ],
+  "windows_products": [
+    "Windows Server 2016",
+    "Windows Server 2022"
+  ],
+  "cisco_versions": [
+    "ASA|9.8(4)15",
+    "IOS XE|17.06.04",
+    "IOS|15.1(4)M12a",
+    "IOS|15.2(7)E8"
+  ]
+}

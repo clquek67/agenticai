@@ -1,16 +1,23 @@
 {
   "scanner": "VulnScan 0.1.0",
-  "started": "2026-10-28T04:21:09.890201+00:00",
-  "finished": "2026-10-28T04:21:09.909908+00:00",
-  "risk_score": 70,
+  "started": "2026-10-28T06:46:25.560365+00:00",
+  "finished": "2026-10-28T06:46:25.581702+00:00",
+  "risk_score": 76,
   "severity_counts": {
     "critical": 7,
-    "high": 15,
-    "medium": 8,
+    "high": 32,
+    "medium": 15,
     "low": 9,
     "info": 4
   },
   "kev_count": 9,
+  "feeds": {
+    "kev": "2026-10-28T06:45:44+00:00",
+    "msrc": "2026-10-28T06:45:44+00:00",
+    "nvd": "2026-10-28T06:45:44+00:00",
+    "osv-rocky": "2026-10-28T06:45:44+00:00",
+    "osv-ubuntu": "2026-10-28T06:45:44+00:00"
+  },
   "devices": [
     {
       "host": "10.10.0.1",
@@ -26,7 +33,9 @@
       "release": "",
       "serial": "FDO0000A1BC",
       "lifecycle": "end_of_sale",
-      "notes": [],
+      "notes": [
+        "Cisco advisories for this version are not in the feed folder yet, so NVD data was used. Take feed-request.json to the sync machine to add them."
+      ],
       "software": [],
       "findings": [
         {
@@ -49,7 +58,10 @@
           "references": [
             "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CVE-2023-20273",
@@ -71,7 +83,10 @@
           "references": [
             "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-002",
@@ -88,7 +103,10 @@
             "ip http server"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOS-HW",
@@ -107,7 +125,10 @@
           "references": [
             "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -125,7 +146,9 @@
       "release": "",
       "serial": "FTX0000A0BC",
       "lifecycle": "end_of_support",
-      "notes": [],
+      "notes": [
+        "Cisco advisories for this version are not in the feed folder yet, so NVD data was used. Take feed-request.json to the sync machine to add them."
+      ],
       "software": [],
       "findings": [
         {
@@ -143,7 +166,10 @@
             "snmp-server community ****"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-004",
@@ -160,7 +186,10 @@
             "snmp-server community **** RW"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-005",
@@ -177,7 +206,10 @@
             "enable password"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOL-HW",
@@ -196,7 +228,10 @@
           "references": [
             "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-001",
@@ -213,7 +248,10 @@
             "transport input telnet"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-006",
@@ -230,7 +268,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-007",
@@ -247,7 +288,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-008",
@@ -264,7 +308,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-010",
@@ -281,7 +328,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -299,9 +349,35 @@
       "release": "",
       "serial": "FOC0000X0AB",
       "lifecycle": "end_of_sale",
-      "notes": [],
+      "notes": [
+        "Cisco advisories for this version are not in the feed folder yet, so NVD data was used. Take feed-request.json to the sync machine to add them."
+      ],
       "software": [],
       "findings": [
+        {
+          "id": "SAMPLE-NVD-0001",
+          "title": "SAMPLE: Cisco IOS SNMP denial of service",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 8.6,
+          "cves": [
+            "SAMPLE-NVD-0001"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "ios 15.2(7)e8 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0001"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade IOS software",
+          "epss": null,
+          "confidence": "confirmed"
+        },
         {
           "id": "CFG-IOS-003",
           "title": "Default SNMP community string",
@@ -317,7 +393,10 @@
             "snmp-server community ****"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-001",
@@ -335,7 +414,10 @@
             "(2 matching lines in total)"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-006",
@@ -352,7 +434,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOS-HW",
@@ -371,7 +456,10 @@
           "references": [
             "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-IOS-010",
@@ -388,7 +476,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -424,7 +515,9 @@
       "release": "",
       "serial": "FCH0000A0BC",
       "lifecycle": "end_of_support",
-      "notes": [],
+      "notes": [
+        "Cisco advisories for this version are not in the feed folder yet, so NVD data was used. Take feed-request.json to the sync machine to add them."
+      ],
       "software": [],
       "findings": [
         {
@@ -447,7 +540,10 @@
           "references": [
             "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-ro-path-KJuQhB86"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-ASA-002",
@@ -464,7 +560,10 @@
             "http 0.0.0.0 0.0.0.0 outside"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-ASA-005",
@@ -481,7 +580,10 @@
             "access-list dmz_out extended permit ip any any"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOL-HW",
@@ -500,7 +602,10 @@
           "references": [
             "https://www.cisco.com/c/en/us/products/eos-eol-listing.html"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -522,6 +627,30 @@
       "software": [],
       "findings": [
         {
+          "id": "SAMPLE-NVD-0002",
+          "title": "SAMPLE: Comware SSH denial of service",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.5,
+          "cves": [
+            "SAMPLE-NVD-0002"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "comware 7.1.070 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0002"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade HPE Comware software",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
           "id": "CFG-CW-003",
           "title": "Default SNMP community string",
           "severity": "high",
@@ -536,7 +665,10 @@
             "snmp-agent community read simple ****"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-001",
@@ -553,7 +685,10 @@
             "telnet server enable"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-004",
@@ -570,7 +705,10 @@
             "snmp-agent sys-info version all"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-009",
@@ -587,7 +725,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -623,7 +764,10 @@
             "snmp-agent community read ****"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-005",
@@ -640,7 +784,10 @@
             "password simple ****"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-006",
@@ -657,7 +804,10 @@
             "authentication-mode none"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-001",
@@ -674,7 +824,10 @@
             "telnet server enable"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-002",
@@ -691,7 +844,10 @@
             "ip http enable"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-004",
@@ -708,7 +864,10 @@
             "snmp-agent sys-info version v2c"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-007",
@@ -725,7 +884,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-008",
@@ -742,7 +904,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CFG-CW-009",
@@ -759,7 +924,10 @@
             "Not found in the running configuration"
           ],
           "references": [],
-          "source": "Config rule"
+          "source": "Config rule",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -862,18 +1030,19 @@
       "findings": [
         {
           "id": "CVE-2026-109618",
-          "title": "PHP2Shell: PHP memory corruption on out-of-memory handling (remote code execution)",
-          "severity": "critical",
+          "title": "Important: php security update",
+          "severity": "high",
           "priority": "P1",
           "category": "vulnerability",
-          "cvss": 9.8,
+          "cvss": 8.1,
           "cves": [
             "CVE-2026-109618"
           ],
           "kev": true,
-          "description": "Crafted multipart requests can corrupt memory while PHP handles an out-of-memory condition, leading to unauthenticated remote code execution. Affects mod_php, PHP-FPM, php-cgi, FrankenPHP and LiteSpeed. Exploited in the wild; on CISA KEV.",
-          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8.1 or later.",
           "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8.1",
             "/opt/remi/php84/root/usr/bin/php: PHP 8.4.20 (cli) is in the affected range",
             "/usr/bin/php: PHP 8.0.30 (cli) is in the affected range",
             "/opt/remi/php84/root/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
@@ -882,26 +1051,31 @@
             "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
           ],
           "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:87151",
             "https://www.php.net/ChangeLog-8.php",
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CVE-2026-109619",
-          "title": "PHP2Shell: PHP stale global state (remote code execution)",
-          "severity": "critical",
+          "title": "Important: php security update",
+          "severity": "high",
           "priority": "P1",
           "category": "vulnerability",
-          "cvss": null,
+          "cvss": 8.1,
           "cves": [
             "CVE-2026-109619"
           ],
           "kev": true,
-          "description": "Companion flaw to CVE-2026-109618 fixed in the same releases, allowing unauthenticated remote code execution. Exploited in the wild; on CISA KEV.",
-          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8.1 or later.",
           "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8.1",
             "/opt/remi/php84/root/usr/bin/php: PHP 8.4.20 (cli) is in the affected range",
             "/usr/bin/php: PHP 8.0.30 (cli) is in the affected range",
             "/opt/remi/php84/root/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
@@ -910,11 +1084,447 @@
             "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
           ],
           "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:87151",
             "https://www.php.net/ChangeLog-8.php",
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-91765",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 8.1,
+          "cves": [
+            "CVE-2026-91765"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8.1 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8.1"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:87151"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-6722",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-6722"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-6735",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-6735"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7258",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-7258"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7259",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-7259"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7261",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-7261"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7262",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-7262"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7568",
+          "title": "Important: php security update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.7,
+          "cves": [
+            "CVE-2026-7568"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-6.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-6.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:33449"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-14355",
+          "title": "Low: php security, bug fix, and enhancement update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.4,
+          "cves": [
+            "CVE-2026-14355"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:61259"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-17543",
+          "title": "Low: php security, bug fix, and enhancement update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.4,
+          "cves": [
+            "CVE-2026-17543"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:61259"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2026-7260",
+          "title": "Low: php security, bug fix, and enhancement update",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.4,
+          "cves": [
+            "CVE-2026-7260"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-8.el9_8 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-8.el9_8"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:61259"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-14177",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 6.5,
+          "cves": [
+            "CVE-2025-14177"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-5.el9_7 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-5.el9_7"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:2799"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-14178",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 6.5,
+          "cves": [
+            "CVE-2025-14178"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-5.el9_7 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-5.el9_7"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2026:2799"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-1217",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 5.3,
+          "cves": [
+            "CVE-2025-1217"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-3.el9_6 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-3.el9_6"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2025:7431"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-1219",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 5.3,
+          "cves": [
+            "CVE-2025-1219"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-3.el9_6 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-3.el9_6"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2025:7431"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-1734",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 5.3,
+          "cves": [
+            "CVE-2025-1734"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-3.el9_6 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-3.el9_6"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2025:7431"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-1736",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 5.3,
+          "cves": [
+            "CVE-2025-1736"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-3.el9_6 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-3.el9_6"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2025:7431"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "CVE-2025-1861",
+          "title": "Moderate: php security update",
+          "severity": "medium",
+          "priority": "P3",
+          "category": "vulnerability",
+          "cvss": 5.3,
+          "cves": [
+            "CVE-2025-1861"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Update php to 0:8.0.30-3.el9_6 or later.",
+          "evidence": [
+            "php 0:8.0.30-1.el9_2 installed; fixed in 0:8.0.30-3.el9_6"
+          ],
+          "references": [
+            "https://osv.dev/vulnerability/RLSA-2025:7431"
+          ],
+          "source": "OSV.dev (Rocky Linux)",
+          "fix_group": "Update package php",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOL-PHP-8.0",
@@ -933,7 +1543,10 @@
           "references": [
             "https://www.php.net/supported-versions.php"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -1019,7 +1632,34 @@
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "Upgrade PHP",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "SAMPLE-WIN-0001",
+          "title": "SAMPLE: Windows remote code execution",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.8,
+          "cves": [
+            "SAMPLE-WIN-0001"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Install KB5099991 (build 10.0.20348.4294) or a later cumulative update.",
+          "evidence": [
+            "Windows Server 2022 build 10.0.20348.2700; fixed in build 10.0.20348.4294"
+          ],
+          "references": [
+            "https://msrc.microsoft.com/update-guide/vulnerability/SAMPLE-WIN-0001"
+          ],
+          "source": "Microsoft MSRC",
+          "fix_group": "Install the latest Windows cumulative update",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CVE-2026-109619",
@@ -1046,7 +1686,34 @@
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "Upgrade PHP",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "SAMPLE-WIN-0002",
+          "title": "SAMPLE: Windows elevation of privilege",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 7.8,
+          "cves": [
+            "SAMPLE-WIN-0002"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Install KB5099991 (build 10.0.20348.4294) or a later cumulative update.",
+          "evidence": [
+            "Windows Server 2022 build 10.0.20348.2700; fixed in build 10.0.20348.4294"
+          ],
+          "references": [
+            "https://msrc.microsoft.com/update-guide/vulnerability/SAMPLE-WIN-0002"
+          ],
+          "source": "Microsoft MSRC",
+          "fix_group": "Install the latest Windows cumulative update",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     },
@@ -1103,7 +1770,34 @@
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "Upgrade PHP",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "SAMPLE-NVD-0003",
+          "title": "SAMPLE: PHP memory corruption",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.1,
+          "cves": [
+            "SAMPLE-NVD-0003"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Upgrade to a release the vendor lists as fixed for this CVE.",
+          "evidence": [
+            "php 8.1.31 matches NVD's affected range"
+          ],
+          "references": [
+            "https://nvd.nist.gov/vuln/detail/SAMPLE-NVD-0003"
+          ],
+          "source": "NVD",
+          "fix_group": "Upgrade PHP (C:\\xampp\\php\\php.exe)",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "CVE-2026-109619",
@@ -1128,7 +1822,34 @@
             "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
             "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
           ],
-          "source": "Local advisory rule"
+          "source": "Local advisory rule",
+          "fix_group": "Upgrade PHP",
+          "epss": null,
+          "confidence": "confirmed"
+        },
+        {
+          "id": "SAMPLE-WIN-0003",
+          "title": "SAMPLE: Windows remote code execution",
+          "severity": "high",
+          "priority": "P2",
+          "category": "vulnerability",
+          "cvss": 8.8,
+          "cves": [
+            "SAMPLE-WIN-0003"
+          ],
+          "kev": false,
+          "description": "",
+          "remediation": "Install KB5099992 (build 10.0.14393.8519) or a later cumulative update.",
+          "evidence": [
+            "Windows Server 2016 build 10.0.14393.7259; fixed in build 10.0.14393.8519"
+          ],
+          "references": [
+            "https://msrc.microsoft.com/update-guide/vulnerability/SAMPLE-WIN-0003"
+          ],
+          "source": "Microsoft MSRC",
+          "fix_group": "Install the latest Windows cumulative update",
+          "epss": null,
+          "confidence": "confirmed"
         },
         {
           "id": "EOL-PHP-8.1",
@@ -1147,7 +1868,10 @@
           "references": [
             "https://www.php.net/supported-versions.php"
           ],
-          "source": "Lifecycle data"
+          "source": "Lifecycle data",
+          "fix_group": "",
+          "epss": null,
+          "confidence": "confirmed"
         }
       ]
     }

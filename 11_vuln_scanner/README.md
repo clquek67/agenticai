@@ -11,8 +11,72 @@ A command-line scanner, in the spirit of Tenable Nessus, for network devices. It
   SNMP communities, plain-text passwords, HTTP management, any-any firewall rules, no syslog/NTP, ...).
 - **End of sale / end of support hardware** from `data/lifecycle.json`.
 
+With a feed folder (below) it reports **every published CVE** for each device, grouped into a
+fix plan ("update php8.3: fixes 12 CVEs, 1 actively exploited").
+
 Output is a **self-contained HTML report** (opens offline, prints to PDF, light and dark mode) plus
 `findings.json` and `findings.csv`. See `examples/sample-report/report.html`.
+
+## Offline vulnerability feeds (two-machine setup)
+
+The scanner can match **every published CVE** for the devices it scans without itself having
+internet access. A separate *sync machine* downloads the databases; you copy the folder across.
+
+```
+ Sync machine (internet)                     Scanner (no internet)                 Devices
+ python scan.py --sync-feeds --out feeds  →  python scan.py ... --feeds feeds   →  SSH / WinRM
+            ▲                                          │
+            └──────── feed-request.json ◄──────────────┘  (OS releases + software versions only)
+```
+
+| Feed | Covers | Source |
+|---|---|---|
+| `osv-<distro>` | every package on Ubuntu, Debian, RHEL, Rocky, Alma, using the distribution's own fixed versions (backports handled) | OSV.dev bulk download |
+| `msrc` | Windows Server 2016/2019/2022/2025 CVEs and the cumulative-update build that fixes each | Microsoft Security Update Guide (CVRF API) |
+| `nvd` | Cisco (fallback), Fortinet, Juniper, Aruba, Comware, PHP and the products in `data/nvd_products.json` | NIST NVD API 2.0 |
+| `cisco` | exact Cisco IOS / IOS XE / ASA versions you run | Cisco openVuln API |
+| `kev` | which CVEs are exploited in the wild | CISA KEV |
+| `epss` | probability each CVE is exploited in the next 30 days | FIRST EPSS |
+
+Only these outbound HTTPS hosts are needed **on the sync machine**: `osv-vulnerabilities.storage.googleapis.com`,
+`services.nvd.nist.gov`, `api.msrc.microsoft.com`, `id.cisco.com`, `apix.cisco.com`, `www.cisa.gov`,
+`epss.empiricalsecurity.com`. It needs no access to your devices and holds no device credentials.
+
+**Workflow**
+
+1. On the sync machine (first time, before any scan has run):
+   ```bash
+   export NVD_API_KEY=...            # free: https://nvd.nist.gov/developers/request-an-api-key
+   export CISCO_CLIENT_ID=... CISCO_CLIENT_SECRET=...   # free: https://developer.cisco.com/psirt/
+   python scan.py --sync-feeds --out feeds --distros ubuntu:22.04,ubuntu:24.04,rhel:9,rocky:9
+   ```
+   The first run downloads a few GB and takes 20-60 minutes (NVD is the slow part); later runs
+   only fetch changes. The resulting folder is small (tens of MB).
+2. Copy the whole `feeds` folder to the scanner (file share, transfer server or USB).
+3. On the scanner: `python scan.py --inventory devices.csv --credentials credentials.yaml --allowlist allowlist.txt --feeds feeds`.
+   Every file is checked against the checksums in `feeds/manifest.json`; a changed or partial
+   copy is refused. Feeds older than 7 days are flagged in the report.
+4. Each scan writes `feed-request.json` next to the report: the Linux releases, Windows versions
+   and Cisco software versions it found (no IP addresses, hostnames or configs). Copy it back and
+   run `python scan.py --sync-feeds --out feeds --request feed-request.json` so the next sync
+   includes them. The feed folder remembers earlier requests.
+
+**Daily schedule on the sync machine**
+
+Linux (cron, 05:15 every day):
+```
+15 5 * * * cd /opt/vulnscan && .venv/bin/python scan.py --sync-feeds --out /srv/vulnscan-feeds >> sync.log 2>&1
+```
+Windows (Task Scheduler, run as a service account):
+```powershell
+schtasks /Create /TN "VulnScan feed sync" /SC DAILY /ST 05:15 /RU "DOMAIN\svc-vulnsync" /RP * ^
+  /TR "C:\vulnscan\.venv\Scripts\python.exe C:\vulnscan\scan.py --sync-feeds --out D:\vulnscan-feeds"
+```
+Then sync the feed folder to the scanner with whatever your transfer process is (e.g. `robocopy`/`rsync`
+to a share the scanner can read).
+
+A failed source (e.g. NVD down) is recorded in the manifest and its previous copy is kept, so the
+scanner keeps working with slightly older data and says so in the report.
 
 ## Supported platforms (v0.1)
 
@@ -57,7 +121,7 @@ pip install -r requirements.txt
 
 # Offline demo with the sample devices in examples/ (no network needed)
 python scan.py --inventory examples/devices.csv --offline examples/offline \
-               --allowlist examples/allowlist.txt --no-network --org "Example Org"
+               --allowlist examples/allowlist.txt --feeds examples/feeds --org "Example Org"
 ```
 
 ## Live scan
@@ -134,6 +198,10 @@ vulnscan/platforms.py    per-vendor commands and parsers
 vulnscan/collectors.py   SSH (Netmiko) and offline collectors
 vulnscan/checks.py       config rules, local advisories, lifecycle, secret masking
 vulnscan/feeds.py        CISA KEV and Cisco openVuln clients
+vulnscan/feedsync.py     --sync-feeds: download and compact OSV, NVD, MSRC, Cisco, KEV, EPSS
+vulnscan/feedstore.py    --feeds: verify the feed folder and match devices against it
+vulnscan/vercmp.py       dpkg / rpm / Windows build version comparison
+vulnscan/cvss.py         CVSS v3 base score from a vector
 vulnscan/scanner.py      orchestration and scoring
 vulnscan/report.py       HTML / JSON / CSV output
 data/                    rules and reference data
