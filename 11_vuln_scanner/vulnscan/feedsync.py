@@ -42,6 +42,11 @@ EPSS_URLS = [
 DEFAULT_DISTROS = ["ubuntu:20.04", "ubuntu:22.04", "ubuntu:24.04", "debian:11", "debian:12", "debian:13",
                    "rhel:8", "rhel:9", "rocky:8", "rocky:9", "alma:8", "alma:9"]
 DEFAULT_WINDOWS = ["Windows Server 2016", "Windows Server 2019", "Windows Server 2022", "Windows Server 2025"]
+# --all: every release the scanner can match (older ones only get fixes through paid extended support)
+ALL_DISTROS = ["ubuntu:18.04", "ubuntu:20.04", "ubuntu:22.04", "ubuntu:24.04", "ubuntu:26.04",
+               "debian:10", "debian:11", "debian:12", "debian:13", "rhel:7", "rhel:8", "rhel:9", "rhel:10",
+               "rocky:8", "rocky:9", "rocky:10", "alma:8", "alma:9", "alma:10"]
+ALL_WINDOWS = ["Windows Server 2012", "Windows Server 2012 R2"] + DEFAULT_WINDOWS
 OSV_ECOSYSTEMS = {"ubuntu": "Ubuntu", "debian": "Debian", "rhel": "Red Hat", "rocky": "Rocky Linux", "alma": "AlmaLinux"}
 BUNDLE_PREFIXES = ("USN-", "LSN-", "DSA-", "DLA-", "DTSA-")
 SEVERITY_WORDS = {"negligible": "info", "low": "low", "medium": "medium", "moderate": "medium",
@@ -473,13 +478,19 @@ def load_request(out_dir, request_files=(), extra=None):
     return req
 
 
+def coverage(req, everything=False):
+    """Linux releases and Windows versions to download: everything, the request, or the defaults."""
+    if everything:
+        return sorted(set(ALL_DISTROS) | set(req["distros"])), sorted(set(ALL_WINDOWS) | set(req["windows_products"]))
+    return req["distros"] or DEFAULT_DISTROS, req["windows_products"] or DEFAULT_WINDOWS
+
+
 def sync_all(out_dir, request_file=None, distros=None, skip=(), nvd_api_key=None, msrc_since=2022,
-             cisco_id=None, cisco_secret=None, windows=None, cisco_versions=None):
+             cisco_id=None, cisco_secret=None, windows=None, cisco_versions=None, everything=False):
     os.makedirs(out_dir, exist_ok=True)
     extra = {"distros": distros or [], "windows_products": windows or [], "cisco_versions": cisco_versions or []}
     req = load_request(out_dir, request_file, extra)
-    distros = req["distros"] or DEFAULT_DISTROS
-    windows = sorted(set(req["windows_products"])) or DEFAULT_WINDOWS
+    distros, windows = coverage(req, everything)
     manifest_path = os.path.join(out_dir, "manifest.json")
     manifest = {"feeds": {}}
     if os.path.exists(manifest_path):

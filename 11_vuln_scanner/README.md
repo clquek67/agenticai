@@ -48,7 +48,8 @@ Only these outbound HTTPS hosts are needed **on the sync machine**: `osv-vulnera
    ```bash
    export NVD_API_KEY=...            # free: https://nvd.nist.gov/developers/request-an-api-key
    export CISCO_CLIENT_ID=... CISCO_CLIENT_SECRET=...   # free: https://developer.cisco.com/psirt/
-   python scan.py --sync-feeds --out feeds --distros ubuntu:22.04,ubuntu:24.04,rhel:9,rocky:9
+   python scan.py --sync-feeds --out feeds --all     # every supported Linux release and Windows version
+   # or only what you run:  --distros ubuntu:22.04,ubuntu:24.04,rhel:9,rocky:9 --windows 2016,2022
    ```
    The first run downloads a few GB and takes 20-60 minutes (NVD is the slow part); later runs
    only fetch changes. The resulting folder is small (tens of MB).
@@ -81,7 +82,7 @@ downloaded; add `["vendor", "product"]` pairs there for other products.
 
 Linux (cron, 05:15 every day):
 ```
-15 5 * * * cd /opt/vulnscan && .venv/bin/python scan.py --sync-feeds --out /srv/vulnscan-feeds >> sync.log 2>&1
+15 5 * * * cd /opt/vulnscan && .venv/bin/python scan.py --sync-feeds --all --out /srv/vulnscan-feeds >> sync.log 2>&1
 ```
 Windows (Task Scheduler, run as a service account):
 ```powershell

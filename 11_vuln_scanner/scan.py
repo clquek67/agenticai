@@ -52,6 +52,8 @@ def parse_args(argv=None):
     sync.add_argument("--windows", help="add Windows Server versions, e.g. 2016,2019,2022,2025")
     sync.add_argument("--cisco", help="add Cisco versions, e.g. 'IOS XE|17.9.4a,ASA|9.16(4),IOS|15.2(7)E10'")
     sync.add_argument("--nvd-products", help="add NVD products, e.g. 'talariax:sendquick,trendmicro:tippingpoint_operating_system'")
+    sync.add_argument("--all", action="store_true",
+                      help="download every supported Linux release and Windows Server version, not just the requested ones")
     sync.add_argument("--show-request", action="store_true", help="print what the feed folder will download, then stop")
     sync.add_argument("--skip", default="", help="feeds to skip: osv,nvd,msrc,kev,epss,cisco")
     sync.add_argument("--msrc-since", type=int, default=2022, help="first year of Microsoft updates to download")
@@ -61,7 +63,7 @@ def parse_args(argv=None):
 def run_sync(args):
     from vulnscan.feedsync import sync_all
 
-    from vulnscan.feedsync import DEFAULT_DISTROS, DEFAULT_WINDOWS, load_request
+    from vulnscan.feedsync import coverage, load_request
 
     out = args.out or "feeds"
     split = lambda value: [v.strip() for v in (value or "").split(",") if v.strip()]
@@ -73,8 +75,11 @@ def run_sync(args):
     except (ValueError, OSError, json.JSONDecodeError) as exc:
         sys.exit(f"Request problem: {exc}")
     print(f"Feed folder {out} will cover:")
-    print("  Linux:   " + ", ".join(req["distros"] or [d + " (default)" for d in DEFAULT_DISTROS]))
-    print("  Windows: " + ", ".join(req["windows_products"] or [w + " (default)" for w in DEFAULT_WINDOWS]))
+    distros, windows = coverage(req, args.all)
+    note = " (all)" if args.all else "" if req["distros"] else " (defaults: nothing requested yet)"
+    print(f"  Linux{note}: " + ", ".join(distros))
+    note = " (all)" if args.all else "" if req["windows_products"] else " (defaults: nothing requested yet)"
+    print(f"  Windows{note}: " + ", ".join(windows))
     print("  Cisco:   " + (", ".join(req["cisco_versions"]) or "none yet (add with --cisco or a scan's feed-request.json)"))
     print("  NVD:     all products in data/nvd_products.json (Fortinet, Juniper, Aruba, Comware, PHP, ...)"
           + (" plus " + ", ".join(req["nvd_products"]) if req["nvd_products"] else ""))
@@ -88,6 +93,7 @@ def run_sync(args):
         msrc_since=args.msrc_since,
         cisco_id=os.environ.get("CISCO_CLIENT_ID"),
         cisco_secret=os.environ.get("CISCO_CLIENT_SECRET"),
+        everything=args.all,
     )
     failed = [n for n, e in manifest["feeds"].items() if e.get("status") != "ok"]
     print(f"Done. Copy the whole '{out}' folder to the scanner." + (f" Failed this time: {', '.join(failed)}" if failed else ""))

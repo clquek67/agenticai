@@ -237,3 +237,12 @@ def test_cisco_asa_queries_both_version_formats():
     with mock.patch("vulnscan.feeds.requests.get", fake_get):
         assert [a["advisoryId"] for a in api.advisories("ASA", "9.12(4)40")] == ["cisco-sa-1"]
     assert asked == ["9.12(4)40", "9.12.4.40"]
+
+
+def test_all_covers_every_release_plus_requested():
+    from vulnscan.feedsync import ALL_DISTROS, coverage
+
+    req = {"distros": ["ubuntu:24.04"], "windows_products": ["Windows Server 2022"]}
+    assert coverage(req) == (["ubuntu:24.04"], ["Windows Server 2022"])
+    distros, windows = coverage(req, everything=True)
+    assert set(ALL_DISTROS) <= set(distros) and "Windows Server 2012 R2" in windows
