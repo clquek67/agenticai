@@ -1,0 +1,21 @@
+OS=Microsoft Windows Server 2022 Standard
+OSVERSION=10.0.20348
+HOSTNAME=WEB-WIN-01
+### PHP C:\php\php-cgi.exe
+PHP 8.3.30 (cgi-fcgi) (built: Sep 30 2026 14:02:11) (NTS Visual C++ 2019 x64)
+expose_php => On => On
+file_uploads => On => On
+memory_limit => 128M => 128M
+post_max_size => 8M => 8M
+session.upload_progress.enabled => On => On
+### PHP C:\php\php.exe
+PHP 8.3.30 (cli) (built: Sep 30 2026 14:02:11) (NTS Visual C++ 2019 x64)
+expose_php => On => On
+file_uploads => On => On
+memory_limit => 128M => 128M
+post_max_size => 8M => 8M
+session.upload_progress.enabled => On => On
+### PHP C:\php82\php.exe
+PHP 8.2.35 (cli) (built: Oct 21 2026 09:15:40) (NTS Visual C++ 2019 x64)
+file_uploads => On => On
+session.upload_progress.enabled => Off => Off

@@ -1,16 +1,16 @@
 {
   "scanner": "VulnScan 0.1.0",
-  "started": "2026-10-26T04:51:48.364654+00:00",
-  "finished": "2026-10-26T04:51:48.377073+00:00",
-  "risk_score": 65,
+  "started": "2026-10-28T04:21:09.890201+00:00",
+  "finished": "2026-10-28T04:21:09.909908+00:00",
+  "risk_score": 70,
   "severity_counts": {
-    "critical": 1,
-    "high": 14,
+    "critical": 7,
+    "high": 15,
     "medium": 8,
-    "low": 8,
+    "low": 9,
     "info": 4
   },
-  "kev_count": 3,
+  "kev_count": 9,
   "devices": [
     {
       "host": "10.10.0.1",
@@ -27,6 +27,7 @@
       "serial": "FDO0000A1BC",
       "lifecycle": "end_of_sale",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CVE-2023-20198",
@@ -125,6 +126,7 @@
       "serial": "FTX0000A0BC",
       "lifecycle": "end_of_support",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CFG-IOS-003",
@@ -298,6 +300,7 @@
       "serial": "FOC0000X0AB",
       "lifecycle": "end_of_sale",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CFG-IOS-003",
@@ -404,6 +407,7 @@
       "serial": "",
       "lifecycle": "unknown",
       "notes": [],
+      "software": [],
       "findings": []
     },
     {
@@ -421,6 +425,7 @@
       "serial": "FCH0000A0BC",
       "lifecycle": "end_of_support",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CVE-2020-3452",
@@ -514,6 +519,7 @@
       "serial": "",
       "lifecycle": "unknown",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CFG-CW-003",
@@ -600,6 +606,7 @@
       "serial": "",
       "lifecycle": "unknown",
       "notes": [],
+      "software": [],
       "findings": [
         {
           "id": "CFG-CW-003",
@@ -771,7 +778,378 @@
       "serial": "",
       "lifecycle": "unknown",
       "notes": [],
+      "software": [],
       "findings": []
+    },
+    {
+      "host": "10.20.1.10",
+      "name": "web-lnx-01",
+      "site": "HQ DMZ",
+      "platform": "linux",
+      "status": "ok",
+      "error": "",
+      "hostname": "web-lnx-01",
+      "model": "Ubuntu 24.04.3 LTS",
+      "os": "Linux",
+      "version": "24.04",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [
+        "Distribution package changelogs list fixes for CVE-2026-109618, CVE-2026-109619."
+      ],
+      "software": [
+        {
+          "name": "php",
+          "version": "8.3.6",
+          "build": "8.3.6",
+          "sapi": "cli",
+          "path": "/usr/bin/php8.3",
+          "ini": {
+            "expose_php": "Off",
+            "file_uploads": "On",
+            "memory_limit": "-1",
+            "post_max_size": "8M",
+            "session.upload_progress.enabled": "On"
+          }
+        }
+      ],
+      "findings": []
+    },
+    {
+      "host": "10.20.1.11",
+      "name": "web-lnx-02",
+      "site": "HQ DMZ",
+      "platform": "linux",
+      "status": "ok",
+      "error": "",
+      "hostname": "web-lnx-02",
+      "model": "Rocky Linux 9.4 (Blue Onyx)",
+      "os": "Linux",
+      "version": "9.4",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [
+        {
+          "name": "php",
+          "version": "8.4.20",
+          "build": "8.4.20",
+          "sapi": "cli",
+          "path": "/opt/remi/php84/root/usr/bin/php",
+          "ini": {
+            "expose_php": "On",
+            "file_uploads": "On",
+            "memory_limit": "128M",
+            "post_max_size": "8M",
+            "session.upload_progress.enabled": "On"
+          }
+        },
+        {
+          "name": "php",
+          "version": "8.0.30",
+          "build": "8.0.30",
+          "sapi": "cli",
+          "path": "/usr/bin/php",
+          "ini": {
+            "file_uploads": "On",
+            "memory_limit": "128M",
+            "session.upload_progress.enabled": "On"
+          }
+        }
+      ],
+      "findings": [
+        {
+          "id": "CVE-2026-109618",
+          "title": "PHP2Shell: PHP memory corruption on out-of-memory handling (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.8,
+          "cves": [
+            "CVE-2026-109618"
+          ],
+          "kev": true,
+          "description": "Crafted multipart requests can corrupt memory while PHP handles an out-of-memory condition, leading to unauthenticated remote code execution. Affects mod_php, PHP-FPM, php-cgi, FrankenPHP and LiteSpeed. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "/opt/remi/php84/root/usr/bin/php: PHP 8.4.20 (cli) is in the affected range",
+            "/usr/bin/php: PHP 8.0.30 (cli) is in the affected range",
+            "/opt/remi/php84/root/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "/usr/bin/php is a distribution package and its changelog does not list CVE-2026-109618: install your distribution's security update.",
+            "/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CVE-2026-109619",
+          "title": "PHP2Shell: PHP stale global state (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": null,
+          "cves": [
+            "CVE-2026-109619"
+          ],
+          "kev": true,
+          "description": "Companion flaw to CVE-2026-109618 fixed in the same releases, allowing unauthenticated remote code execution. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "/opt/remi/php84/root/usr/bin/php: PHP 8.4.20 (cli) is in the affected range",
+            "/usr/bin/php: PHP 8.0.30 (cli) is in the affected range",
+            "/opt/remi/php84/root/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "/usr/bin/php is a distribution package and its changelog does not list CVE-2026-109619: install your distribution's security update.",
+            "/usr/bin/php: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "EOL-PHP-8.0",
+          "title": "PHP 8.0 is end of life upstream",
+          "severity": "low",
+          "priority": "P4",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The PHP project no longer releases security fixes for this branch (PHP 8.1 and older are end of life). This install is a distribution package: check that your distribution still supports it.",
+          "remediation": "Upgrade to a supported PHP branch (8.2 or newer; 8.4/8.5 preferred).",
+          "evidence": [
+            "/usr/bin/php: PHP 8.0.30 (cli)"
+          ],
+          "references": [
+            "https://www.php.net/supported-versions.php"
+          ],
+          "source": "Lifecycle data"
+        }
+      ]
+    },
+    {
+      "host": "10.20.1.20",
+      "name": "web-win-01",
+      "site": "HQ DMZ",
+      "platform": "windows",
+      "status": "ok",
+      "error": "",
+      "hostname": "WEB-WIN-01",
+      "model": "Microsoft Windows Server 2022 Standard",
+      "os": "Windows",
+      "version": "10.0.20348",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [
+        {
+          "name": "php",
+          "version": "8.3.30",
+          "build": "8.3.30",
+          "sapi": "cgi-fcgi",
+          "path": "C:\\php\\php-cgi.exe",
+          "ini": {
+            "expose_php": "On",
+            "file_uploads": "On",
+            "memory_limit": "128M",
+            "post_max_size": "8M",
+            "session.upload_progress.enabled": "On"
+          }
+        },
+        {
+          "name": "php",
+          "version": "8.3.30",
+          "build": "8.3.30",
+          "sapi": "cli",
+          "path": "C:\\php\\php.exe",
+          "ini": {
+            "expose_php": "On",
+            "file_uploads": "On",
+            "memory_limit": "128M",
+            "post_max_size": "8M",
+            "session.upload_progress.enabled": "On"
+          }
+        },
+        {
+          "name": "php",
+          "version": "8.2.35",
+          "build": "8.2.35",
+          "sapi": "cli",
+          "path": "C:\\php82\\php.exe",
+          "ini": {
+            "file_uploads": "On",
+            "session.upload_progress.enabled": "Off"
+          }
+        }
+      ],
+      "findings": [
+        {
+          "id": "CVE-2026-109618",
+          "title": "PHP2Shell: PHP memory corruption on out-of-memory handling (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.8,
+          "cves": [
+            "CVE-2026-109618"
+          ],
+          "kev": true,
+          "description": "Crafted multipart requests can corrupt memory while PHP handles an out-of-memory condition, leading to unauthenticated remote code execution. Affects mod_php, PHP-FPM, php-cgi, FrankenPHP and LiteSpeed. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "C:\\php\\php-cgi.exe: PHP 8.3.30 (cgi-fcgi) is in the affected range",
+            "C:\\php\\php.exe: PHP 8.3.30 (cli) is in the affected range",
+            "C:\\php\\php-cgi.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "C:\\php\\php.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CVE-2026-109619",
+          "title": "PHP2Shell: PHP stale global state (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": null,
+          "cves": [
+            "CVE-2026-109619"
+          ],
+          "kev": true,
+          "description": "Companion flaw to CVE-2026-109618 fixed in the same releases, allowing unauthenticated remote code execution. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "C:\\php\\php-cgi.exe: PHP 8.3.30 (cgi-fcgi) is in the affected range",
+            "C:\\php\\php.exe: PHP 8.3.30 (cli) is in the affected range",
+            "C:\\php\\php-cgi.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "C:\\php\\php.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        }
+      ]
+    },
+    {
+      "host": "10.20.1.21",
+      "name": "web-win-02",
+      "site": "Branch 3",
+      "platform": "windows",
+      "status": "ok",
+      "error": "",
+      "hostname": "WEB-WIN-02",
+      "model": "Microsoft Windows Server 2016 Standard",
+      "os": "Windows",
+      "version": "10.0.14393",
+      "release": "",
+      "serial": "",
+      "lifecycle": "unknown",
+      "notes": [],
+      "software": [
+        {
+          "name": "php",
+          "version": "8.1.31",
+          "build": "8.1.31",
+          "sapi": "cli",
+          "path": "C:\\xampp\\php\\php.exe",
+          "ini": {
+            "file_uploads": "On",
+            "memory_limit": "512M",
+            "session.upload_progress.enabled": "On"
+          }
+        }
+      ],
+      "findings": [
+        {
+          "id": "CVE-2026-109618",
+          "title": "PHP2Shell: PHP memory corruption on out-of-memory handling (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": 9.8,
+          "cves": [
+            "CVE-2026-109618"
+          ],
+          "kev": true,
+          "description": "Crafted multipart requests can corrupt memory while PHP handles an out-of-memory condition, leading to unauthenticated remote code execution. Affects mod_php, PHP-FPM, php-cgi, FrankenPHP and LiteSpeed. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "C:\\xampp\\php\\php.exe: PHP 8.1.31 (cli) is in the affected range",
+            "C:\\xampp\\php\\php.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "CVE-2026-109619",
+          "title": "PHP2Shell: PHP stale global state (remote code execution)",
+          "severity": "critical",
+          "priority": "P1",
+          "category": "vulnerability",
+          "cvss": null,
+          "cves": [
+            "CVE-2026-109619"
+          ],
+          "kev": true,
+          "description": "Companion flaw to CVE-2026-109618 fixed in the same releases, allowing unauthenticated remote code execution. Exploited in the wild; on CISA KEV.",
+          "remediation": "Upgrade PHP to 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or later (Linux distribution packages: install the vendor's security update). PHP 8.1 and older get no official fix: move to a supported branch. Interim only (partial): set session.upload_progress.enabled=0, block multipart/form-data requests at the WAF where uploads aren't needed, or put the application behind network-level authentication.",
+          "evidence": [
+            "C:\\xampp\\php\\php.exe: PHP 8.1.31 (cli) is in the affected range",
+            "C:\\xampp\\php\\php.exe: session.upload_progress.enabled = On (interim mitigation not applied)",
+            "Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini."
+          ],
+          "references": [
+            "https://www.php.net/ChangeLog-8.php",
+            "https://www.helpnetsecurity.com/2026/10/21/php2shell-php-vulnerabilities-patched-cve-2026-109618-cve-2026-109619/",
+            "https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/"
+          ],
+          "source": "Local advisory rule"
+        },
+        {
+          "id": "EOL-PHP-8.1",
+          "title": "PHP 8.1 is end of life upstream",
+          "severity": "high",
+          "priority": "P2",
+          "category": "lifecycle",
+          "cvss": null,
+          "cves": [],
+          "kev": false,
+          "description": "The PHP project no longer releases security fixes for this branch (PHP 8.1 and older are end of life).",
+          "remediation": "Upgrade to a supported PHP branch (8.2 or newer; 8.4/8.5 preferred).",
+          "evidence": [
+            "C:\\xampp\\php\\php.exe: PHP 8.1.31 (cli)"
+          ],
+          "references": [
+            "https://www.php.net/supported-versions.php"
+          ],
+          "source": "Lifecycle data"
+        }
+      ]
     }
   ]
 }

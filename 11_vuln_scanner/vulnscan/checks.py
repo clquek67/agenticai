@@ -98,7 +98,7 @@ def run_local_advisories(platform_name, facts, advisories):
     findings = []
     config = facts.raw.get("config", "")
     for adv in advisories:
-        if adv["platform"] != platform_name:
+        if adv.get("platform") != platform_name:
             continue
         if adv.get("os") and adv["os"] != facts.os_name:
             continue
@@ -171,3 +171,88 @@ def check_lifecycle(facts, lifecycle):
                 )
             return status, None
     return "unknown", None
+
+
+# --- server software (PHP, ...) -------------------------------------------------
+
+_ON = ("1", "on", "true", "yes")
+
+
+def is_distro_build(install, facts):
+    """True for PHP shipped by the Linux distribution, which backports fixes without
+    changing the upstream version (e.g. Ubuntu '8.1.2-1ubuntu2.19', RHEL /usr/bin/php)."""
+    if install["build"] != install["version"]:
+        return True
+    return bool(facts.packages) and install["path"].startswith(("/usr/bin/", "/usr/sbin/"))
+
+
+def _describe(install):
+    return f"{install['path']}: PHP {install['build']} ({install['sapi']})"
+
+
+def run_software_advisories(platform_name, facts, advisories):
+    """One finding per advisory per server, listing every affected install as evidence."""
+    findings = []
+    for adv in advisories:
+        if "software" not in adv or platform_name not in adv.get("platforms", []):
+            continue
+        affected_lines, notes = [], []
+        for inst in facts.software:
+            if inst["name"] != adv["software"] or not _version_affected(inst["version"], adv.get("affected", {})):
+                continue
+            if adv["id"] in facts.fixed_cves and is_distro_build(inst, facts):
+                continue  # the distro package changelog lists this CVE as fixed (backport)
+            affected_lines.append(_describe(inst) + " is in the affected range")
+            if is_distro_build(inst, facts):
+                notes.append(f"{inst['path']} is a distribution package and its changelog does not list "
+                             f"{adv['id']}: install your distribution's security update.")
+            for key, bad in adv.get("mitigation_ini", {}).items():
+                value = inst["ini"].get(key)
+                if value is not None and value.lower() in bad:
+                    notes.append(f"{inst['path']}: {key} = {value} (interim mitigation not applied)")
+        if any("mitigation not applied" in n for n in notes):
+            notes.append("Settings were read from the CLI php.ini; PHP-FPM, Apache or IIS may use a different php.ini.")
+        if affected_lines:
+            findings.append(
+                Finding(
+                    id=adv["id"],
+                    title=adv["title"],
+                    severity=adv.get("severity") or severity_from_cvss(adv.get("cvss")),
+                    category="vulnerability",
+                    description=adv.get("description", ""),
+                    remediation=adv.get("remediation", ""),
+                    cvss=adv.get("cvss"),
+                    cves=adv.get("cves", [adv["id"]]),
+                    evidence=affected_lines + notes,
+                    references=adv.get("references", []),
+                    source="Local advisory rule",
+                )
+            )
+    return findings
+
+
+def check_software_lifecycle(facts, software_lifecycle):
+    findings = []
+    for entry in software_lifecycle:
+        for inst in facts.software:
+            if inst["name"] != entry["software"]:
+                continue
+            if versions.compare(versions.train(inst["version"]), entry["supported_from"]) >= 0:
+                continue
+            distro = is_distro_build(inst, facts)
+            findings.append(
+                Finding(
+                    id=f"EOL-{entry['software'].upper()}-{versions.train(inst['version'])}",
+                    title=f"{entry['label']} {versions.train(inst['version'])} is end of life upstream",
+                    severity="low" if distro else "high",
+                    category="lifecycle",
+                    description=entry["note"] + (
+                        " This install is a distribution package: check that your distribution still "
+                        "supports it." if distro else ""),
+                    remediation=entry["remediation"],
+                    evidence=[_describe(inst)],
+                    references=entry.get("references", []),
+                    source="Lifecycle data",
+                )
+            )
+    return findings

@@ -7,3 +7,7 @@ host,name,platform,credential,site
 10.20.0.5,sw-core-01,hpe_comware,comware_ro,HQ
 10.20.0.6,sw-dist-02,hpe_comware,comware_ro,HQ
 192.168.99.1,sw-guest-01,cisco_ios,cisco_ro,Guest
+10.20.1.10,web-lnx-01,linux,linux_ro,HQ DMZ
+10.20.1.11,web-lnx-02,linux,linux_ro,HQ DMZ
+10.20.1.20,web-win-01,windows,windows_ro,HQ DMZ
+10.20.1.21,web-win-02,windows,windows_ro,Branch 3

@@ -2,8 +2,30 @@
   "title": "Bundled subset of the CISA Known Exploited Vulnerabilities catalog, used only when the live feed and cache are unavailable",
   "catalogVersion": "snapshot",
   "vulnerabilities": [
-    {"cveID": "CVE-2023-20198", "vendorProject": "Cisco", "product": "IOS XE Web UI"},
-    {"cveID": "CVE-2023-20273", "vendorProject": "Cisco", "product": "IOS XE Web UI"},
-    {"cveID": "CVE-2020-3452", "vendorProject": "Cisco", "product": "Adaptive Security Appliance (ASA) and Firepower Threat Defense (FTD)"}
+    {
+      "cveID": "CVE-2023-20198",
+      "vendorProject": "Cisco",
+      "product": "IOS XE Web UI"
+    },
+    {
+      "cveID": "CVE-2023-20273",
+      "vendorProject": "Cisco",
+      "product": "IOS XE Web UI"
+    },
+    {
+      "cveID": "CVE-2020-3452",
+      "vendorProject": "Cisco",
+      "product": "Adaptive Security Appliance (ASA) and Firepower Threat Defense (FTD)"
+    },
+    {
+      "cveID": "CVE-2026-109618",
+      "vendorProject": "PHP Group",
+      "product": "PHP"
+    },
+    {
+      "cveID": "CVE-2026-109619",
+      "vendorProject": "PHP Group",
+      "product": "PHP"
+    }
   ]
 }

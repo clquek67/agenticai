@@ -45,6 +45,10 @@ class Facts:
     release: str = ""
     serial: str = ""
     raw: dict = field(default_factory=dict)  # command key -> output text (never exported)
+    # Servers: installed software such as PHP. Each item: name, version, build, sapi, path, ini.
+    software: list = field(default_factory=list)
+    packages: dict = field(default_factory=dict)  # Linux package name -> version
+    fixed_cves: set = field(default_factory=set)  # CVEs the distro package changelogs say are fixed
 
 
 @dataclass

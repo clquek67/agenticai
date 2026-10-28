@@ -21,6 +21,21 @@ Output is a **self-contained HTML report** (opens offline, prints to PDF, light 
 | `cisco_ios` | IOS and IOS XE: 2811, 2960X, 3750G, ISR 4331, ... | `show version`, `show running-config` |
 | `cisco_asa` | ASA 5512-X, 5520, 5525-X, ... | `show version`, `show running-config` |
 | `hpe_comware` | Comware 5/7: 5130, 5500, A5500, 5510, 5900, 5700, 5940, HP 850 | `display version`, `display current-configuration` |
+| `linux` | Ubuntu, Debian, RHEL, Rocky, Alma (SSH, no sudo needed) | `cat /etc/os-release`, `php -v` / `php -i`, package list and changelogs, process list |
+| `windows` | Windows Server (WinRM over HTTPS) | one read-only PowerShell script: OS info, PHP on PATH / IIS FastCGI / common folders, `php -v` / `php -i` |
+
+### PHP on servers (PHP2Shell: CVE-2026-109618, CVE-2026-109619)
+
+The `linux` and `windows` platforms find every PHP install on a server (PATH, IIS FastCGI, Remi,
+Plesk, cPanel, XAMPP, ...) and check it against the PHP2Shell fixes: **8.5.12, 8.4.27, 8.3.36 and
+8.2.35**. PHP 8.1 and older have no official fix and are also reported as end of life.
+
+Linux distributions (Ubuntu, Debian, RHEL) backport fixes without changing the PHP version number,
+so for distribution packages the scanner reads the package changelog: if it lists the CVE, the
+server is reported as fixed. The report also shows whether the partial interim mitigation
+(`session.upload_progress.enabled = 0`) is in place in the CLI `php.ini`.
+
+Windows needs WinRM (HTTPS, port 5986) enabled and an account in *Remote Management Users*.
 
 Next modules planned: Aruba (AOS-CX, ArubaOS, ArubaOS-Switch, ClearPass), Juniper Junos, TippingPoint.
 
@@ -55,6 +70,7 @@ python scan.py --inventory examples/devices.csv --offline examples/offline \
    export VULNSCAN_CISCO_PASSWORD='...'  VULNSCAN_CISCO_ENABLE='...'
    export VULNSCAN_ASA_PASSWORD='...'    VULNSCAN_ASA_ENABLE='...'
    export VULNSCAN_COMWARE_PASSWORD='...'
+   export VULNSCAN_LINUX_PASSWORD='...'  VULNSCAN_WINDOWS_PASSWORD='...'
    ```
 4. Optional but recommended: get a free Cisco openVuln API client at
    https://developer.cisco.com/psirt/ and export `CISCO_CLIENT_ID` / `CISCO_CLIENT_SECRET`.
@@ -93,6 +109,10 @@ No Comware CVE rules ship yet: add them from HPE bulletins for the releases you 
 
 **Config rule** (`data/config_rules.json`): `type` `present` fires when the regex matches the running
 config, `absent` when it doesn't.
+
+**Software rules**: advisories with `"software": "php"` and `"platforms": ["linux", "windows"]`
+are checked against each PHP install found on a server (`data/advisories.json`);
+`data/software_lifecycle.json` sets the oldest supported PHP branch.
 
 **Lifecycle** (`data/lifecycle.json`): model regex → `end_of_support` / `end_of_sale` / `supported`.
 Confirm dates against the vendor's end-of-life notices.

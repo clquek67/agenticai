@@ -24,6 +24,7 @@ class Scanner:
         self.config_rules = checks.load_json("config_rules.json", data_dir)
         self.advisories = checks.load_json("advisories.json", data_dir)
         self.lifecycle = checks.load_json("lifecycle.json", data_dir)
+        self.software_lifecycle = checks.load_json("software_lifecycle.json", data_dir)
 
     def scan(self, devices):
         started = datetime.now(timezone.utc)
@@ -49,7 +50,12 @@ class Scanner:
         result.facts = facts
         if not facts.version:
             result.notes.append("Software version not recognised in the output; CVE matching skipped.")
-        if "config" not in outputs:
+        if platform.name in ("linux", "windows") and not facts.software:
+            result.notes.append("No PHP installation found.")
+        backported = sorted(facts.fixed_cves & {a["id"] for a in self.advisories if "software" in a})
+        if backported:
+            result.notes.append("Distribution package changelogs list fixes for " + ", ".join(backported) + ".")
+        if "config" in platform.commands and "config" not in outputs:
             result.notes.append("Running configuration not collected; config checks skipped.")
 
         findings = []
@@ -57,6 +63,8 @@ class Scanner:
         if eol:
             findings.append(eol)
         findings += checks.run_local_advisories(platform.name, facts, self.advisories)
+        findings += checks.run_software_advisories(platform.name, facts, self.advisories)
+        findings += checks.check_software_lifecycle(facts, self.software_lifecycle)
         if self.cisco_api and platform.name.startswith("cisco"):
             try:
                 findings += self.cisco_api.findings(facts)

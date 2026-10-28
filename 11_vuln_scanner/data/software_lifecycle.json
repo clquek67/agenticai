@@ -1,0 +1,12 @@
+[
+  {
+    "software": "php",
+    "label": "PHP",
+    "supported_from": "8.2",
+    "note": "The PHP project no longer releases security fixes for this branch (PHP 8.1 and older are end of life).",
+    "remediation": "Upgrade to a supported PHP branch (8.2 or newer; 8.4/8.5 preferred).",
+    "references": [
+      "https://www.php.net/supported-versions.php"
+    ]
+  }
+]

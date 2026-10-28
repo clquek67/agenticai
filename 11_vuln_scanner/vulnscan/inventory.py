@@ -49,7 +49,8 @@ def load_credentials(path):
     for name, p in (data.get("profiles") or {}).items():
         password = os.environ.get(p["password_env"], "") if p.get("password_env") else p.get("password", "")
         secret = os.environ.get(p["secret_env"], "") if p.get("secret_env") else p.get("secret", "")
-        profiles[name] = {"username": p.get("username", ""), "password": password, "secret": secret}
+        extra = {k: v for k, v in p.items() if k not in ("password", "secret", "password_env", "secret_env")}
+        profiles[name] = {**extra, "username": p.get("username", ""), "password": password, "secret": secret}
     return profiles
 
 

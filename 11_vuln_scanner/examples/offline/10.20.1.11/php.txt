@@ -1,0 +1,12 @@
+### PHP /opt/remi/php84/root/usr/bin/php
+PHP 8.4.20 (cli) (built: Jun  3 2026 08:41:17) (NTS gcc x86_64)
+expose_php => On => On
+file_uploads => On => On
+memory_limit => 128M => 128M
+post_max_size => 8M => 8M
+session.upload_progress.enabled => On => On
+### PHP /usr/bin/php
+PHP 8.0.30 (cli) (built: Aug  3 2023 17:13:08) ( NTS gcc x86_64 )
+file_uploads => On => On
+memory_limit => 128M => 128M
+session.upload_progress.enabled => On => On

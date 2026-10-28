@@ -1,0 +1,7 @@
+### PHP /usr/bin/php8.3
+PHP 8.3.6 (cli) (built: Oct 24 2026 10:12:01) (NTS)
+expose_php => Off => Off
+file_uploads => On => On
+memory_limit => -1 => -1
+post_max_size => 8M => 8M
+session.upload_progress.enabled => On => On

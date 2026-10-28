@@ -59,7 +59,7 @@ def to_dict(scan):
                 "platform": r.device.platform, "status": r.status, "error": r.error,
                 "hostname": r.facts.hostname, "model": r.facts.model, "os": r.facts.os_name,
                 "version": r.facts.version, "release": r.facts.release, "serial": r.facts.serial,
-                "lifecycle": r.lifecycle, "notes": r.notes,
+                "lifecycle": r.lifecycle, "notes": r.notes, "software": r.facts.software,
                 "findings": [_finding_dict(f) for f in r.findings],
             }
             for r in scan.results
@@ -255,6 +255,10 @@ def render_html(scan, title, org):
         w("</summary><div class='dev-body'>")
         for note in r.notes:
             w(f"<p class='muted'>Note: {_e(note)}</p>")
+        if r.facts.software:
+            items = "".join(f"<li class='mono'>{_e(i['path'])}: {_e(i['name'].upper())} {_e(i['build'])} ({_e(i['sapi'])})</li>"
+                            for i in r.facts.software)
+            w(f"<p><b>Software found:</b></p><ul style='margin:4px 0 8px'>{items}</ul>")
         if not r.findings:
             w("<p class='muted'>No findings.</p>")
         for f in r.findings:
@@ -293,7 +297,7 @@ def render_html(scan, title, org):
     rc = scan.rule_counts
     cisco = "Cisco openVuln API (live)" if scan.cisco_api_used else "Cisco openVuln API not configured: Cisco CVEs come from local rules only"
     w("<section><h2>7. Method and data sources</h2><p>Each device was accessed with a read-only account. "
-      "Only <code>show</code> / <code>display</code> commands were run; no exploits were attempted and no configuration "
+      "Only read-only commands were run (<code>show</code> / <code>display</code> on network devices, inventory queries such as <code>php -v</code> on servers); no exploits were attempted and no configuration "
       "was changed. Full configurations are not stored in this report and secrets in evidence are masked.</p>")
     w(f"<p class='muted'>Sources: {_e(cisco)} · {_e(scan.kev_source)} · {rc['advisories']} local advisory rules · "
       f"{rc['config']} configuration rules · {rc['lifecycle']} lifecycle entries. "

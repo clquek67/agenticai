@@ -1,0 +1,8 @@
+OS=Microsoft Windows Server 2016 Standard
+OSVERSION=10.0.14393
+HOSTNAME=WEB-WIN-02
+### PHP C:\xampp\php\php.exe
+PHP 8.1.31 (cli) (built: Nov 21 2024 13:10:34) (ZTS Visual C++ 2019 x64)
+file_uploads => On => On
+memory_limit => 512M => 512M
+session.upload_progress.enabled => On => On
